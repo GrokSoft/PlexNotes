@@ -1,0 +1,8 @@
+{
+"version":3,
+"file":"",
+"lineCount":1,
+"mappings":"AAAAA,OAAA,CAAQ,WAAR,CACAC,OAAAC,QAAA,CAAiBC;",
+"sources":["index.js"],
+"names":["require","module","exports","angular"]
+}

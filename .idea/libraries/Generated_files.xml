@@ -1,0 +1,26 @@
+<component name="libraryTable">
+  <library name="Generated files" type="javaScript">
+    <properties>
+      <sourceFilesUrls>
+        <item url="file://$PROJECT_DIR$/js/jquery-1.11.3.min.min.js" />
+        <item url="file://$PROJECT_DIR$/js/app.min.js" />
+        <item url="file://$PROJECT_DIR$/js/angular/angular.min.js" />
+        <item url="file://$PROJECT_DIR$/js/angular/index.min.min.js" />
+        <item url="file://$PROJECT_DIR$/js/media.min.js" />
+        <item url="file://$PROJECT_DIR$/js/angular/index.min.js" />
+        <item url="file://$PROJECT_DIR$/js/bootstrap.min.js" />
+      </sourceFilesUrls>
+    </properties>
+    <CLASSES>
+      <root url="file://$PROJECT_DIR$/js/jquery-1.11.3.min.min.js" />
+      <root url="file://$PROJECT_DIR$/js/app.min.js" />
+      <root url="file://$PROJECT_DIR$/js/angular/angular.min.js" />
+      <root url="file://$PROJECT_DIR$/js/angular/index.min.min.js" />
+      <root url="file://$PROJECT_DIR$/js/media.min.js" />
+      <root url="file://$PROJECT_DIR$/js/angular/index.min.js" />
+      <root url="file://$PROJECT_DIR$/js/bootstrap.min.js" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
