@@ -13,10 +13,7 @@
 
 var restify = require('restify');
 
-function respondConfirm(req, res, next) {
-   res.send('confirm ' + req.params.name + ' it works!' + '\n\n');
-   next();
-}
+
 
 function respond(req, res, next) {
    res.send('hello ' + req.params.name + ' it works!' + '\n\n');
@@ -26,7 +23,10 @@ function respond(req, res, next) {
 var server = restify.createServer({name: 'PlexNotes Server'});
 server.get('/hello/:name', respond);
 server.head('/hello/:name', respond);
-server.get('/confirm/:name', respondConfirm);
+server.get('/confirm/:name', function respondConfirm(req, res, next) {
+   res.send('confirm ' + req.params.name + ' it works!' + '\n\n');
+   next();
+});
 
 server.listen(8080, function() {
    console.log('%s listening at %s', server.name, server.url);
