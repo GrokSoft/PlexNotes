@@ -13,12 +13,11 @@
 
 var restify = require('restify');
 
-
-
 function respond(req, res, next) {
    res.send('hello ' + req.params.name + ' it works!' + '\n\n');
    next();
 }
+
 
 var server = restify.createServer({name: 'PlexNotes Server'});
 server.get('/hello/:name', respond);

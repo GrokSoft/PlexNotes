@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ProjectTasksOptions">
-    <TaskOptions isEnabled="false">
+    <TaskOptions isEnabled="true">
       <option name="arguments" value="--compilation_level SIMPLE_OPTIMIZATIONS --js $FileName$ --create_source_map $FileName$.map --output_wrapper &quot;%output% //# sourceMappingURL=$FileName$.map&quot;" />
       <option name="checkSyntaxErrors" value="true" />
       <option name="description" value="Compiles .js files" />
@@ -14,7 +14,7 @@
         <array />
       </option>
       <option name="outputFromStdout" value="true" />
-      <option name="program" value="C:/Program Files/nodejs/compiler.jar" />
+      <option name="program" value="$PROJECT_DIR$/misc/tools/compiler.jar" />
       <option name="scopeName" value="File Watcher" />
       <option name="trackOnlyRoot" value="true" />
       <option name="workingDir" value="$FileDir$" />
