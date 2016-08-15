@@ -23,7 +23,7 @@ function respond(req, res, next) {
 var server = restify.createServer({name: 'PlexNotes Server'});
 server.get('/hello/:name', respond);
 server.head('/hello/:name', respond);
-server.get('/confirm/:name', function respondConfirm(req, res, next) {
+server.get('/confirm/:name', function (req, res, next) {
    res.send('confirm ' + req.params.name + ' it works!' + '\n\n');
    next();
 });
