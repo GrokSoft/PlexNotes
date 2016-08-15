@@ -1,0 +1,6 @@
+{
+  "uri": "http://localhost:8080/hello/mark?accept\u003dext%2Fplain",
+  "method": "GET",
+  "body": "",
+  "headers": {}
+}

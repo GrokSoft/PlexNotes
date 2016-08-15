@@ -1,7 +1,4 @@
 /**
- * Created by Bill on 8/14/2016.
- */
-/**
  * Created by trh on 8/13/16.
  *
  * Test with:
@@ -17,7 +14,7 @@ function respond(req, res, next) {
    next();
 }
 
-var server = restify.createServer();
+var server = restify.createServer({name: 'PlexNotes Server'});
 server.get('/hello/:name', respond);
 server.head('/hello/:name', respond);
 

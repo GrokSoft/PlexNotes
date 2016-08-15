@@ -1,3 +1,7 @@
+/**
+ * Created by Bill on 8/14/2016.
+ * Copyright (c) 2016. GrokSoft LLC All Rights Reserved
+ */
 "use strict";
 
 (function () {
