@@ -3,11 +3,9 @@
     <properties>
       <sourceFilesUrls>
         <item url="file://$PROJECT_DIR$/server/plexNotesServer.min.js" />
-        <item url="file://$PROJECT_DIR$/server/plexNotesServer.min.js" />
       </sourceFilesUrls>
     </properties>
     <CLASSES>
-      <root url="file://$PROJECT_DIR$/server/plexNotesServer.min.js" />
       <root url="file://$PROJECT_DIR$/server/plexNotesServer.min.js" />
     </CLASSES>
     <JAVADOC />
