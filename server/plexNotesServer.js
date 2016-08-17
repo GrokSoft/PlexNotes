@@ -29,7 +29,7 @@
      */
     function respond(req, res, next) {
        var param = req.query.whatever;
-
+        console.log("Received %s",req.params.name);
         res.send('hello ' + req.params.name + ' it works! (' + param + ')\n\n');
         next();
     }
