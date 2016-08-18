@@ -10,7 +10,6 @@
  *      curl -is http://localhost:8080/confirm/bill -H 'accept: text/plain'
  *      curl -is http://localhost:8080/confirm/john
  *      curl -is http://localhost:8080/confirm/chewbaca -X HEAD -H 'connection: close'
- *
  */
 'use strict';
 
@@ -18,22 +17,59 @@
  * PlexNotes REST Server
  */
 (function () {
+    var PORT = 8080;
+    var dataFile = "plexData.json";     /** The file to save the plex data in */
+    var fs = require('fs');             /** The file system */
+    var restify = require('restify');   /** REST Server */
 
-    var restify = require('restify');
+    var plexData = [
+        {
+            "id" : 1,
+            "user" : "Bill",
+            "priority" : 3,
+            "status" : 3,
+            "Notes" : "",
+            "issues" : [
+                "3",
+                "6"
+            ]
+        }
+    ];
+    var idLast = plexData[plexData.length - 1].id; /** id to used to create the next issue */
 
     /**
-     * Respond with name passed and parameter
-     * @param req
-     * @param res
-     * @param next
+     * Issue Priorities
      */
-    function respond(req, res, next) {
-       var param = req.query.whatever;
-        console.log("Received %s",req.params.name);
-        res.send('hello ' + req.params.name + ' it works! (' + param + ')\n\n');
-        next();
-    }
+    var plexPriorites = {
+        "1": "Extremely Important",
+        "2" : "Important",
+        "3" : "Not Important"
+    };
 
+    /**
+     * Issue Statuses
+     */
+    var plexStatuses = {
+        "1" : "Being Worked",
+        "2" : "On Hold",
+        "3" : "Completed"
+    };
+
+    /**
+     * Plex Issues
+     */
+    var plexIssues = {
+        "1" : "Needs Subtitles",
+        "2" : "Needs Forced Subtitles",
+        "3" : "Error Streaming",
+        "4" : "Choppy Streaming",
+        "5" : "Low Resolution",
+        "6" : "Bad Audio",
+        "7" : "Low Audio",
+        "8" : "High Audio",
+        "9" : "Add Artwork",
+        "10" : "See Notes"
+    };
     var server = restify.createServer({name: 'PlexNotes Server'});
 
     // Load the plugins
@@ -58,10 +94,132 @@
     server.use(restify.bodyParser());
     //server.use(restify.CORS());
 
+    //
+    // Common REST  routs
+    //
+
     /**
-     * REST End points
+     * Respond with name passed and parameter
+     *
+     * @param req
+     * @param res
+     * @param next
+     */
+    function respond(req, res, next) {
+        var param = req.query.whatever;
+        console.log("Received %s",req.params.name);
+        res.send('hello ' + req.params.name + ' it works! (' + param + ')\n\n');
+        next();
+    }
+
+
+    //
+    // REST routes
+    //
+
+    /**
+     * Get all issues with optional query parameter
+     *
+     * get /api/issues
+     * get /api/issues?query=movie
+     *
+     * @param req   The Request
+     * @param res   The Response
+     * @param next  The Next rout in the chain
+     *
+     * @returns  The requested note or 404
+     */
+    server.get('/api/issues', function (req, res, next) {
+        var ret = [];
+        var query = req.query.query;
+
+        plexData.forEach(function (node) {
+            // Test for a query string
+            if (query === undefined || node.search(query) != -1)
+                ret.push(node);
+        });
+        if (ret.length == 0) {
+            ret = notFound(res);
+        }
+        res.json(ret);
+        next();
+    });
+
+
+    /**
+     * Get a issues by id
+     *
+     * get /api/issues/{id}
+     *
+     * @param req   The Request
+     * @param res   The Response
+     * @param next  The Next rout in the chain
+     *
+     * @returns  The requested note or 404
+     */
+    server.get('/api/issues/:id', function (req, res, next) {
+        // There can not be duplicate notes, so always use the first element returned.
+        var ret = plexData.filter(function (node) {
+            return node.id == req.params.id;
+        })[0];
+        if (ret === undefined) {
+            ret = notFound(res);
+        }
+        res.json(ret);
+        next();
+    });
+
+    /**
+     * Create a new issue
+     *
+     * post api/issues ( body = {
+     *  "id" : 1,
+     *  "user" : "Bill",
+     *  "priority" : 3,
+     *  "status" : 3,
+     *  "Notes" : "",
+     *  "issues" : [
+     *  "3",
+     *  "6"
+     *  }])
+     *
+     * @param req   The Request
+     * @param res   The Response
+     * @param next  The Next rout in the chain
+     *
+     * @returns  The new issue, or 400 if the issue could not be created.
+     */
+    server.post('/api/issues', function (req, res, next) {
+        var ret;
+
+        // Check the body for valid data
+        try {
+            // Handle the body coming in as a JSON object or string.
+            var body = typeof req.body !== "string"
+                ? req.body.toString()
+                : JSON.parse(req.body).body;
+            idLast++;
+            // Todo Figure out how to pass the issue data!!!
+            ret = {"id": idLast, "body": body};
+            plexData.push(ret);
+            saveIssues();
+        }
+        catch (e) {
+            res.statusCode = 400;
+            ret = "data invalid";
+        }
+        res.json(ret);
+        next();
+    });
+
+    /**
+     *
      */
     server.get('/hello/:name', respond);
+
+    /**
+     *
+     */
     server.head('/hello/:name', respond);
 
     /**
@@ -76,13 +234,75 @@
         next();
     });
 
+    //
+    // Misc functions
+    //
 
     /**
-     * Have restify listen on the configured port.
+     * Load the passed response with a 404 Not Found error and return the error text
+     *
+     * @param res  The response to modify
+     * @returns {string} Note NOT found
      */
-    server.listen(8080, function () {
+    var notFound = function (res) {
+        res.statusCode = 404;
+        return "Note NOT found";
+    };
+
+    /**
+     * Save the notes to a file
+     */
+    var saveIssues = function () {
+        fs.writeFile(dataFile, JSON.stringify(plexData), function (err) {
+            if (err) {
+                return console.log(err);
+            }
+            console.log("The file was saved with %d issues.", plexData.length);
+        });
+    };
+
+    /**
+     * Get the notes from the file.
+     */
+    var getIssues = function () {
+        fs.exists(dataFile, function (exists) {
+            if (exists) {
+                fs.readFile(dataFile, function (err, data) {
+                    if (err) {
+                        return console.log(err);
+                    }
+                    plexData = JSON.parse(data);
+
+                    /**
+                     * Find the last id used so it can be incremented for a new note.
+                     */
+                    // If the file can not be manually edited we can get the largest id with the following
+                    // idLast = notes[notes.length-1].id;
+
+                    // Iterate through the notes to find the largest ID number in case it was manually edited.
+                    plexData.forEach(function (node) {
+                        //console.log("idLast = %s note.id = %s", idLast, note.id);
+                        idLast = Math.max(idLast, parseInt(node.id));
+                    });
+                    console.log("There are %d notes available.", plexDatalength);
+                });
+            }
+            else {
+                console.log("No Data file - using the default data");
+            }
+        });
+    };
+
+    //
+    // Initialization
+    //
+
+    // Load the issues if the file exists.
+    getIssues();
+
+    // Have restify listen on the configured port
+    server.listen(PORT, function () {
         console.log('%s listening at %s', server.name, server.url);
     });
-
 
 })();

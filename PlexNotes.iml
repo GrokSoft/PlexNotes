@@ -5,7 +5,7 @@
       <configuration sdkName="Python 3.5.2 (C:\Tools\Web\Python35\pythonw.exe)" />
     </facet>
   </component>
-  <component name="NewModuleRootManager" inherit-compiler-output="false">
+  <component name="NewModuleRootManager">
     <content url="file://$MODULE_DIR$">
       <sourceFolder url="file://$MODULE_DIR$/www" type="java-resource" />
       <excludeFolder url="file://$MODULE_DIR$/database" />
@@ -16,5 +16,6 @@
     <orderEntry type="library" name="jquery-DefinitelyTyped" level="application" />
     <orderEntry type="library" name="node-DefinitelyTyped" level="application" />
     <orderEntry type="library" name="Python 3.5.2 (C:\Tools\Web\Python35\pythonw.exe) interpreter library" level="application" />
+    <orderEntry type="library" name="PlexNotes node_modules" level="project" />
   </component>
 </module>
