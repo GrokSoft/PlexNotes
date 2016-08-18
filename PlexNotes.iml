@@ -5,13 +5,12 @@
       <configuration sdkName="Python 3.5.2 (C:\Tools\Web\Python35\pythonw.exe)" />
     </facet>
   </component>
-  <component name="NewModuleRootManager">
+  <component name="NewModuleRootManager" inherit-compiler-output="false">
     <content url="file://$MODULE_DIR$">
       <sourceFolder url="file://$MODULE_DIR$/www" type="java-resource" />
       <excludeFolder url="file://$MODULE_DIR$/database" />
     </content>
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="library" name="angularjs-DefinitelyTyped" level="application" />
     <orderEntry type="library" name="bootstrap-DefinitelyTyped" level="application" />
     <orderEntry type="library" name="jquery-DefinitelyTyped" level="application" />
     <orderEntry type="library" name="node-DefinitelyTyped" level="application" />

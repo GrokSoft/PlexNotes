@@ -12,6 +12,7 @@
       <root url="file://$PROJECT_DIR$/www/js/media.min.js" />
       <root url="file://$PROJECT_DIR$/server/plexNotesServer.min.js" />
     </CLASSES>
+    <JAVADOC />
     <SOURCES />
   </library>
 </component>

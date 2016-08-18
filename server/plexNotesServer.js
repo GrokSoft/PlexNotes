@@ -33,6 +33,17 @@
                 "3",
                 "6"
             ]
+        },
+        {
+            "id" : 2,
+            "user" : "Todd",
+            "priority" : 2,
+            "status" : 1,
+            "Notes" : "a note",
+            "issues" : [
+                "2",
+                "4"
+            ]
         }
     ];
     var idLast = plexData[plexData.length - 1].id; /** id to used to create the next issue */
@@ -192,21 +203,52 @@
     server.post('/api/issues', function (req, res, next) {
         var ret;
 
+        console.log(plexData);
+
         // Check the body for valid data
         try {
             // Handle the body coming in as a JSON object or string.
-            var body = typeof req.body !== "string"
+            var issue;/* = typeof req.body !== "string"
                 ? req.body.toString()
-                : JSON.parse(req.body).body;
+                : JSON.parse(req.body).body;*/
+            issue = req.body.toString();
+            //issue = issue.replace(/"/g, "");
             idLast++;
             // Todo Figure out how to pass the issue data!!!
-            ret = {"id": idLast, "body": body};
+            //issue.id = idLast;
+
+            ret = JSON.parse(JSON.stringify(issue));
+            //ret = ret.replace(/"/g, "");
+            //
+            // Todo Cannot figure out how to get rid of the quotes around the json object.
+            // which makes the data file invalid!
+            // I've tried every combo of the following:
+            // obj.toString()
+            // JSON.stringify(obj)
+            // JSON.parse(obj);
+            // obj.toJSON()
+            //
+            console.log(ret);
+            /*{
+                "id": idLast,
+                "user" : "Bill",
+                "priority" : 3,
+                "status" : 3,
+                "Notes" : "",
+                "issues" : [
+                    "3",
+                    "6"
+                ]
+            };*/
+
+            //plexData.push(JSON.parse(JSON.stringify(ret)));
             plexData.push(ret);
             saveIssues();
         }
         catch (e) {
+            console.log("Error "+issue);
             res.statusCode = 400;
-            ret = "data invalid";
+            //ret = "data invalid";
         }
         res.json(ret);
         next();
@@ -262,7 +304,7 @@
     };
 
     /**
-     * Get the notes from the file.
+     * Get the issues from the file.
      */
     var getIssues = function () {
         fs.exists(dataFile, function (exists) {
@@ -284,7 +326,7 @@
                         //console.log("idLast = %s note.id = %s", idLast, note.id);
                         idLast = Math.max(idLast, parseInt(node.id));
                     });
-                    console.log("There are %d notes available.", plexDatalength);
+                    console.log("There are %d issues available.", plexData.length);
                 });
             }
             else {
