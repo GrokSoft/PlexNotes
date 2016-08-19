@@ -2,14 +2,18 @@
 
 <div ng-init="">
     
-    <span>{{issue.id}}</span>
-    <span>{{issue.user}}</span>
-    <span>{{issue.priority}}</span>
-    <span>{{issue.status}}</span>
-    <span>{{issue.Notes}}</span>
+    <div><b>ID:</b> {{issue.id}}</div>
+    <div><b>User:</b> {{issue.user}}</div>
+    <div><b>Priority:</b> {{issuesCtrl.priorities[issue.priority]}}</div>
+    <div><b>Status:</b> {{issuesCtrl.statuses[issue.status]}}</div>
+    <div><b>Notes:</b> "{{issue.Notes}}"</div>
     
-    <span></span>
+    <br>
+    <b>Issues:</b>
+    [<span ng-repeat="issue in issue.issues" > {{issuesCtrl.issueTypes[issue]}}, </span>]
     
-    <span ng-repeat="issue in issues.issues" >{{issue}}</span>
+    <br>
+    <br>
+    
     
 </div>

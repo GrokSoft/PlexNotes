@@ -119,7 +119,7 @@
     //server.use(restify.CORS());
 
     //
-    // Common REST  routs
+    // Common REST routs
     //
 
     /**
@@ -137,6 +137,64 @@
         next();
     }
 
+    //
+    // Data for GUI rest routes
+    //
+
+    /**
+     * Get the Plex issue priorities
+     *
+     * get /api/data/priorities
+     *
+     * @param req   The Request
+     * @param res   The Response
+     * @param next  The Next rout in the chain
+     *
+     * @returns  Plex issue priorities
+     */
+    server.get('api/data/priorities', function (req, res, next) {
+        var ret = plexPriorites;
+        setResponseHeader(res);
+        res.json(ret);
+        next();
+    });
+
+    /**
+     * Get the Plex issue statuses
+     *
+     * get /api/data/statuses
+     *
+     * @param req   The Request
+     * @param res   The Response
+     * @param next  The Next rout in the chain
+     *
+     * @returns  Plex issue statuses
+     */
+    server.get('api/data/statuses', function (req, res, next) {
+        var ret = plexStatuses;
+        setResponseHeader(res);
+        res.json(ret);
+        next();
+    });
+
+    /**
+     * Get the Plex issue issues
+     *
+     * get /api/data/issues
+     *
+     * @param req   The Request
+     * @param res   The Response
+     * @param next  The Next rout in the chain
+     *
+     * @returns  Plex issue issues
+     */
+    // Todo - Is there a better names for these, since the whole thing is already an issue
+    server.get('api/data/issues', function (req, res, next) {
+        var ret = plexIssues;
+        setResponseHeader(res);
+        res.json(ret);
+        next();
+    });
 
     //
     // REST routes

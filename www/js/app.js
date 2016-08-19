@@ -38,12 +38,41 @@
          controller  : function () {
             var ctrl = this;
             var issues = [];
+            var priorities = [];
+            var statuses = [];
+            var issueTypes = [];
+
+            this.getPriorities = function () {
+               $http.get('http://localhost:8080/api/data/priorities').success(function (priorities) {
+                  ctrl.priorities = priorities;
+                  //console.log("Data Read "+ ctrl.priorities.length +" priorities");
+               });
+            };
+
+            this.getStatuses = function () {
+               $http.get('http://localhost:8080/api/data/statuses').success(function (statuses) {
+                  ctrl.statuses = statuses;
+                  //console.log("Data Read %d statuses", statuses.length);
+               });
+            };
+
+            this.getIssueTypes = function () {
+               $http.get('http://localhost:8080/api/data/issues').success(function (issueTypes) {
+                  ctrl.issueTypes = issueTypes;
+                  //console.log("Data Read %d issueTypes", issueTypes.length);
+               });
+            };
+
+            // Get the data needed for the GUI
+            this.getPriorities();
+            this.getStatuses();
+            this.getIssueTypes();
 
             // Get the issues
             /*$http.get('http://cors.io/?u=http://localhost:8080/api/issues').success(function (issues) {*/
             $http.get('http://localhost:8080/api/issues').success(function (issues) {
                ctrl.issues = issues;
-               console.log("Data Read %d items", issues.length);
+               console.log("Data Read "+ issues.length +" items.");
             });
 
          },
@@ -55,10 +84,10 @@
       return {
          restrict    : "E",   // By Attribute <div project-specs>
          templateUrl : "../issue.html",
-         controller  : function () {
+         /*controller  : function () {
 
          },
-         controllerAs: "issueCtrl"
+         controllerAs: "issueCtrl"*/
       }
    }]);
 
