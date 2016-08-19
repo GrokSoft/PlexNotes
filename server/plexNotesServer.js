@@ -83,7 +83,15 @@
     };
     var server = restify.createServer({name: 'PlexNotes Server',  formatters: {
         'application/json': function(req, res, body, cb) {
-            return cb(null, JSON.stringify(body, null, 4));
+            var ret;
+            try {
+                ret = cb(null, JSON.stringify(body, null, '\t'));
+            } catch(e) {
+                res.statusCode = 400;
+                ret = badRequest(body);
+            }
+            console.log(ret);
+            return ret;
         }
     }});
 
@@ -234,7 +242,9 @@
         catch (e) {
             console.log("Error "+issue);
             res.statusCode = 400;
-            ret = "data invalid - "+issue;
+
+
+            ret = badRequest(issue);
         }
         res.json(ret);
         next();
@@ -267,6 +277,27 @@
     //
 
     /**
+     * Return a json error showing a bad request
+     *
+     * @param body
+     * @returns {{jse_shortmsg: string, jse_info: {}, message: string, statusCode: number, body: {code: string, message: string}, restCode: string}}
+     */
+    var badRequest = function (body) {
+        var retJson = {
+            "jse_shortmsg": "Invalid Data",
+            "jse_info": {},
+            "message": "Body contained invalid Data",
+            "statusCode": 400,
+            "body": {
+                "code": "BadRequest",
+                "message": "data invalid Body = "+body
+            },
+            "restCode": "BadRequest"
+        };
+        return retJson;
+    };
+
+    /**
      * Load the passed response with a 404 Not Found error and return the error text
      *
      * @param res  The response to modify
@@ -274,7 +305,19 @@
      */
     var notFound = function (res) {
         res.statusCode = 404;
-        return "Note NOT found";
+        var retJson = {
+            "jse_shortmsg": "Issue not found",
+            "jse_info": {},
+            "message": "Requested issue was not found",
+            "statusCode": 404,
+            "body": {
+                "code": "NotFound",
+                "message": "Issue was not found!"
+            },
+            "restCode": "NotFound"
+        };
+
+        return retJson;
     };
 
     /**
