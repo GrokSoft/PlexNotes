@@ -132,6 +132,7 @@
     function respond(req, res, next) {
         var param = req.query.whatever;
         console.log("Received %s",req.params.name);
+        setResponseHeader(res);
         res.send('hello ' + req.params.name + ' it works! (' + param + ')\n\n');
         next();
     }
@@ -165,6 +166,8 @@
         if (ret.length == 0) {
             ret = notFound(res);
         }
+
+        setResponseHeader(res);
         res.json(ret);
         next();
     });
@@ -189,6 +192,7 @@
         if (ret === undefined) {
             ret = notFound(res);
         }
+        setResponseHeader(res);
         res.json(ret);
         next();
     });
@@ -246,6 +250,7 @@
 
             ret = badRequest(issue);
         }
+        setResponseHeader(res);
         res.json(ret);
         next();
     });
@@ -275,6 +280,21 @@
     //
     // Misc functions
     //
+
+    /**
+     * Set the header for the response
+     *
+     * Adds Access-Control-Allow-Origin *
+     * and
+     * Access-Control-Allow-Headers X-Requested-With
+     * to the header
+     *
+     * @param res
+     */
+    var setResponseHeader = function (res) {
+        res.header("Access-Control-Allow-Origin", "*");
+        res.header("Access-Control-Allow-Headers", "X-Requested-With");
+    };
 
     /**
      * Return a json error showing a bad request

@@ -7,7 +7,7 @@
 (function () {
    var app = angular.module('plexNotes', ['media-directives']);
 
-   app.controller('PlexNotesController', ['$http', function ($http)
+   app.controller('PlexNotesController', ['$scope', '$http', function ($scope, $http)
    {
       var plexNotes = this;
       var movies = [];
@@ -30,6 +30,37 @@
          controllerAs: "jumboCtrl"
       };
    });
+
+   app.directive("issues", ['$rootScope', '$http', function ($rootScope, $http) {
+      return {
+         restrict    : "E",   // By Attribute <div project-specs>
+         templateUrl : "issues.html",
+         controller  : function () {
+            var ctrl = this;
+            var issues = [];
+
+            // Get the issues
+            /*$http.get('http://cors.io/?u=http://localhost:8080/api/issues').success(function (issues) {*/
+            $http.get('http://localhost:8080/api/issues').success(function (issues) {
+               ctrl.issues = issues;
+               console.log("Data Read %d items", issues.length);
+            });
+
+         },
+         controllerAs: "issuesCtrl"
+      }
+   }]);
+
+   app.directive("issue", ['$rootScope', function ($rootScope) {
+      return {
+         restrict    : "E",   // By Attribute <div project-specs>
+         templateUrl : "../issue.html",
+         controller  : function () {
+
+         },
+         controllerAs: "issueCtrl"
+      }
+   }]);
 
    // Misc helper functions
 
