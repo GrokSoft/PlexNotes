@@ -91,6 +91,39 @@
       }
    }]);
 
+   //
+   // Directives for controls
+   //
+
+   app.directive("statuses", function () {
+      return {
+         restrict    : "E",
+         templateUrl : "statuses.html",
+      };
+   });
+
+   app.directive("priorities", function () {
+      return {
+         restrict    : "E",
+         templateUrl : "priorities.html",
+         controller  : function () {
+
+         },
+         controllerAs: "prioritiesCtrl"
+      };
+   });
+
+   app.directive("issueType", function () {
+      return {
+         restrict    : "E",
+         templateUrl : "issueType.html",
+         controller  : function () {
+
+         },
+         controllerAs: "issueTypeCtrl"
+      };
+   });
+
    // Misc helper functions
 
    /**

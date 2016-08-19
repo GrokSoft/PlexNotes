@@ -2,16 +2,43 @@
 
 <div ng-init="">
     
-    <div><b>ID:</b> {{issue.id}}</div>
-    <div><b>User:</b> {{issue.user}}</div>
-    <div><b>Priority:</b> {{issuesCtrl.priorities[issue.priority]}}</div>
-    <div><b>Status:</b> {{issuesCtrl.statuses[issue.status]}}</div>
-    <div><b>Notes:</b> "{{issue.Notes}}"</div>
+    <h3 class="issue-header">
+        <span>Issue# {{issue.id}}</span>
+        
+        <span class="pull-right">
+            <span><b>Status:</b> {{issuesCtrl.statuses[issue.status]}}</span>
+            <a href="{{issue.html_url}}">
+                <span class="github grow grow-box-shadow"
+                        title="View the issue on GetHub"></span>
+            </a>
+        </span>
+    </h3>
     
-    <br>
+    <div class="issue-sub-header bordered text-left">
+        
+        <!-- ToDo: This has an artifact when expanding since I added Markdown.
+            <span class="col-sm-1"><a class="accordion-toggle"
+                href="#issueBody{{issue.number}}"
+                data-toggle="collapse">
+            <span class="glyphicon glyphicon-chevron-up"
+                    title="Click to expand this issue"></span>
+        </a></span>-->
+        <span>User# {{issue.user}}</span>
+    
+        <span class="pull-right">
+            <span><b>Priority:</b> {{issuesCtrl.priorities[issue.priority]}}</span>
+        </span>
+    </div>
+    
+    <div class="issue-notes bordered text-left">
+        Notes: "{{issue.Notes}}"
+    </div>
+    
+    <div class="issue">
     <b>Issues:</b>
-    [<span ng-repeat="issue in issue.issues" > {{issuesCtrl.issueTypes[issue]}}, </span>]
-    
+    <br>
+    <div ng-repeat="issue in issue.issues"  > {{issuesCtrl.issueTypes[issue]}} </div>
+    </div>
     <br>
     <br>
     

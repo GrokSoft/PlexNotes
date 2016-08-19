@@ -84,13 +84,15 @@
     var server = restify.createServer({name: 'PlexNotes Server',  formatters: {
         'application/json': function(req, res, body, cb) {
             var ret;
+            //console.log("body = "+ JSON.stringify(body));
             try {
                 ret = cb(null, JSON.stringify(body, null, '\t'));
             } catch(e) {
                 res.statusCode = 400;
                 ret = badRequest(body);
+                console.log("Error = "+ body);
             }
-            console.log(ret);
+            //console.log(ret);
             return ret;
         }
     }});
@@ -345,7 +347,10 @@
      * Adds Access-Control-Allow-Origin *
      * and
      * Access-Control-Allow-Headers X-Requested-With
-     * to the header
+     * to the header, so we can call REST servers on other domains.
+     *
+     * Note: This is needed to debug in IntelliJ/WebStorm.
+     * The server runs under one port, and the web app runs under another.
      *
      * @param res
      */

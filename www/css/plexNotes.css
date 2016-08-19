@@ -1,0 +1,111 @@
+
+issue {
+    border: outset;
+    background-image: url("../images/paperBG.jpg");
+}
+
+.issue-header, .issue-sub-header, .issue-notes
+{
+    padding: 4px 10px 4px 10px;
+}
+.issue-header {
+      background-color: #1b6d85;
+    color: white;
+  }
+
+.issue-sub-header {
+    background-color: #2bafd6;
+
+}
+
+.issue-notes {
+    background-color: #2bafd6;
+}
+
+.issue {
+    padding-left: 20px;
+    background-color: #e0e0e0;
+}
+
+
+.fluid {
+    clear: both;
+    margin-left: 0;
+    width: 100%;
+    float: left;
+    display: block;
+}
+.box-shadow {
+    -webkit-box-shadow: 0 4px 6px 0 rgba(0, 0, 0, .8);
+    -moz-box-shadow: 0 4px 6px 0 rgba(0, 0, 0, .8);
+    box-shadow: 0 4px 6px 0 rgba(0, 0, 0, .8);
+}
+
+.box-shadow-full {
+    -webkit-box-shadow: 0 0 6px 6px rgba(0, 0, 0, .4);
+    -moz-box-shadow: 0 0 6px 6px rgba(0, 0, 0, .4);
+    box-shadow: 0 0 6px 6px rgba(0, 0, 0, .4);
+}
+.grow {
+    transition: all .2s ease-in-out;
+    cursor: pointer
+}
+
+.grow:hover {
+    transform: scale(1.3);
+}
+
+.grow-box-shadow {
+    box-shadow: 2px 3px 2px rgba(0, 0, 0, 0.6);
+    /*transition: box-shadow 0.3s ease-in-out;*/
+}
+
+.grow-box-shadow:hover {
+    box-shadow: 4px 6px 15px rgba(0, 0, 0, 0.8);
+}
+
+/*
+Bootstrap Carousel Fade Transition (for Bootstrap 3.3.x)
+CSS from:       http://codepen.io/transportedman/pen/NPWRGq
+and:            http://stackoverflow.com/questions/18548731/bootstrap-3-carousel-fading-to-new-slide-instead-of-sliding-to-new-slide
+Inspired from:  http://codepen.io/Rowno/pen/Afykb
+*/
+.carousel-fade .carousel-inner .item {
+    opacity: 0;
+    transition-property: opacity;
+    transition-duration: 1s;
+}
+
+.carousel-fade .carousel-inner .active {
+    opacity: 1;
+}
+
+.carousel-indicators {
+    bottom: 5px;
+}
+
+/* Todo Verify transform-3d & -webkit-transform-3d are correct. */
+@media all and (transform-3d), (-webkit-transform-3d) {
+    .carousel-fade .carousel-inner > .item.next,
+    .carousel-fade .carousel-inner > .item.active.right {
+        opacity: 0;
+        -webkit-transform: translate3d(0, 0, 0);
+        transform: translate3d(0, 0, 0);
+    }
+
+    .carousel-fade .carousel-inner > .item.prev,
+    .carousel-fade .carousel-inner > .item.active.left {
+        opacity: 0;
+        -webkit-transform: translate3d(0, 0, 0);
+        transform: translate3d(0, 0, 0);
+    }
+
+    .carousel-fade .carousel-inner > .item.next.left,
+    .carousel-fade .carousel-inner > .item.prev.right,
+    .carousel-fade .carousel-inner > .item.active {
+        opacity: 1;
+        -webkit-transform: translate3d(0, 0, 0);
+        transform: translate3d(0, 0, 0);
+    }
+}
+
