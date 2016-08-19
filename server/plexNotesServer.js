@@ -30,8 +30,8 @@
             "status" : 3,
             "Notes" : "",
             "issues" : [
-                "3",
-                "6"
+                3,
+                6
             ]
         },
         {
@@ -41,8 +41,8 @@
             "status" : 1,
             "Notes" : "a note",
             "issues" : [
-                "2",
-                "4"
+                2,
+                4
             ]
         }
     ];
@@ -83,7 +83,7 @@
     };
     var server = restify.createServer({name: 'PlexNotes Server',  formatters: {
         'application/json': function(req, res, body, cb) {
-            return cb(null, JSON.stringify(body, null, '\t'));
+            return cb(null, JSON.stringify(body, null, 4));
         }
     }});
 
@@ -104,7 +104,8 @@
     server.use(restify.bodyParser());                   // remaps the body content of a request to the req.params variable, allowing both GET and POST/PUT routes to use the same interface
 */
 
-    server.use(restify.fullResponse());
+    server.use(restify.jsonp());
+    //server.use(restify.fullResponse());
     server.use(restify.queryParser());
     server.use(restify.bodyParser());
     //server.use(restify.CORS());
@@ -207,52 +208,33 @@
     server.post('/api/issues', function (req, res, next) {
         var ret;
 
-        console.log(plexData);
-
         // Check the body for valid data
         try {
             // Handle the body coming in as a JSON object or string.
             var issue;/* = typeof req.body !== "string"
                 ? req.body.toString()
                 : JSON.parse(req.body).body;*/
-            issue = req.body.toString();
-            //issue = issue.replace(/"/g, "");
+                /*
+                    Todo Leaving this comment in until this has been tested with curl and the real app.
+                    The json - string functions
+                    JSON.stringify();
+                    JSON.parse();
+                    jSON.toString();
+                    issue.toJSON()
+                    issue.toJson();
+                */
+
+            issue = req.body;
             idLast++;
-            // Todo Figure out how to pass the issue data!!!
-            //issue.id = idLast;
-
-            ret = JSON.parse(JSON.stringify(issue));
-            //ret = ret.replace(/"/g, "");
-            //
-            // Todo Cannot figure out how to get rid of the quotes around the json object.
-            // which makes the data file invalid!
-            // I've tried every combo of the following:
-            // obj.toString()
-            // JSON.stringify(obj)
-            // JSON.parse(obj);
-            // obj.toJSON()
-            //
-            console.log(ret);
-            /*{
-                "id": idLast,
-                "user" : "Bill",
-                "priority" : 3,
-                "status" : 3,
-                "Notes" : "",
-                "issues" : [
-                    "3",
-                    "6"
-                ]
-            };*/
-
-            //plexData.push(JSON.parse(JSON.stringify(ret)));
+            issue.id = idLast;
+            ret = issue;
             plexData.push(ret);
             saveIssues();
         }
         catch (e) {
             console.log("Error "+issue);
             res.statusCode = 400;
-            //ret = "data invalid";
+            ret = "data invalid - "+issue;
         }
         res.json(ret);
         next();
@@ -299,7 +281,7 @@
      * Save the notes to a file
      */
     var saveIssues = function () {
-        fs.writeFile(dataFile, JSON.stringify(plexData), function (err) {
+        fs.writeFile(dataFile, JSON.stringify(plexData, null, 4), function (err) {
             if (err) {
                 return console.log(err);
             }
