@@ -81,7 +81,11 @@
         "9" : "Add Artwork",
         "10" : "See Notes"
     };
-    var server = restify.createServer({name: 'PlexNotes Server'});
+    var server = restify.createServer({name: 'PlexNotes Server',  formatters: {
+        'application/json': function(req, res, body, cb) {
+            return cb(null, JSON.stringify(body, null, '\t'));
+        }
+    }});
 
     // Load the plugins
 /*
