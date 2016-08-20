@@ -72,7 +72,7 @@
 
         $http.get('http://localhost:8080/api/issues').success(function (issues) {
             $scope.issues = ctrl.issues = issues;
-            console.log("Data Read " + issues.length + " items.");
+            console.log("Data Read IssuesController " + issues.length + " items.");
         });
 
 
@@ -155,7 +155,7 @@
         return {
             restrict    : "E",
             templateUrl : "newIssue.html",
-            controller  : 'IssuesController',
+            controller  : 'IssuesController',   // ToDo Don't do this the controller constructor gets called again, and probably under a different scope.
             controllerAs: "newIssueCtrl"
         };
     });
