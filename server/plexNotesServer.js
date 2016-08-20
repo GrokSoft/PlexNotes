@@ -561,7 +561,8 @@ var loremIpsum = function (start, len) {
 
         issue.issues = [];
 
-        issueCnt = parseInt(Math.random()*plexIssues.length);
+        // Ensure we have at least 1 issue.
+        issueCnt = Math.max(1, parseInt(Math.random()*plexIssues.length));
         console.log("issueCnt "+ issueCnt);
         for( var j = 0; j < issueCnt; j++ ) {
             for( var k = 0; k < issueCnt; k++ ) {
