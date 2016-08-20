@@ -5,12 +5,21 @@
 "use strict";
 
 (function () {
+   var VERSION = "0.0.1";
    var app = angular.module('plexNotes', ['media-directives']);
 
    app.controller('PlexNotesController', ['$scope', '$http', function ($scope, $http)
    {
       var plexNotes = this;
       var movies = [];
+
+      /**
+       * Get the version of Plex Notes
+       * @returns {string}
+       */
+      this.getVersion = function () {
+         return "Version: "+VERSION;
+      };
 
 
    }]);

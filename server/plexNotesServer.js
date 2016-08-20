@@ -14,62 +14,112 @@
 'use strict';
 
 /**
+ * Get Lorem Ipsum text.
+ * If start and/or end are not passed they will be randomly generated.
+ *
+ * @param start
+ * @param len
+ * @returns {string}
+ */
+var loremIpsum = function (start, len) {
+    var MIN = 10;   /** The minimum number of characters to return. */
+    var loremIpsumTxt = "Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur? Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur, vel illum qui dolorem eum fugiat quo voluptas nulla pariatur?";
+
+    if( start == undefined )
+        start = Math.random() * loremIpsumTxt.length-MIN;
+    if( len == undefined )
+        len = Math.max(start-1, parseInt(Math.random() * loremIpsumTxt.length-MIN ));
+
+    return loremIpsumTxt.substr(start,len);
+};
+
+/**
  * PlexNotes REST Server
  */
 (function () {
+
     var PORT = 8080;
     var dataFile = "plexData.json";     /** The file to save the plex data in */
     var fs = require('fs');             /** The file system */
     var restify = require('restify');   /** REST Server */
 
+    // The following data contains all of the data used in the UI
     var plexData = [
         {
             "id" : 1,
             "user" : "Bill",
-            "priority" : 3,
-            "status" : 3,
-            "Notes" : "",
+            "priority" : 1,
+            "status" : 1,
+            "notes" : loremIpsum(),
             "issues" : [
-                3,
-                6
+                1,
+                2
             ]
         },
         {
             "id" : 2,
             "user" : "Todd",
             "priority" : 2,
-            "status" : 1,
-            "Notes" : "a note",
+            "status" : 2,
+            "notes" : loremIpsum(),
             "issues" : [
-                2,
-                4
+                3,
+                4,
+                5
             ]
-        }
+        },
+            {
+                "id" : 3,
+                "user" : "Todd",
+                "priority" : 3,
+                "status" : 3,
+                "notes" : loremIpsum(),
+                 "issues" : [
+                    6,
+                    7,
+                    8,
+                    9,
+                    10
+                ]
+            }
+
     ];
-    var idLast = plexData[plexData.length - 1].id; /** id to used to create the next issue */
+    var idLast = parseInt(plexData[plexData.length - 1].id); /** id to used to create the next issue */
 
     /**
      * Issue Priorities
      */
-    var plexPriorites = {
-        "1": "Extremely Important",
-        "2" : "Important",
-        "3" : "Not Important"
-    };
+    var plexPriorites = [
+        "Extremely Important",
+        "Important",
+        "Not Important"
+    ];
 
     /**
      * Issue Statuses
      */
-    var plexStatuses = {
-        "1" : "Being Worked",
-        "2" : "On Hold",
-        "3" : "Completed"
-    };
+    var plexStatuses = [
+        "Being Worked",
+        "On Hold",
+        "Completed"
+    ];
 
     /**
      * Plex Issues
      */
-    var plexIssues = {
+    var plexIssues = [
+        "Needs Subtitles",
+        "Needs Forced Subtitles",
+        "Error Streaming",
+        "Choppy Streaming",
+        "Low Resolution",
+        "Bad Audio",
+        "Low Audio",
+        "High Audio",
+        "Add Artwork",
+        "See Notes"
+    ];
+    /*var plexIssues = {
         "1" : "Needs Subtitles",
         "2" : "Needs Forced Subtitles",
         "3" : "Error Streaming",
@@ -80,7 +130,7 @@
         "8" : "High Audio",
         "9" : "Add Artwork",
         "10" : "See Notes"
-    };
+    };*/
     var server = restify.createServer({name: 'PlexNotes Server',  formatters: {
         'application/json': function(req, res, body, cb) {
             var ret;
@@ -142,6 +192,27 @@
     //
     // Data for GUI rest routes
     //
+
+    server.get('api/data/add/:count', function (req, res, next) {
+        var ret;
+        var issue;
+        var count = req.params.count;
+
+        for( var i=0 ; i<count; i++ ){
+
+            issue = createIssue();
+
+            plexData.push(issue);
+            console.log("issue = "+JSON.stringify(issue));
+        }
+
+        saveIssues();
+        setResponseHeader(res);
+
+        res.json(ret);
+        next();
+    });
+
 
     /**
      * Get the Plex issue priorities
@@ -265,7 +336,7 @@
      *  "user" : "Bill",
      *  "priority" : 3,
      *  "status" : 3,
-     *  "Notes" : "",
+     *  "notes" : "",
      *  "issues" : [
      *  "3",
      *  "6"
@@ -340,6 +411,8 @@
     //
     // Misc functions
     //
+
+
 
     /**
      * Set the header for the response
@@ -432,12 +505,13 @@
                      */
                     // If the file can not be manually edited we can get the largest id with the following
                     // idLast = notes[notes.length-1].id;
-
+                    console.log("idLast = "+idLast);
                     // Iterate through the notes to find the largest ID number in case it was manually edited.
                     plexData.forEach(function (node) {
-                        //console.log("idLast = %s note.id = %s", idLast, note.id);
-                        idLast = Math.max(idLast, parseInt(node.id));
+                        console.log("idLast = %s note.id = %s", idLast, node.id);
+                        idLast = parseInt(Math.max(idLast, parseInt(node.id)));
                     });
+                    console.log("idLast = "+idLast);
                     console.log("There are %d issues available.", plexData.length);
                 });
             }
@@ -445,6 +519,67 @@
                 console.log("No Data file - using the default data");
             }
         });
+    };
+
+
+    var createIssue = function () {
+
+        var issueCnt;
+        var issueNum;
+        var users = [ "Bill", "Todd", "Sarah", "Reid", "Erin", "Ellissa"];
+        var issueTemplate = {
+            "id" : 3,
+            "user" : "Todd",
+            "priority" : 3,
+            "status" : 3,
+            "notes" : loremIpsum(),
+            "issues" : [
+                6,
+                7,
+                8,
+                9,
+                10
+            ]
+        };
+
+        var issue = {
+            "id" : 0,
+            "user" : "",
+            "priority" : 0,
+            "status" : 0,
+            "notes" : loremIpsum(),
+            "issues" : []
+        };
+
+        console.log("idLast "+idLast);
+        issue.id = ++idLast;
+        issue.user = users[parseInt(Math.random()*users.length)];
+        issue.priority = parseInt(Math.random()*plexPriorites.length);
+        console.log("issue.priority "+issue.priority);
+        issue.status = parseInt(Math.random()*plexStatuses.length);
+        issue.notes = loremIpsum();
+
+        issue.issues = [];
+
+        issueCnt = parseInt(Math.random()*plexIssues.length);
+        console.log("issueCnt "+ issueCnt);
+        for( var j = 0; j < issueCnt; j++ ) {
+            for( var k = 0; k < issueCnt; k++ ) {
+                issueNum = parseInt(Math.random()*plexIssues.length);
+                var isUsed = issue.issues.find(function (node) {
+                    console.log("node "+node);
+                    return node == issueNum;
+                });
+                console.log("isUsed "+isUsed);
+                if( isUsed == undefined ) {
+                    console.log("issueNum"+ issueNum);
+                    issue.issues.push(issueNum);
+                    break;
+                }
+            }
+        }
+        console.log("createIssue = "+JSON.stringify(issue));
+        return issue;
     };
 
     //
