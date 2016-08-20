@@ -1,3 +1,7 @@
+/*
+ * Copyright (c) 2016. GrokSoft LLC - All Rights Reserved
+ */
+
 /**
  * Created by trh on 8/13/16.
  *
@@ -90,6 +94,7 @@ var loremIpsum = function (start, len) {
      * Issue Priorities
      */
     var plexPriorites = [
+        "None",
         "Extremely Important",
         "Important",
         "Not Important"
@@ -99,6 +104,7 @@ var loremIpsum = function (start, len) {
      * Issue Statuses
      */
     var plexStatuses = [
+        "None",
         "Open",
         "Closed",
         "Being Worked",
@@ -110,6 +116,7 @@ var loremIpsum = function (start, len) {
      * Plex Issues
      */
     var plexIssues = [
+        "None",
         "See Notes",
         "Needs Subtitles",
         "Needs Forced Subtitles",
