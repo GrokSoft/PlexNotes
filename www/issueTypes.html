@@ -1,7 +1,13 @@
-<!-- Copyright 2016 GrokSoft LLC All Rights Reserved -->
+<!--
+  ~ Copyright (c) 2016. GrokSoft LLC - All Rights Reserved
+  -->
 
 
-<select multiple class="combobox" ng-model="newIssue.issues">
+<select multiple
+        class="combobox"
+        ng-model="newIssue.issues">
     <!--<option value="">Choose Issue Typess</option>-->
-    <option ng-repeat="issueType in issueTypeCtrl.issueTypes track by $index" value="{{$index+1}}">{{issueType}}</option>
+    <option ng-repeat="issueType in issueTypeCtrl.issueTypes track by $index"
+            value="{{$index+1}}">{{issueType}}
+    </option>
 </select>

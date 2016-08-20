@@ -1,38 +1,41 @@
-<!-- Copyright 2016 GrokSoft LLC All Rights Reserved -->
+<!--
+  ~ Copyright (c) 2016. GrokSoft LLC - All Rights Reserved
+  -->
 <div class="fluid">
-    <div class="text-center shadowed-dropped" style="font-size: x-large; font-weight: bold; color: #918f8b;">Create a new Issue</div>
+    <div class="text-center shadowed-dropped"
+            style="font-size: x-large; font-weight: bold; color: #918f8b;">Create a new Issue
+    </div>
     <form name="newIssueForm"
             method="post"
             class="form-horizontal"
             ng-submit="createIssue()">
         <br>
         <div class="form-group">
-            <label class="col-xs-3 control-label">User</label>
+            <label class="col-xs-3 control-label">User:</label>
             <div class="col-xs-5">
                 <input type="text"
                         class="form-control"
                         name="user"
-                ng-model="newIssue.user"/>
+                        ng-model="newIssue.user"/>
             </div>
         </div>
         
         <div class="form-group">
-            <label class="col-xs-3 control-label">Status</label>
+            <label class="col-xs-3 control-label">Status:</label>
             <div class="col-xs-5 selectContainer">
                 <statuses></statuses>
             </div>
         </div>
         
         <div class="form-group">
-            <label class="col-xs-3 control-label">Priority</label>
+            <label class="col-xs-3 control-label">Priority:</label>
             <div class="col-xs-5 selectContainer">
                 <priorities></priorities>
             </div>
         </div>
         
-       
         <div class="form-group">
-            <label class="col-xs-3 control-label">Note</label>
+            <label class="col-xs-3 control-label">Note:</label>
             <div class="col-xs-8">
             <textarea name="note"
                     class="form-control"
@@ -40,21 +43,20 @@
                     ng-model="newIssue.note"></textarea>
             </div>
         </div>
-    
+        
         <div class="form-group">
-            <label class="col-xs-3 control-label">Issue Types</label>
+            <label class="col-xs-3 control-label">Issue Types:</label>
             <div class="col-xs-5 selectContainer">
                 <issue-types></issue-types>
             </div>
         </div>
-    
-    
+        
         <div class="form-group">
             <label class="col-xs-3 control-label"></label>
             <div class="col-xs-8">
-                <button class="box-shadow" id="submitBtn"
-                        type="submit"
-                        >Add Issue
+                <button class="box-shadow"
+                        id="submitBtn"
+                        type="submit">Add Issue
                 </button>
             </div>
         </div>

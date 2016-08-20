@@ -1,6 +1,5 @@
-/**
- * Created by Bill on 8/14/2016.
- * Copyright (c) 2016. GrokSoft LLC All Rights Reserved
+/*
+ * Copyright (c) 2016. GrokSoft LLC - All Rights Reserved
  */
 "use strict";
 
@@ -103,7 +102,6 @@
                 alert("You must fill in all the data to save an issue!");
                 return;
             }
-
 
             // Convert to numbers
             // Todo There should be a better way of doing this with an angular filter, directive or something!

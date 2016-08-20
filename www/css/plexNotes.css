@@ -1,3 +1,7 @@
+/*
+ * Copyright (c) 2016. GrokSoft LLC - All Rights Reserved
+ */
+
 
 issue {
     border: outset;
@@ -10,14 +14,22 @@ new-issue {
     background-image: url("../images/paperBG3.jpg");
 }
 
-.issue-header, .issue-sub-header, .issue-notes
-{
+.form-group {
+    vertical-align: middle;
+}
+
+.form-group > label {
+    font-size: large;
+}
+
+.issue-header, .issue-sub-header, .issue-notes {
     padding: 4px 10px 4px 10px;
 }
+
 .issue-header {
-      background-color: #1b6d85;
+    background-color: #1b6d85;
     color: white;
-  }
+}
 
 .issue-sub-header {
     background-color: #2bafd6;
@@ -32,7 +44,6 @@ new-issue {
     padding-left: 20px;
     background-color: #e0e0e0;
 }
-
 
 .fluid {
     clear: both;
@@ -61,6 +72,7 @@ new-issue {
     -moz-box-shadow: 0 0 6px 6px rgba(0, 0, 0, .4);
     box-shadow: 0 0 6px 6px rgba(0, 0, 0, .4);
 }
+
 .grow, .grow-sm {
     transition: all .2s ease-in-out;
     cursor: pointer
@@ -88,6 +100,7 @@ new-issue {
     color: #f8f4ed;
     text-shadow: 0px 0px 4px rgba(0, 0, 0, 0.82);
 }
+
 /*
 Bootstrap Carousel Fade Transition (for Bootstrap 3.3.x)
 CSS from:       http://codepen.io/transportedman/pen/NPWRGq

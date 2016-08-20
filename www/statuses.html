@@ -1,24 +1,28 @@
-<!-- Copyright 2016 GrokSoft LLC All Rights Reserved -->
+<!--
+  ~ Copyright (c) 2016. GrokSoft LLC - All Rights Reserved
+  -->
 
 
-    
-    
-    <select class="combobox" ng-model="newIssue.status">
-        <option value="">Choose a Status</option>
-        <option type="number" ng-repeat="status in statusesCtrl.statuses track by $index" value="{{$index+1}}">{{status}}</option>
-    </select>
+<select class="combobox"
+        ng-model="newIssue.status">
+    <option value="">Choose a Status</option>
+    <option type="number"
+            ng-repeat="status in statusesCtrl.statuses track by $index"
+            value="{{$index+1}}">{{status}}
+    </option>
+</select>
 
 
-    <!--<button type="button"
-            class="btn btn-primary dropdown-toggle"
-            data-toggle="dropdown"
-            aria-haspopup="true"
-            aria-expanded="false">
-        Statuses&nbsp;
-        <span class="caret"></span>
-        <span class="sr-only">Statuses</span>
-    </button>
-    <ul class="dropdown-menu"
-            role="menu">
-        <li ng-repeat="status in statusesCtrl.statuses"><a class="grow-sm">{{status}}</a></li>
-    </ul>-->
+<!--<button type="button"
+        class="btn btn-primary dropdown-toggle"
+        data-toggle="dropdown"
+        aria-haspopup="true"
+        aria-expanded="false">
+    Statuses&nbsp;
+    <span class="caret"></span>
+    <span class="sr-only">Statuses</span>
+</button>
+<ul class="dropdown-menu"
+        role="menu">
+    <li ng-repeat="status in statusesCtrl.statuses"><a class="grow-sm">{{status}}</a></li>
+</ul>-->
