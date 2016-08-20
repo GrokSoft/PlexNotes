@@ -11,7 +11,8 @@
             <div class="col-xs-5">
                 <input type="text"
                         class="form-control"
-                        name="user"/>
+                        name="user"
+                ng-model="newIssue.user"/>
             </div>
         </div>
         
@@ -29,28 +30,31 @@
             </div>
         </div>
         
-        <div class="form-group">
-            <label class="col-xs-3 control-label">Issue Type</label>
-            <div class="col-xs-5 selectContainer">
-                <issue-types></issue-types>
-            </div>
-        </div>
-        
+       
         <div class="form-group">
             <label class="col-xs-3 control-label">Note</label>
             <div class="col-xs-8">
             <textarea name="note"
                     class="form-control"
-                    rows="5"></textarea>
+                    rows="5"
+                    ng-model="newIssue.note"></textarea>
             </div>
         </div>
-        
+    
+        <div class="form-group">
+            <label class="col-xs-3 control-label">Issue Types</label>
+            <div class="col-xs-5 selectContainer">
+                <issue-types></issue-types>
+            </div>
+        </div>
+    
+    
         <div class="form-group">
             <label class="col-xs-3 control-label"></label>
             <div class="col-xs-8">
                 <button id="submitBtn"
-                        type="button"
-                        ng-click="newIssueCtrl.createIssue(newIssueForm)">Submit
+                        type="submit"
+                        >Submit
                 </button>
             </div>
         </div>

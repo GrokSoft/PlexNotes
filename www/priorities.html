@@ -1,6 +1,6 @@
 <!-- Copyright 2016 GrokSoft LLC All Rights Reserved -->
 
-    <select class="combobox">
+    <select class="combobox" ng-model="newIssue.priority">
         <option value="">Choose a Priority</option>
         <option ng-repeat="priority in prioritiesCtrl.priorities track by $index" value="{{$index+1}}">{{priority}}</option>
     </select>

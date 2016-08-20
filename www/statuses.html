@@ -3,14 +3,11 @@
 
     
     
-    <select class="combobox">
+    <select class="combobox" ng-model="newIssue.status">
         <option value="">Choose a Status</option>
-        <option ng-repeat="status in statusesCtrl.statuses track by $index" value="{{$index+1}}">{{status}}</option>
+        <option type="number" ng-repeat="status in statusesCtrl.statuses track by $index" value="{{$index+1}}">{{status}}</option>
     </select>
-    
-    <script type="text/javascript">
-       
-    </script>
+
 
     <!--<button type="button"
             class="btn btn-primary dropdown-toggle"

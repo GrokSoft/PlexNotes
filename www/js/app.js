@@ -9,7 +9,6 @@
     var VERSION = "0.0.1";
     var app = angular.module('plexNotes', ['media-directives']);
 
-
     app.controller('PlexNotesController', ['$scope', '$http', function ($scope, $http) {
         var plexNotes = this;
 
@@ -54,6 +53,8 @@
         var issueTypes;
         var issues;
 
+
+
         $http.defaults.headers.post['Content-Type'] = 'application/json;charset=utf-8';
 
         $http.get('http://localhost:8080/api/data/statuses').success(function (statuses) {
@@ -76,11 +77,47 @@
             console.log("Data Read " + issues.length + " items.");
         });
 
-        var createIssue = function (form) {
-            $http.post('http://localhost:8080/data/issues', issue).success(function (data, status, headers, config) {
+
+        $scope.intToString = function(key) {
+            return (!isNaN(key)) ? parseInt(key) : key;
+        };
+
+        $scope.newIssue = { "id":0, "user": "", "priority": "", "status": "", "note": "", "issues": [
+            1,
+            2
+        ]};
+
+        $scope.createIssue = function () {
+
+            // Convert to numbers
+            // Todo There should be a better way of doing this with an angular filter, directive or something!
+            $scope.newIssue.status = parseInt($scope.newIssue.status);
+            $scope.newIssue.priority = parseInt($scope.newIssue.priority);
+            for(var i=0; i< $scope.newIssue.issues.length; i++)
+                $scope.newIssue.issues[i] = parseInt($scope.newIssue.issues[i]);
+
+            $http({
+                method : 'POST',
+                url : "http://localhost:8080/api/issues",
+                data : $scope.newIssue,
+                headers : {'content-Type' : 'application/json'}
+            }).success(function (data, status, headers, config) {
+                if( data.errors) {
+
+                } else {
+                    $scope.message = data.message;
+                }
 
                 console.log("Data Read " + JSON.stringify(data));
             });
+
+
+
+
+            /*$http.post('http://localhost:8080/api/issues', issue).success(function (data, status, headers, config) {
+
+                console.log("Data Read " + JSON.stringify(data));
+            });*/
         }
 
     }]);
