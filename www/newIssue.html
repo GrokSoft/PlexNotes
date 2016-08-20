@@ -1,6 +1,6 @@
 <!-- Copyright 2016 GrokSoft LLC All Rights Reserved -->
 <div class="fluid">
-    <span style="font-size: large; font-weight: bold">Create a new Issue</span>
+    <div class="text-center shadowed-dropped" style="font-size: x-large; font-weight: bold; color: #918f8b;">Create a new Issue</div>
     <form name="newIssueForm"
             method="post"
             class="form-horizontal"
@@ -36,7 +36,7 @@
             <div class="col-xs-8">
             <textarea name="note"
                     class="form-control"
-                    rows="5"
+                    rows="2"
                     ng-model="newIssue.note"></textarea>
             </div>
         </div>
@@ -52,9 +52,9 @@
         <div class="form-group">
             <label class="col-xs-3 control-label"></label>
             <div class="col-xs-8">
-                <button id="submitBtn"
+                <button class="box-shadow" id="submitBtn"
                         type="submit"
-                        >Submit
+                        >Add Issue
                 </button>
             </div>
         </div>

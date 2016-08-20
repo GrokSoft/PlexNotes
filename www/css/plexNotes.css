@@ -41,6 +41,15 @@ new-issue {
     float: left;
     display: block;
 }
+
+.shadowed {
+    text-shadow: 0px 0px 3px rgba(0, 0, 0, 0.82);
+}
+
+.shadowed-dropped {
+    text-shadow: 2px 2px 2px rgba(2, 2, 0, 0.82);
+}
+
 .box-shadow {
     -webkit-box-shadow: 0 4px 6px 0 rgba(0, 0, 0, .8);
     -moz-box-shadow: 0 4px 6px 0 rgba(0, 0, 0, .8);
@@ -74,6 +83,11 @@ new-issue {
     box-shadow: 4px 6px 15px rgba(0, 0, 0, 0.8);
 }
 
+.main-title {
+    font-weight: bold;
+    color: #f8f4ed;
+    text-shadow: 0px 0px 4px rgba(0, 0, 0, 0.82);
+}
 /*
 Bootstrap Carousel Fade Transition (for Bootstrap 3.3.x)
 CSS from:       http://codepen.io/transportedman/pen/NPWRGq

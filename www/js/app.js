@@ -28,7 +28,7 @@
         };
 
         // Set up the comboboxes
-        $(document).ready(function(){
+        $(document).ready(function () {
             $('.combobox').combobox();
         });
 
@@ -54,7 +54,6 @@
         var issues;
 
 
-
         $http.defaults.headers.post['Content-Type'] = 'application/json;charset=utf-8';
 
         $http.get('http://localhost:8080/api/data/statuses').success(function (statuses) {
@@ -78,46 +77,62 @@
         });
 
 
-        $scope.intToString = function(key) {
+        $scope.intToString = function (key) {
             return (!isNaN(key)) ? parseInt(key) : key;
         };
 
-        $scope.newIssue = { "id":0, "user": "", "priority": "", "status": "", "note": "", "issues": [
-            1,
-            2
-        ]};
+        $scope.newIssueTemplate = {
+            "id": 0, "user": "", "priority": "", "status": "", "note": "", "issues": [
+                1,
+                2
+            ]
+        };
+
+        // Do a deep copy of the template
+        $scope.newIssue = JSON.parse(JSON.stringify($scope.newIssueTemplate));
 
         $scope.createIssue = function () {
+            var issue = $scope.newIssue;
+
+            // Verify the data has been filled out
+            if ($scope.newIssue.status == "" ||
+                $scope.newIssue.priority == "" ||
+                $scope.newIssue.issues.length == 0 ||
+                $scope.newIssue.user == "") {
+                // Return an error!!!
+                alert("You must fill in all the data to save an issue!");
+                return;
+            }
+
 
             // Convert to numbers
             // Todo There should be a better way of doing this with an angular filter, directive or something!
             $scope.newIssue.status = parseInt($scope.newIssue.status);
             $scope.newIssue.priority = parseInt($scope.newIssue.priority);
-            for(var i=0; i< $scope.newIssue.issues.length; i++)
+            for (var i = 0; i < $scope.newIssue.issues.length; i++)
                 $scope.newIssue.issues[i] = parseInt($scope.newIssue.issues[i]);
 
             $http({
                 method : 'POST',
-                url : "http://localhost:8080/api/issues",
-                data : $scope.newIssue,
-                headers : {'content-Type' : 'application/json'}
+                url    : "http://localhost:8080/api/issues",
+                data   : $scope.newIssue,
+                headers: {'content-Type': 'application/json'}
             }).success(function (data, status, headers, config) {
-                if( data.errors) {
-
+                if (data.errors) {
+                    alert("New issue was NOT created:" + JSON.stringify(errors, null, 4));
                 } else {
                     $scope.message = data.message;
+                    alert("New issue was created:" + JSON.stringify(data, null, 4));
                 }
-
-                console.log("Data Read " + JSON.stringify(data));
+                console.log("Issue created: " + JSON.stringify(data));
             });
 
-
-
+            $scope.newIssue = JSON.parse(JSON.stringify($scope.newIssueTemplate));
 
             /*$http.post('http://localhost:8080/api/issues', issue).success(function (data, status, headers, config) {
 
-                console.log("Data Read " + JSON.stringify(data));
-            });*/
+             console.log("Data Read " + JSON.stringify(data));
+             });*/
         }
 
     }]);
