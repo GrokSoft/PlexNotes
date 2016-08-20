@@ -99,6 +99,8 @@ var loremIpsum = function (start, len) {
      * Issue Statuses
      */
     var plexStatuses = [
+        "Open",
+        "Closed",
         "Being Worked",
         "On Hold",
         "Completed"
@@ -108,6 +110,7 @@ var loremIpsum = function (start, len) {
      * Plex Issues
      */
     var plexIssues = [
+        "See Notes",
         "Needs Subtitles",
         "Needs Forced Subtitles",
         "Error Streaming",
@@ -131,6 +134,9 @@ var loremIpsum = function (start, len) {
         "9" : "Add Artwork",
         "10" : "See Notes"
     };*/
+
+    // Create the restify server
+    // Add a filter to beautify json output so it's on multiple lines.
     var server = restify.createServer({name: 'PlexNotes Server',  formatters: {
         'application/json': function(req, res, body, cb) {
             var ret;
@@ -200,7 +206,7 @@ var loremIpsum = function (start, len) {
 
         for( var i=0 ; i<count; i++ ){
 
-            issue = createIssue();
+            issue = createRandomIssues();
 
             plexData.push(issue);
             console.log("issue = "+JSON.stringify(issue));
@@ -522,26 +528,11 @@ var loremIpsum = function (start, len) {
     };
 
 
-    var createIssue = function () {
-
+    var createRandomIssues = function () {
         var issueCnt;
         var issueNum;
-        var users = [ "Bill", "Todd", "Sarah", "Reid", "Erin", "Ellissa"];
-        var issueTemplate = {
-            "id" : 3,
-            "user" : "Todd",
-            "priority" : 3,
-            "status" : 3,
-            "notes" : loremIpsum(),
-            "issues" : [
-                6,
-                7,
-                8,
-                9,
-                10
-            ]
-        };
-
+        var users = [ "Bill" +
+        "", "Todd", "Sarah", "Reid", "Erin", "Ellissa"];
         var issue = {
             "id" : 0,
             "user" : "",
@@ -558,8 +549,6 @@ var loremIpsum = function (start, len) {
         console.log("issue.priority "+issue.priority);
         issue.status = parseInt(Math.random()*plexStatuses.length);
         issue.notes = loremIpsum();
-
-        issue.issues = [];
 
         // Ensure we have at least 1 issue.
         issueCnt = Math.max(1, parseInt(Math.random()*plexIssues.length));

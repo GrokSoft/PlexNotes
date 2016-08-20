@@ -3,7 +3,7 @@
 <div class="fluid">
     
     <h3 class="issue-header">
-        <span>Issue# {{issue.id}}</span>
+        <span><b>Issue#</b> {{issue.id}}</span>
         
         <span class="pull-right">
             <span><b>Status:</b> {{issuesCtrl.statuses[issue.status]}}</span>
@@ -23,7 +23,7 @@
             <span class="glyphicon glyphicon-chevron-up"
                     title="Click to expand this issue"></span>
         </a></span>-->
-        <span>User# {{issue.user}}</span>
+        <span><b>User#</b> {{issue.user}}</span>
         
         <span class="pull-right">
             <span><b>Priority:</b> {{issuesCtrl.priorities[issue.priority]}}</span>
@@ -31,7 +31,7 @@
     </div>
     
     <div class="issue-notes bordered text-left">
-        Notes: "{{issue.notes}}"
+        <b>Notes:</b> "{{issue.notes}}"
     </div>
     
     <div class="issue">

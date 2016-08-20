@@ -1,6 +1,7 @@
 <!-- Copyright 2016 GrokSoft LLC All Rights Reserved -->
 
-<ul class="dropdown-menu"
-        role="menu">
-    <li ng-repeat="issueType in issuesCtrl.issueTypes">{{issueType[1]}}</li>
-</ul>
+
+<select class="combobox">
+    <option value="">Choose a Issue Type</option>
+    <option ng-repeat="issueType in issueTypeCtrl.issueTypes track by $index" value="{{$index+1}}">{{issueType}}</option>
+</select>
