@@ -54,6 +54,8 @@
         var issueTypes;
         var issues;
 
+        $http.defaults.headers.post['Content-Type'] = 'application/json;charset=utf-8';
+
         $http.get('http://localhost:8080/api/data/statuses').success(function (statuses) {
             $scope.statuses = ctrl.statuses = statuses;
             //console.log("Data Read %d statuses", statuses.length);
@@ -73,6 +75,13 @@
             $scope.issues = ctrl.issues = issues;
             console.log("Data Read " + issues.length + " items.");
         });
+
+        var createIssue = function (form) {
+            $http.post('http://localhost:8080/data/issues', issue).success(function (data, status, headers, config) {
+
+                console.log("Data Read " + JSON.stringify(data));
+            });
+        }
 
     }]);
 
@@ -96,19 +105,7 @@
         return {
             restrict    : "E",
             templateUrl : "newIssue.html",
-            controller  : function () {
-                var ctrl = this;
-
-                /*this.createIssue = function (issue) {
-
-                 $http.post('http://localhost:8080/api/issues').success(function (issue) {
-
-                 //console.log("Data Read %d statuses", statuses.length);
-                 });
-                 };*/
-
-
-            },
+            controller  : 'IssuesController',
             controllerAs: "newIssueCtrl"
         };
     });

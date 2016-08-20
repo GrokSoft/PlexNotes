@@ -1,9 +1,10 @@
 <!-- Copyright 2016 GrokSoft LLC All Rights Reserved -->
 <div class="fluid">
     <span style="font-size: large; font-weight: bold">Create a new Issue</span>
-    <form id="productForm"
+    <form name="newIssueForm"
             method="post"
-            class="form-horizontal">
+            class="form-horizontal"
+            ng-submit="createIssue()">
         <br>
         <div class="form-group">
             <label class="col-xs-3 control-label">User</label>
@@ -49,7 +50,7 @@
             <div class="col-xs-8">
                 <button id="submitBtn"
                         type="button"
-                        ng-click="newUser()">Submit
+                        ng-click="newIssueCtrl.createIssue(newIssueForm)">Submit
                 </button>
             </div>
         </div>

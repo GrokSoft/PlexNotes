@@ -170,10 +170,11 @@ var loremIpsum = function (start, len) {
     server.use(restify.bodyParser());                   // remaps the body content of a request to the req.params variable, allowing both GET and POST/PUT routes to use the same interface
 */
 
-    server.use(restify.jsonp());
+
     //server.use(restify.fullResponse());
     server.use(restify.queryParser());
     server.use(restify.bodyParser());
+    server.use(restify.jsonp());
     //server.use(restify.CORS());
 
     //
