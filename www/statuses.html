@@ -1,6 +1,19 @@
 <!-- Copyright 2016 GrokSoft LLC All Rights Reserved -->
 
-<ul class="dropdown-menu"
-        role="menu">
-    <li ng-repeat="status in issuesCtrl.statuses">{{status[1]}}</li>
-</ul>
+<div class="btn-group "><!--<a href="portfolio/oo"
+                                class="btn btn-primary dropdown-toggle"
+                                role="button">OO Projects</a>-->
+    <button type="button"
+            class="btn btn-primary dropdown-toggle"
+            data-toggle="dropdown"
+            aria-haspopup="true"
+            aria-expanded="false">
+        Statuses&nbsp;
+        <span class="caret"></span>
+        <span class="sr-only">Statuses</span>
+    </button>
+    <ul class="dropdown-menu"
+            role="menu">
+        <li ng-repeat="status in statusesCtrl.statuses"><a class="grow-sm">{{status}}</a></li>
+    </ul>
+</div>

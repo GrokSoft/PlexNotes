@@ -42,17 +42,15 @@
             var statuses = [];
             var issueTypes = [];
 
+            $http.get('http://localhost:8080/api/data/statuses').success(function (statuses) {
+               ctrl.statuses = statuses;
+               //console.log("Data Read %d statuses", statuses.length);
+            });
+
             this.getPriorities = function () {
                $http.get('http://localhost:8080/api/data/priorities').success(function (priorities) {
                   ctrl.priorities = priorities;
                   //console.log("Data Read "+ ctrl.priorities.length +" priorities");
-               });
-            };
-
-            this.getStatuses = function () {
-               $http.get('http://localhost:8080/api/data/statuses').success(function (statuses) {
-                  ctrl.statuses = statuses;
-                  //console.log("Data Read %d statuses", statuses.length);
                });
             };
 
@@ -65,7 +63,7 @@
 
             // Get the data needed for the GUI
             this.getPriorities();
-            this.getStatuses();
+            //this.getStatuses();
             this.getIssueTypes();
 
             // Get the issues
@@ -80,7 +78,7 @@
       }
    }]);
 
-   app.directive("issue", ['$rootScope', function ($rootScope) {
+   app.directive("issue", ['$rootScope', '$http', function ($rootScope, $http) {
       return {
          restrict    : "E",   // By Attribute <div project-specs>
          templateUrl : "../issue.html",
@@ -95,12 +93,23 @@
    // Directives for controls
    //
 
-   app.directive("statuses", function () {
+   app.directive("statuses", ['$http', function ($http) {
       return {
-         restrict    : "E",
+         restrict    : "EA",
          templateUrl : "statuses.html",
+         controller  : function () {
+            var ctrl = this;
+            var statuses = [];
+
+            $http.get('http://localhost:8080/api/data/statuses').success(function (statuses) {
+               ctrl.statuses = statuses;
+               //console.log("Data Read %d statuses", statuses.length);
+            });
+
+         },
+         controllerAs: "statusesCtrl"
       };
-   });
+   }]);
 
    app.directive("priorities", function () {
       return {
