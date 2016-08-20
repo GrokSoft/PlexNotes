@@ -1,0 +1,57 @@
+<!-- Copyright 2016 GrokSoft LLC All Rights Reserved -->
+<div>
+    <span style="font-size: large; font-weight: bold">Create a new Issue</span>
+    <form id="productForm"
+            method="post"
+            class="form-horizontal">
+        <br>
+        <div class="form-group">
+            <label class="col-xs-3 control-label">User</label>
+            <div class="col-xs-5">
+                <input type="text"
+                        class="form-control"
+                        name="user"/>
+            </div>
+        </div>
+        
+        <div class="form-group">
+            <label class="col-xs-3 control-label">Status</label>
+            <div class="col-xs-5 selectContainer">
+                <statuses></statuses>
+            </div>
+        </div>
+        
+        <div class="form-group">
+            <label class="col-xs-3 control-label">Priority</label>
+            <div class="col-xs-5 selectContainer">
+                <priorities></priorities>
+            </div>
+        </div>
+        
+        <div class="form-group">
+            <label class="col-xs-3 control-label">Issue</label>
+            <div class="col-xs-5 selectContainer">
+                <issue-types></issue-types>
+            </div>
+        </div>
+        
+        <div class="form-group">
+            <label class="col-xs-3 control-label">Note</label>
+            <div class="col-xs-8">
+            <textarea name="note"
+                    class="form-control"
+                    rows="5"></textarea>
+            </div>
+        </div>
+        
+        <div class="form-group">
+            <label class="col-xs-3 control-label"></label>
+            <div class="col-xs-8">
+                <button id="submitBtn"
+                        type="button"
+                        ng-click="newUser()">Submit
+                </button>
+            </div>
+        </div>
+    </form>
+</div>

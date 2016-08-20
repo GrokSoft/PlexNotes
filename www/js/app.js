@@ -89,6 +89,27 @@
       }
    }]);
 
+   app.directive("newIssue", ['$http', function ($http) {
+      return {
+         restrict    : "E",
+         templateUrl : "newIssue.html",
+         controller  : function () {
+            var ctrl = this;
+
+            this.createIssue = function (issue) {
+
+               $http.post('http://localhost:8080/api/issues').success(function (issue) {
+
+                  //console.log("Data Read %d statuses", statuses.length);
+               });
+            };
+
+
+         },
+         controllerAs: "newIssueCtrl"
+      };
+   }]);
+
    //
    // Directives for controls
    //

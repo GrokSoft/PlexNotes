@@ -1,9 +1,32 @@
 <!-- Copyright 2016 GrokSoft LLC All Rights Reserved -->
 
-<div class="btn-group "><!--<a href="portfolio/oo"
-                                class="btn btn-primary dropdown-toggle"
-                                role="button">OO Projects</a>-->
-    <button type="button"
+
+    
+    
+    <select class="combobox">
+        <option value="">Choose a Status</option>
+        <option ng-repeat="status in statusesCtrl.statuses track by $index" value="{{$index+1}}">{{status}}</option>
+    </select>
+    
+    <script type="text/javascript">
+        $(document).ready(function(){
+            $('.combobox').combobox();
+        });
+    </script>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <!--<button type="button"
             class="btn btn-primary dropdown-toggle"
             data-toggle="dropdown"
             aria-haspopup="true"
@@ -15,5 +38,4 @@
     <ul class="dropdown-menu"
             role="menu">
         <li ng-repeat="status in statusesCtrl.statuses"><a class="grow-sm">{{status}}</a></li>
-    </ul>
-</div>
+    </ul>-->
