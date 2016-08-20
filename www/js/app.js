@@ -12,11 +12,7 @@
       var plexNotes = this;
       var movies = [];
 
-      // Get the data for the drinks
-     /* $http.get('movies.json').success(function (data)
-      {
-         plexNotes.movies = data;
-      });*/
+
    }]);
 
    app.directive("plexJumbo", function () {
@@ -41,6 +37,7 @@
             var priorities = [];
             var statuses = [];
             var issueTypes = [];
+
 
             $http.get('http://localhost:8080/api/data/statuses').success(function (statuses) {
                ctrl.statuses = statuses;

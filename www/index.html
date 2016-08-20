@@ -1,19 +1,18 @@
-<!DOCTYPE html>
-<!--******************************************************************************
+<!DOCTYPE html><!--******************************************************************************
     Created by Bill on 8/14/2016.
     Copyright © 2016 GrokSoft LLC All Rights Reserved
   ******************************************************************************-->
 
-
-<html ng-app="plexNotes" lang="en">
+<html ng-app="plexNotes"
+        lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Plex Notes</title>
     
-    
     <link href="css/bootstrap.css"
             rel="stylesheet">
-    <link rel="stylesheet" href="css/bootstrap-combobox.css">
+    <link rel="stylesheet"
+            href="css/bootstrap-combobox.css">
     <link href="css/plexNotes.css"
             rel="stylesheet">
     
@@ -27,23 +26,28 @@
     <script src="js/media.js"></script>
 </head>
 <body ng-controller="PlexNotesController as pnCtrl">
-    <div class="container-fluid">
-        <header>
-            <div class="col-md-6"><plex-jumbo></plex-jumbo></div>
-            <div class="col-md-6"><h1 class="text-center">Welcome to Plex Notes</h1></div>
-            <new-issue class="col-md-6"></new-issue>
-            
-           <!--
-            -->
-        </header>
+<div class="container-fluid">
+    <header class="container-fluid">
+        <div class="col-lg-6">
+            <plex-jumbo></plex-jumbo>
+        </div>
+        <div class="col-lg-6">
+            <h1 class="text-center fluid">Welcome to Plex Notes</h1>
+            <new-issue class="fluid"></new-issue>
+        </div>
+    </header>
 
-    </div>
+
+
     <issues></issues>
 
-    <footer class="container-fluid">
-        <hr>
-        <span class="pull-right">Copyright &copy; 2016 </span>
-    </footer>
+
+
+</div>
+<footer class="container-fluid">
+    <hr>
+    <span class="pull-right">Copyright &copy; 2016</span>
+</footer>
 
 </body>
 </html>

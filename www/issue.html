@@ -1,6 +1,6 @@
 <!-- Copyright 2016 GrokSoft LLC All Rights Reserved -->
 
-<div ng-init="">
+<div class="fluid">
     
     <h3 class="issue-header">
         <span>Issue# {{issue.id}}</span>
@@ -24,7 +24,7 @@
                     title="Click to expand this issue"></span>
         </a></span>-->
         <span>User# {{issue.user}}</span>
-    
+        
         <span class="pull-right">
             <span><b>Priority:</b> {{issuesCtrl.priorities[issue.priority]}}</span>
         </span>
@@ -35,12 +35,9 @@
     </div>
     
     <div class="issue">
-    <b>Issues:</b>
-    <br>
-    <div ng-repeat="issue in issue.issues"  > {{issuesCtrl.issueTypes[issue]}} </div>
+        <b>Issues:</b>
+        <br>
+        <div ng-repeat="issue in issue.issues"> {{issuesCtrl.issueTypes[issue]}} </div>
     </div>
-    <br>
-    <br>
-    
-    
+
 </div>
