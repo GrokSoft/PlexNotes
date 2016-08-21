@@ -8,11 +8,11 @@
         <span><b>Issue#</b> {{issue.id}}</span>
         
         <span class="pull-right">
-            <span><b>Status:</b> {{issuesCtrl.statuses[issue.status]}}</span>
-            <a href="{{issue.html_url}}">
+            <span><b>Status:</b> {{statuses()[issue.status]}}</span>
+           <!-- <a href="{{issue.html_url}}">
                 <span class="github grow grow-box-shadow"
                         title="View the issue on GetHub"></span>
-            </a>
+            </a>-->
         </span>
     </h3>
     
@@ -28,7 +28,7 @@
         <span><b>User#</b> {{issue.user}}</span>
         
         <span class="pull-right">
-            <span><b>Priority:</b> {{issuesCtrl.priorities[issue.priority]}}</span>
+            <span><b>Priority:</b> {{priorities()[issue.priority]}}</span>
         </span>
     </div>
     
@@ -39,7 +39,7 @@
     <div class="issue">
         <b>Issues:</b>
         <br>
-        <div ng-repeat="issue in issue.issues"> {{issuesCtrl.issueTypes[issue]}}</div>
+        <div ng-repeat="issue in issue.issues"> {{issueTypes()[issue]}}</div>
     </div>
 
 </div>

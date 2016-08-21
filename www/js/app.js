@@ -7,16 +7,36 @@
     var theApp = this;
     var VERSION = "0.0.1";
     var app = angular.module('plexNotes', ['media-directives']);
+    var _issues = [];
+    var _priorities = [];
+    var _statuses = [];
+    var _issueTypes = [];
 
     app.controller('PlexNotesController', ['$scope', '$http', function ($scope, $http) {
         var plexNotes = this;
+        var ctrl = this;
 
         $scope.movies = [];
 
-        $scope.issues = [];
-        $scope.priorities = [];
-        $scope.statuses = [];
-        $scope.issueTypes = [];
+        $http.get('http://localhost:8080/api/issues').success(function (issues) {
+            _issues =  issues;
+            console.log("Data Read IssuesController " + issues.length + " items.");
+        });
+
+        $http.get('http://localhost:8080/api/data/statuses').success(function (statuses) {
+            _statuses =  statuses;
+            console.log("Data Read  statuses "+ statuses.length);
+        });
+
+        $http.get('http://localhost:8080/api/data/priorities').success(function (priorities) {
+            _priorities =  priorities;
+            console.log("Data Read "+ priorities.length +" priorities");
+        });
+
+        $http.get('http://localhost:8080/api/data/issues').success(function (issueTypes) {
+            _issueTypes =  issueTypes;
+            console.log("Data Read issueTypes"+ issueTypes.length);
+        });
 
         /**
          * Get the version of Plex Notes
@@ -45,88 +65,33 @@
         };
     });
 
-    app.controller('IssuesController', ['$scope', '$http', function ($scope, $http) {
+    app.controller('IssuesController', ['$scope', '$http', function ($scope) {
         var ctrl = this;
-        var statuses;
-        var priorities;
-        var issueTypes;
-        var issues;
+       /* var statuses = $scope.statuses;
+        var priorities = $scope.priorities;
+        var issueTypes = $scope.issueTypes;
+        var issues = $scope.issues;*/
 
-        $http.defaults.headers.post['Content-Type'] = 'application/json;charset=utf-8';
-
-        $http.get('http://localhost:8080/api/data/statuses').success(function (statuses) {
-            $scope.statuses = ctrl.statuses = statuses;
-            //console.log("Data Read %d statuses", statuses.length);
-        });
-
-        $http.get('http://localhost:8080/api/data/priorities').success(function (priorities) {
-            $scope.priorities = ctrl.priorities = priorities;
-            //console.log("Data Read "+ ctrl.priorities.length +" priorities");
-        });
-
-        $http.get('http://localhost:8080/api/data/issues').success(function (issueTypes) {
-            $scope.issueTypes = ctrl.issueTypes = issueTypes;
-            //console.log("Data Read %d issueTypes", issueTypes.length);
-        });
-
-        $http.get('http://localhost:8080/api/issues').success(function (issues) {
-            $scope.issues = ctrl.issues = issues;
-            console.log("Data Read IssuesController " + issues.length + " items.");
-        });
+        $scope.statuses = function () {
+            console.log("Getting statuses from IssuesController");
+            return _statuses;
+        };
+        $scope.priorities = function () {
+            console.log("Getting priorities from IssuesController");
+            return _priorities;
+        };
+        $scope.issueTypes = function () {
+            console.log("Getting issueTypes from IssuesController");
+            return _issueTypes;
+        };
+        $scope.issues = function () {
+            console.log("Getting issues from IssuesController");
+            return _issues;
+        };
 
         $scope.intToString = function (key) {
             return (!isNaN(key)) ? parseInt(key) : key;
         };
-
-        $scope.newIssueTemplate = {
-            "id": 0, "user": "", "priority": "", "status": "", "note": "", "issues": [ 1, 2 ]
-        };
-
-        // Do a deep copy of the template
-        $scope.newIssue = JSON.parse(JSON.stringify($scope.newIssueTemplate));
-
-        $scope.createIssue = function () {
-            var issue = $scope.newIssue;
-
-            // Verify the data has been filled out
-            if ($scope.newIssue.status == "" ||
-                $scope.newIssue.priority == "" ||
-                $scope.newIssue.issues.length == 0 ||
-                $scope.newIssue.user == "") {
-                // Return an error!!!
-                alert("You must fill in all the data to save an issue!");
-                return;
-            }
-
-            // Convert to numbers
-            // Todo There should be a better way of doing this with an angular filter, directive or something!
-            $scope.newIssue.status = parseInt($scope.newIssue.status);
-            $scope.newIssue.priority = parseInt($scope.newIssue.priority);
-            for (var i = 0; i < $scope.newIssue.issues.length; i++)
-                $scope.newIssue.issues[i] = parseInt($scope.newIssue.issues[i]);
-
-            $http({
-                method : 'POST',
-                url    : "http://localhost:8080/api/issues",
-                data   : $scope.newIssue,
-                headers: {'content-Type': 'application/json'}
-            }).success(function (data, status, headers, config) {
-                if (data.errors) {
-                    alert("New issue was NOT created:" + JSON.stringify(errors, null, 4));
-                } else {
-                    $scope.message = data.message;
-                    alert("New issue was created:" + JSON.stringify(data, null, 4));
-                }
-                console.log("Issue created: " + JSON.stringify(data));
-            });
-
-            $scope.newIssue = JSON.parse(JSON.stringify($scope.newIssueTemplate));
-
-            /*$http.post('http://localhost:8080/api/issues', issue).success(function (data, status, headers, config) {
-
-             console.log("Data Read " + JSON.stringify(data));
-             });*/
-        }
     }]);
 
     app.directive("issues", function () {
@@ -141,7 +106,30 @@
     app.directive("issue", function () {
         return {
             restrict   : "E",   // By Attribute <div project-specs>
-            templateUrl: "issue.html"
+            templateUrl: "issue.html",
+            controller : function ($scope) {
+                $scope.statuses = function () {
+                    console.log("Getting statuses from Issue-Controller");
+                    return _statuses;
+                };
+                $scope.priorities = function () {
+                    console.log("Getting priorities from Issue-Controller");
+                    return _priorities;
+                };
+                $scope.issueTypes = function () {
+                    console.log("Getting issueTypes from Issue-Controller");
+                    return _issueTypes;
+                };
+                $scope.issues = function () {
+                    console.log("Getting issues from Issue-Controller");
+                    return _issues;
+                };
+
+                $scope.intToString = function (key) {
+                    return (!isNaN(key)) ? parseInt(key) : key;
+                };
+            },
+            controllerAs : "issueCtrl"
         }
     });
 
@@ -149,7 +137,61 @@
         return {
             restrict    : "E",
             templateUrl : "newIssue.html",
-            controller  : 'IssuesController',   // ToDo Don't do this the controller constructor gets called again, and probably under a different scope.
+            controller  : function ($scope, $http) {
+
+                // todo get rid of this if not needed
+                $http.defaults.headers.post['Content-Type'] = 'application/json;charset=utf-8';
+
+                $scope.newIssueTemplate = {
+                    "id": 0, "user": "", "priority": "", "status": "", "note": "", "issues": [ 1, 2 ]
+                };
+
+                // Do a deep copy of the template
+                $scope.newIssue = JSON.parse(JSON.stringify($scope.newIssueTemplate));
+
+                $scope.createIssue = function () {
+                    var issue = $scope.newIssue;
+
+                    // Verify the data has been filled out
+                    if ($scope.newIssue.status == "" ||
+                        $scope.newIssue.priority == "" ||
+                        $scope.newIssue.issues.length == 0 ||
+                        $scope.newIssue.user == "") {
+                        // Return an error!!!
+                        alert("You must fill in all the data to save an issue!");
+                        return;
+                    }
+
+                    // Convert to numbers
+                    // Todo There should be a better way of doing this with an angular filter, directive or something!
+                    $scope.newIssue.status = parseInt($scope.newIssue.status);
+                    $scope.newIssue.priority = parseInt($scope.newIssue.priority);
+                    for (var i = 0; i < $scope.newIssue.issues.length; i++)
+                        $scope.newIssue.issues[i] = parseInt($scope.newIssue.issues[i]);
+
+                    $http({
+                        method : 'POST',
+                        url    : "http://localhost:8080/api/issues",
+                        data   : $scope.newIssue,
+                        headers: {'content-Type': 'application/json'}
+                    }).success(function (data, status, headers, config) {
+                        if (data.errors) {
+                            alert("New issue was NOT created:" + JSON.stringify(errors, null, 4));
+                        } else {
+                            $scope.message = data.message;
+                            alert("New issue was created:" + JSON.stringify(data, null, 4));
+                        }
+                        console.log("Issue created: " + JSON.stringify(data));
+                    });
+
+                    $scope.newIssue = JSON.parse(JSON.stringify($scope.newIssueTemplate));
+
+                    /*$http.post('http://localhost:8080/api/issues', issue).success(function (data, status, headers, config) {
+
+                     console.log("Data Read " + JSON.stringify(data));
+                     });*/
+                }
+            },
             controllerAs: "newIssueCtrl"
         };
     });
@@ -160,27 +202,13 @@
 
     app.directive("statuses", function () {
         return {
-            restrict    : "EA",
+            restrict    : "E",
             templateUrl : "statuses.html",
-            controller  : function ($scope, $http) {
-                var ctrl = this;
-
-                var statuses = function () {
-
-                    $http.get('http://localhost:8080/api/data/statuses').success(function (statuses) {
-                        $scope.statuses = ctrl.statuses = statuses;
-                        //console.log("Data Read %d statuses", statuses.length);
-                    });
-
-                    return $scope.statuses;
-
+            controller  : function () {
+                this.statuses = function () {
+                    console.log("Getting statuses from statuses");
+                    return _statuses;
                 };
-                var priorities = $scope.priorities;
-                var issueTypes = $scope.issueTypes;
-                var issues = $scope.issues;
-
-
-
             },
             controllerAs: "statusesCtrl"
         };
@@ -190,7 +218,13 @@
         return {
             restrict    : "E",
             templateUrl : "priorities.html",
-            controller  : 'IssuesController',
+            controller  : function () {
+
+                this.priorities = function () {
+                    console.log("Getting priorities from priorities");
+                    return _priorities;
+                };
+            },
             controllerAs: "prioritiesCtrl"
         };
     });
@@ -199,7 +233,12 @@
         return {
             restrict    : "E",
             templateUrl : "issueTypes.html",
-            controller  : 'IssuesController',
+            controller  : function () {
+                this.issueTypes = function () {
+                    console.log("Getting issueTypes from issueTypes");
+                    return _issueTypes;
+                };
+            },
             controllerAs: "issueTypeCtrl"
         };
     });

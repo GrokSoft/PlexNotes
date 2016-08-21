@@ -7,7 +7,7 @@
         ng-model="newIssue.status">
     <option value="">Choose a Status</option>
     <option type="number"
-            ng-repeat="status in statusesCtrl.statuses track by $index"
+            ng-repeat="status in statuses() track by $index"
             value="{{$index+1}}">{{status}}
     </option>
 </select>
