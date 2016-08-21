@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="DataSourceManagerImpl" format="xml" multifile-model="true">
-    <data-source source="LOCAL" name="Sqlite (Xerial) - plex.sqlite" uuid="94f8db7e-fd32-4577-b5d4-27dc3b8c3fd7">
+    <data-source source="LOCAL" name="Sqlite (Xerial) - plexdb.sqlite" uuid="94f8db7e-fd32-4577-b5d4-27dc3b8c3fd7">
       <driver-ref>sqlite.xerial</driver-ref>
       <synchronize>true</synchronize>
       <jdbc-driver>org.sqlite.JDBC</jdbc-driver>
-      <jdbc-url>jdbc:sqlite:$PROJECT_DIR$/database/plex.sqlite</jdbc-url>
+      <jdbc-url>jdbc:sqlite:$PROJECT_DIR$/database/plexdb.sqlite</jdbc-url>
     </data-source>
   </component>
 </project>
