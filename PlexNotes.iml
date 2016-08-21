@@ -4,6 +4,9 @@
     <facet type="Python" name="Python">
       <configuration sdkName="" />
     </facet>
+    <facet type="NBMindMap" name="NB Mind Map">
+      <configuration />
+    </facet>
   </component>
   <component name="NewModuleRootManager" inherit-compiler-output="false">
     <content url="file://$MODULE_DIR$">
