@@ -6,34 +6,51 @@
 (function () {
     var theApp = this;
     var VERSION = "0.0.1";
-    var app = angular.module('plexNotes', ['media-directives']);
+    var urlBase;
+
     var _issues = [];
     var _priorities = [];
     var _statuses = [];
     var _issueTypes = [];
 
-    app.controller('PlexNotesController', ['$scope', '$http', function ($scope, $http) {
+    /**
+     * Main module plexNotes
+     *
+     * @type {angular.Module}
+     */
+    var app = angular.module('plexNotes', ['media-directives']/*,function($locationProvider){
+        $locationProvider.html5Mode(true);
+    }*/);
+
+    app.controller('PlexNotesController', ['$scope', '$http', '$location', function ($scope, $http, $location) {
         var plexNotes = this;
         var ctrl = this;
 
+
+        // ToDo Either change the port in the run configuration to run on to be the same as the servers or add logic to decide which to use, or Have the server configurable at the GUI?????????
+        urlBase = 'http://'+$location.absUrl().split("/")[2]||"Unknown";
+        this.getUrlBase = function () {
+            return urlBase;
+        };
+
         $scope.movies = [];
 
-        $http.get('http://localhost:8080/api/issues').success(function (issues) {
+        $http.get(urlBase+'/api/issues').success(function (issues) {
             _issues =  issues;
             console.log("Data Read IssuesController " + issues.length + " items.");
         });
 
-        $http.get('http://localhost:8080/api/data/statuses').success(function (statuses) {
+        $http.get(urlBase+'/api/data/statuses').success(function (statuses) {
             _statuses =  statuses;
             console.log("Data Read  statuses "+ statuses.length);
         });
 
-        $http.get('http://localhost:8080/api/data/priorities').success(function (priorities) {
+        $http.get(urlBase+'/api/data/priorities').success(function (priorities) {
             _priorities =  priorities;
             console.log("Data Read "+ priorities.length +" priorities");
         });
 
-        $http.get('http://localhost:8080/api/data/issues').success(function (issueTypes) {
+        $http.get(urlBase+'/api/data/issues').success(function (issueTypes) {
             _issueTypes =  issueTypes;
             console.log("Data Read issueTypes"+ issueTypes.length);
         });
@@ -50,6 +67,15 @@
         $(document).ready(function () {
             $('.combobox').combobox();
         });
+
+        // Show info
+        //console.log("$route = "+$route);
+        //console.log("$routeParams = "+$routeParams);
+        console.log("$location = "+JSON.stringify($location));
+        console.log("$location.absUrl() = "+$location.absUrl());
+        console.log("urlBase = "+urlBase);
+        /*var pId = $location.absUrl().split("/")[3]||"Unknown";    //path will be /person/show/321/, and array looks like: ["","person","show","321",""]
+        console.log("pId = "+pId);*/
 
     }]);
 
@@ -186,7 +212,7 @@
 
                     $scope.newIssue = JSON.parse(JSON.stringify($scope.newIssueTemplate));
 
-                    /*$http.post('http://localhost:8080/api/issues', issue).success(function (data, status, headers, config) {
+                    /*$http.post('http://'+var urlBase+'/api/issues', issue).success(function (data, status, headers, config) {
 
                      console.log("Data Read " + JSON.stringify(data));
                      });*/

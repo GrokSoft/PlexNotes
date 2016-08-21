@@ -32,12 +32,14 @@
         </div>
         <div class="col-lg-6">
             <h1 class="main-title text-center fluid">Plex Notes
-                <span style="font-size:smaller ">{{getVersion()}}</span>
+                <span style="font-size:smaller ">{{pnCtrl.getVersion()}}</span>
             </h1>
             <new-issue class="fluid"></new-issue>
         </div>
     </header>
-    
+
+    <h3>Debug</h3>
+    urlBase = <span>{{pnCtrl.getUrlBase()}}</span>
     <h2 class="text-center shadowed"
             style="font-weight: bold; color: #587c91;">Plex Issues</h2>
     <issues></issues>
