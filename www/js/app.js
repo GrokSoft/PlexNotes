@@ -19,41 +19,53 @@
      * @type {angular.Module}
      */
     var app = angular.module('plexNotes', ['media-directives']/*,function($locationProvider){
-        $locationProvider.html5Mode(true);
-    }*/);
+     $locationProvider.html5Mode(true);
+     }*/);
 
     app.controller('PlexNotesController', ['$scope', '$http', '$location', function ($scope, $http, $location) {
         var plexNotes = this;
         var ctrl = this;
 
 
-        // ToDo Either change the port in the run configuration to run on to be the same as the servers or add logic to decide which to use, or Have the server configurable at the GUI?????????
-        urlBase = 'http://'+$location.absUrl().split("/")[2]||"Unknown";
+        // ToDo Either change the port in the run configuration to run on to be the same as the servers or add logic to decide which to use, or Have the server configurable at the
+        // GUI?????????
+        urlBase = 'http://' + $location.absUrl().split("/")[2] || "Unknown";
+        urlBase = 'http://localhost:8080'; // For debugging
         this.getUrlBase = function () {
             return urlBase;
         };
 
         $scope.movies = [];
 
-        $http.get(urlBase+'/api/issues').success(function (issues) {
-            _issues =  issues;
+        $http.get(urlBase + '/api/issues').success(function (issues) {
+            _issues = issues;
             console.log("Data Read IssuesController " + issues.length + " items.");
         });
 
-        $http.get(urlBase+'/api/data/statuses').success(function (statuses) {
-            _statuses =  statuses;
-            console.log("Data Read  statuses "+ statuses.length);
+        $http.get(urlBase + '/api/data/statuses').success(function (statuses) {
+            _statuses = statuses;
+            console.log("Data Read  statuses " + statuses.length);
         });
 
-        $http.get(urlBase+'/api/data/priorities').success(function (priorities) {
-            _priorities =  priorities;
-            console.log("Data Read "+ priorities.length +" priorities");
+        $http.get(urlBase + '/api/data/priorities').success(function (priorities) {
+            _priorities = priorities;
+            console.log("Data Read " + priorities.length + " priorities");
         });
 
-        $http.get(urlBase+'/api/data/issues').success(function (issueTypes) {
-            _issueTypes =  issueTypes;
-            console.log("Data Read issueTypes"+ issueTypes.length);
+        $http.get(urlBase + '/api/data/issues').success(function (issueTypes) {
+            _issueTypes = issueTypes;
+            console.log("Data Read issueTypes" + issueTypes.length);
         });
+
+        /**
+         * Refresh the Issues daTA
+         */
+        $scope.refreshIssues = function () {
+            $http.get(urlBase + '/api/issues').success(function (issues) {
+                _issues = issues;
+                console.log("Data Read IssuesController " + issues.length + " items.");
+            });
+        };
 
         /**
          * Get the version of Plex Notes
@@ -71,11 +83,11 @@
         // Show info
         //console.log("$route = "+$route);
         //console.log("$routeParams = "+$routeParams);
-        console.log("$location = "+JSON.stringify($location));
-        console.log("$location.absUrl() = "+$location.absUrl());
-        console.log("urlBase = "+urlBase);
+        console.log("$location = " + JSON.stringify($location));
+        console.log("$location.absUrl() = " + $location.absUrl());
+        console.log("urlBase = " + urlBase);
         /*var pId = $location.absUrl().split("/")[3]||"Unknown";    //path will be /person/show/321/, and array looks like: ["","person","show","321",""]
-        console.log("pId = "+pId);*/
+         console.log("pId = "+pId);*/
 
     }]);
 
@@ -93,10 +105,10 @@
 
     app.controller('IssuesController', ['$scope', '$http', function ($scope) {
         var ctrl = this;
-       /* var statuses = $scope.statuses;
-        var priorities = $scope.priorities;
-        var issueTypes = $scope.issueTypes;
-        var issues = $scope.issues;*/
+        /* var statuses = $scope.statuses;
+         var priorities = $scope.priorities;
+         var issueTypes = $scope.issueTypes;
+         var issues = $scope.issues;*/
 
         $scope.statuses = function () {
             console.log("Getting statuses from IssuesController");
@@ -131,9 +143,9 @@
 
     app.directive("issue", function () {
         return {
-            restrict   : "E",   // By Attribute <div project-specs>
-            templateUrl: "issue.html",
-            controller : function ($scope) {
+            restrict    : "E",   // By Attribute <div project-specs>
+            templateUrl : "issue.html",
+            controller  : function ($scope) {
                 $scope.statuses = function () {
                     console.log("Getting statuses from Issue-Controller");
                     return _statuses;
@@ -155,7 +167,7 @@
                     return (!isNaN(key)) ? parseInt(key) : key;
                 };
             },
-            controllerAs : "issueCtrl"
+            controllerAs: "issueCtrl"
         }
     });
 
@@ -169,7 +181,7 @@
                 $http.defaults.headers.post['Content-Type'] = 'application/json;charset=utf-8';
 
                 $scope.newIssueTemplate = {
-                    "id": 0, "user": "", "priority": "", "status": "", "note": "", "issues": [ 1, 2 ]
+                    "id": 0, "user": "", "priority": "", "status": "", "note": "", "issues": [1, 2]
                 };
 
                 // Do a deep copy of the template
@@ -208,14 +220,18 @@
                             alert("New issue was created:" + JSON.stringify(data, null, 4));
                         }
                         console.log("Issue created: " + JSON.stringify(data));
+
+                        $scope.refreshIssues();
+
+                        // Todo figure out why I had to put http call in the main controller and call it from here with refreshIssue()????
+                        // Refresh the issues
+                        /* $http.post(urlBase+'/api/issues', issue).success(function (data, status, headers, config) {
+                         _issues = data;
+
+                         console.log("Data Read " + JSON.stringify(data) + " issues");
+                         });*/
                     });
-
                     $scope.newIssue = JSON.parse(JSON.stringify($scope.newIssueTemplate));
-
-                    /*$http.post('http://'+var urlBase+'/api/issues', issue).success(function (data, status, headers, config) {
-
-                     console.log("Data Read " + JSON.stringify(data));
-                     });*/
                 }
             },
             controllerAs: "newIssueCtrl"
