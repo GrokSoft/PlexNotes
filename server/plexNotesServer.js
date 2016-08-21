@@ -144,7 +144,9 @@ var loremIpsum = function (start, len) {
 
     // Create the restify server
     // Add a filter to beautify json output so it's on multiple lines.
-    var server = restify.createServer({name: 'PlexNotes Server',  formatters: {
+    var server = restify.createServer({
+        name: 'PlexNotes Server',
+        formatters: {
         'application/json': function(req, res, body, cb) {
             var ret;
             //console.log("body = "+ JSON.stringify(body));
@@ -184,6 +186,16 @@ var loremIpsum = function (start, len) {
     server.use(restify.jsonp());
     //server.use(restify.CORS());
 
+    console.log("__dirname "+__dirname);
+
+    //
+    // Set up Static HTTP server
+    //server.get('api/data/add/:count', function (req, res, next) {
+    //server.get(/\/www\/?.*/, restify.serveStatic({
+    server.get(/www\/?.*/, restify.serveStatic({
+            directory: __dirname+'/../'
+        }));
+
     //
     // Common REST routs
     //
@@ -211,6 +223,8 @@ var loremIpsum = function (start, len) {
         var ret;
         var issue;
         var count = req.params.count;
+
+        console.log("Processing GET api/data/add/:count");
 
         for( var i=0 ; i<count; i++ ){
 
@@ -241,6 +255,9 @@ var loremIpsum = function (start, len) {
      */
     server.get('api/data/priorities', function (req, res, next) {
         var ret = plexPriorites;
+
+        console.log("Processing GET api/data/priorities");
+
         setResponseHeader(res);
         res.json(ret);
         next();
@@ -259,6 +276,9 @@ var loremIpsum = function (start, len) {
      */
     server.get('api/data/statuses', function (req, res, next) {
         var ret = plexStatuses;
+
+        console.log("Processing GET api/data/statuses");
+
         setResponseHeader(res);
         res.json(ret);
         next();
@@ -278,6 +298,9 @@ var loremIpsum = function (start, len) {
     // Todo - Is there a better names for these, since the whole thing is already an issue
     server.get('api/data/issues', function (req, res, next) {
         var ret = plexIssues;
+
+        console.log("Processing GET api/data/issues");
+
         setResponseHeader(res);
         res.json(ret);
         next();
@@ -302,6 +325,8 @@ var loremIpsum = function (start, len) {
     server.get('/api/issues', function (req, res, next) {
         var ret = [];
         var query = req.query.query;
+
+        console.log("Processing GET api/issues");
 
         plexData.forEach(function (node) {
             // Test for a query string
@@ -337,6 +362,9 @@ var loremIpsum = function (start, len) {
         if (ret === undefined) {
             ret = notFound(res);
         }
+
+        console.log("Processing GET api/issues/:id");
+
         setResponseHeader(res);
         res.json(ret);
         next();
@@ -364,6 +392,8 @@ var loremIpsum = function (start, len) {
      */
     server.post('/api/issues', function (req, res, next) {
         var ret;
+
+        console.log("Processing POST api/issues");
 
         // Check the body for valid data
         try {
@@ -588,6 +618,7 @@ var loremIpsum = function (start, len) {
     getIssues();
 
     // Have restify listen on the configured port
+    // server.use("../www");
     server.listen(PORT, function () {
         console.log('%s listening at %s', server.name, server.url);
     });

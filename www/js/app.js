@@ -52,7 +52,6 @@
         var issueTypes;
         var issues;
 
-
         $http.defaults.headers.post['Content-Type'] = 'application/json;charset=utf-8';
 
         $http.get('http://localhost:8080/api/data/statuses').success(function (statuses) {
@@ -75,16 +74,12 @@
             console.log("Data Read IssuesController " + issues.length + " items.");
         });
 
-
         $scope.intToString = function (key) {
             return (!isNaN(key)) ? parseInt(key) : key;
         };
 
         $scope.newIssueTemplate = {
-            "id": 0, "user": "", "priority": "", "status": "", "note": "", "issues": [
-                1,
-                2
-            ]
+            "id": 0, "user": "", "priority": "", "status": "", "note": "", "issues": [ 1, 2 ]
         };
 
         // Do a deep copy of the template
@@ -132,7 +127,6 @@
              console.log("Data Read " + JSON.stringify(data));
              });*/
         }
-
     }]);
 
     app.directive("issues", function () {
@@ -147,7 +141,7 @@
     app.directive("issue", function () {
         return {
             restrict   : "E",   // By Attribute <div project-specs>
-            templateUrl: "../issue.html"
+            templateUrl: "issue.html"
         }
     });
 
@@ -168,7 +162,26 @@
         return {
             restrict    : "EA",
             templateUrl : "statuses.html",
-            controller  : 'IssuesController',
+            controller  : function ($scope, $http) {
+                var ctrl = this;
+
+                var statuses = function () {
+
+                    $http.get('http://localhost:8080/api/data/statuses').success(function (statuses) {
+                        $scope.statuses = ctrl.statuses = statuses;
+                        //console.log("Data Read %d statuses", statuses.length);
+                    });
+
+                    return $scope.statuses;
+
+                };
+                var priorities = $scope.priorities;
+                var issueTypes = $scope.issueTypes;
+                var issues = $scope.issues;
+
+
+
+            },
             controllerAs: "statusesCtrl"
         };
     });
@@ -255,6 +268,4 @@
             $(theId).carousel('cycle');
         }, Carousel.carDelay);
     };
-
-
 })();
