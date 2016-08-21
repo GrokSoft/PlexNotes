@@ -14,7 +14,7 @@
     var _issueTypes = [];
 
     /**
-     * Main module plexNotes
+     * Main plexNotes module
      *
      * @type {angular.Module}
      */
@@ -52,7 +52,7 @@
             console.log("Data Read " + priorities.length + " priorities");
         });
 
-        $http.get(urlBase + '/api/data/issues').success(function (issueTypes) {
+        $http.get(urlBase + '/api/data/issuetypes').success(function (issueTypes) {
             _issueTypes = issueTypes;
             console.log("Data Read issueTypes" + issueTypes.length);
         });

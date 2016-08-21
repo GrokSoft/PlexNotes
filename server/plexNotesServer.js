@@ -6,14 +6,13 @@
  * Created by trh on 8/13/16.
  *
  * Test with:
- *      curl -is http://localhost:8080/hello/mark -H 'accept: text/plain'
- *      curl -is http://localhost:8080/hello/mark
- *      curl -is http://localhost:8080/hello/mark -X HEAD -H 'connection: close'
- *      curl -is http://localhost:8080/hello/bill?whatever='this is a parameter'
  *
- *      curl -is http://localhost:8080/confirm/bill -H 'accept: text/plain'
- *      curl -is http://localhost:8080/confirm/john
- *      curl -is http://localhost:8080/confirm/chewbaca -X HEAD -H 'connection: close'
+ *      curl -is http://localhost:8080/api/issues/:id
+ *
+ *      curl -is http://localhost:8080/api/data/add/:count
+ *      curl -is http://localhost:8080/api/data/priorities
+ *      curl -is http://localhost:8080/api/data/statuses
+ *      curl -is http://localhost:8080/api/data/issues
  */
 'use strict';
 
@@ -185,7 +184,6 @@ var loremIpsum = function (start, len) {
      server.use(restify.bodyParser());                   // remaps the body content of a request to the req.params variable, allowing both GET and POST/PUT routes to use the same interface
      */
 
-
     //server.use(restify.fullResponse());
     server.use(restify.queryParser());
     server.use(restify.bodyParser());
@@ -195,7 +193,7 @@ var loremIpsum = function (start, len) {
     console.log("__dirname " + __dirname);
 
     /**
-     * Set up Static HTTP server
+     * Set up Static HTTP server on www/
      *
      * This serves up the static webapp.
      */
@@ -223,7 +221,7 @@ var loremIpsum = function (start, len) {
     }
 
     //
-    // Data for GUI rest routes
+    // Routes to get data for GUI components
     //
 
     /**
@@ -236,7 +234,6 @@ var loremIpsum = function (start, len) {
      * @param next  The Next rout in the chain
      *
      * @returns  Plex issue priorities
-
      */
     server.get('api/data/add/:count', function (req, res, next) {
         var issue;
@@ -266,17 +263,14 @@ var loremIpsum = function (start, len) {
         saveIssues();
         setResponseHeader(res);
 
-
-
         res.json(ret);
         next();
     });
 
-
     /**
      * Get the Plex issue priorities
      *
-     * get /api/data/priorities
+     * get api/data/priorities
      *
      * @param req   The Request
      * @param res   The Response
@@ -297,7 +291,7 @@ var loremIpsum = function (start, len) {
     /**
      * Get the Plex issue statuses
      *
-     * get /api/data/statuses
+     * get api/data/statuses
      *
      * @param req   The Request
      * @param res   The Response
@@ -318,7 +312,7 @@ var loremIpsum = function (start, len) {
     /**
      * Get the Plex issue issues
      *
-     * get /api/data/issues
+     * get api/data/issuetypes
      *
      * @param req   The Request
      * @param res   The Response
@@ -327,7 +321,7 @@ var loremIpsum = function (start, len) {
      * @returns  Plex issue issues
      */
     // Todo - Is there a better names for these, since the whole thing is already an issue
-    server.get('api/data/issues', function (req, res, next) {
+    server.get('api/data/issuetypes', function (req, res, next) {
         var ret = plexIssues;
 
         console.log("Processing GET api/data/issues");
@@ -338,14 +332,14 @@ var loremIpsum = function (start, len) {
     });
 
     //
-    // REST routes
+    // REST issues routes
     //
 
     /**
      * Get all issues with optional query parameter
      *
-     * get /api/issues
-     * get /api/issues?query=movie
+     * get api/issues
+     * get api/issues?query=movie
      *
      * @param req   The Request
      * @param res   The Response
@@ -353,7 +347,7 @@ var loremIpsum = function (start, len) {
      *
      * @returns  The requested note or 404
      */
-    server.get('/api/issues', function (req, res, next) {
+    server.get('api/issues', function (req, res, next) {
         var ret = [];
         var query = req.query.query;
 
@@ -377,7 +371,7 @@ var loremIpsum = function (start, len) {
     /**
      * Get a issues by id
      *
-     * get /api/issues/{id}
+     * get api/issues/{id}
      *
      * @param req   The Request
      * @param res   The Response
@@ -385,7 +379,7 @@ var loremIpsum = function (start, len) {
      *
      * @returns  The requested note or 404
      */
-    server.get('/api/issues/:id', function (req, res, next) {
+    server.get('api/issues/:id', function (req, res, next) {
         // There can not be duplicate notes, so always use the first element returned.
         var ret = plexData.filter(function (node) {
             return node.id == req.params.id;
@@ -393,7 +387,6 @@ var loremIpsum = function (start, len) {
         if (ret === undefined) {
             ret = notFound(res);
         }
-
         console.log("Processing GET api/issues/:id");
 
         setResponseHeader(res);
@@ -421,10 +414,13 @@ var loremIpsum = function (start, len) {
      *
      * @returns  The new issue, or 400 if the issue could not be created.
      */
-    server.post('/api/issues', function (req, res, next) {
+    server.post('api/issues', function (req, res, next) {
         var ret;
 
         console.log("Processing POST api/issues");
+
+        // Get the notes in case they were change
+        getIssues();
 
         // Check the body for valid data
         try {
@@ -433,15 +429,6 @@ var loremIpsum = function (start, len) {
             /* = typeof req.body !== "string"
              ? req.body.toString()
              : JSON.parse(req.body).body;*/
-            /*
-             Todo Leaving this comment in until this has been tested with curl and the real app.
-             The json - string functions
-             JSON.stringify();
-             JSON.parse();
-             jSON.toString();
-             issue.toJSON()
-             issue.toJson();
-             */
 
             issue = req.body;
             idLast++;
@@ -460,28 +447,6 @@ var loremIpsum = function (start, len) {
         }
         setResponseHeader(res);
         res.json(ret);
-        next();
-    });
-
-    /**
-     *
-     */
-    server.get('/hello/:name', respond);
-
-    /**
-     *
-     */
-    server.head('/hello/:name', respond);
-
-    /**
-     * Respond with name passed
-     *
-     * @param req
-     * @param res
-     * @param next
-     */
-    server.get('/confirm/:name', function (req, res, next) {
-        res.send('confirm ' + req.params.name + ' it works!' + '\n\n');
         next();
     });
 
@@ -581,13 +546,13 @@ var loremIpsum = function (start, len) {
                      */
                     // If the file can not be manually edited we can get the largest id with the following
                     // idLast = notes[notes.length-1].id;
-                    console.log("idLast = " + idLast);
+                    //console.log("idLast = " + idLast);
                     // Iterate through the notes to find the largest ID number in case it was manually edited.
                     plexData.forEach(function (node) {
-                        console.log("idLast = %s note.id = %s", idLast, node.id);
+                        //console.log("idLast = %s note.id = %s", idLast, node.id);
                         idLast = parseInt(Math.max(idLast, parseInt(node.id)));
                     });
-                    console.log("idLast = " + idLast);
+                    //console.log("idLast = " + idLast);
                     console.log("There are %d issues available.", plexData.length);
                 });
             }
@@ -596,7 +561,6 @@ var loremIpsum = function (start, len) {
             }
         });
     };
-
 
     var createRandomIssues = function () {
         var issueCnt;
