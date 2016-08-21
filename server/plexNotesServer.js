@@ -194,10 +194,11 @@ var loremIpsum = function (start, len) {
 
     console.log("__dirname " + __dirname);
 
-    //
-    // Set up Static HTTP server
-    //server.get('api/data/add/:count', function (req, res, next) {
-    //server.get(/\/www\/?.*/, restify.serveStatic({
+    /**
+     * Set up Static HTTP server
+     *
+     * This serves up the static webapp.
+     */
     server.get(/www\/?.*/, restify.serveStatic({
         directory: __dirname + '/../'
     }));
@@ -225,10 +226,32 @@ var loremIpsum = function (start, len) {
     // Data for GUI rest routes
     //
 
+    /**
+     * Create random issues for testing
+     *
+     * api/data/add/:count
+     *
+     * @param req   The Request
+     * @param res   The Response
+     * @param next  The Next rout in the chain
+     *
+     * @returns  Plex issue priorities
+
+     */
     server.get('api/data/add/:count', function (req, res, next) {
-        var ret;
         var issue;
         var count = req.params.count;
+        var retJson = {
+            "jse_shortmsg": "Issues added",
+            "jse_info"    : {},
+            "message"     : "Issues Successfully added",
+            "statusCode"  : 201,
+            "body"        : {
+                "code"   : "Created",
+                "message": "Successfully added "+ count +" issues."
+            },
+            "restCode"    : "Created"
+        };
 
         console.log("Processing GET api/data/add/:count");
 
@@ -242,6 +265,8 @@ var loremIpsum = function (start, len) {
 
         saveIssues();
         setResponseHeader(res);
+
+
 
         res.json(ret);
         next();
@@ -424,6 +449,7 @@ var loremIpsum = function (start, len) {
             ret = issue;
             plexData.push(ret);
             saveIssues();
+            res.statusCode = 201;
         }
         catch (e) {
             console.log("Error " + issue);
