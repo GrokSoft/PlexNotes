@@ -40,7 +40,7 @@
         $http.get(urlBase + '/api/issues').success(function (data) {
             _issues = data;
             console.log("Data Read IssuesController " + data.length + " items.");
-        }).error(function(data, status, headers, config){
+        }).error(function (data, status, headers, config) {
             /*console.log(JSON.stringify(data));
             console.log(status);
             console.log(headers);

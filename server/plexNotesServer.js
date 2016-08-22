@@ -32,7 +32,8 @@
  * @returns {string}
  */
 var loremIpsum = function (start, len) {
-    var MIN = 10;  /** The minimum number of characters to return. */
+    var MIN           = 10;
+    /** The minimum number of characters to return. */
     var loremIpsumTxt = "Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur? Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur, vel illum qui dolorem eum fugiat quo voluptas nulla pariatur?";
 
     if (start == undefined)
@@ -48,56 +49,53 @@ var loremIpsum = function (start, len) {
  */
 (function () {
 
-    var PORT = 8080;
-    var dataFile = "plexData.json";
-    /** The file to save the plex data in */
-    var fs = require('fs');
-    /** The file system */
-    var restify = require('restify');
-    /** REST Server */
+    var PORT     = 8080;
+    var dataFile = "plexData.json"; // The file to save the plex data in
+    var fs       = require('fs'); // The file system
+    var restify  = require('restify'); // REST Server
 
-        // The following data contains all of the data used in the UI
+    // The following data contains all of the data used in the UI
     var plexData = [
-            {
-                "id"      : 1,
-                "user"    : "Bill",
-                "priority": 1,
-                "status"  : 1,
-                "notes"   : loremIpsum(),
-                "issues"  : [
-                    1,
-                    2
-                ]
-            },
-            {
-                "id"      : 2,
-                "user"    : "Todd",
-                "priority": 2,
-                "status"  : 2,
-                "notes"   : loremIpsum(),
-                "issues"  : [
-                    3,
-                    4,
-                    5
-                ]
-            },
-            {
-                "id"      : 3,
-                "user"    : "Todd",
-                "priority": 3,
-                "status"  : 3,
-                "notes"   : loremIpsum(),
-                "issues"  : [
-                    6,
-                    7,
-                    8,
-                    9,
-                    10
-                ]
-            }
+        {
+            "id"      : 1,
+            "user"    : "Bill",
+            "priority": 1,
+            "status"  : 1,
+            "notes"   : loremIpsum(),
+            "issues"  : [
+                1,
+                2
+            ]
+        },
+        {
+            "id"      : 2,
+            "user"    : "Todd",
+            "priority": 2,
+            "status"  : 2,
+            "notes"   : loremIpsum(),
+            "issues"  : [
+                3,
+                4,
+                5
+            ]
+        },
+        {
+            "id"      : 3,
+            "user"    : "Todd",
+            "priority": 3,
+            "status"  : 3,
+            "notes"   : loremIpsum(),
+            "issues"  : [
+                6,
+                7,
+                8,
+                9,
+                10
+            ]
+        }
 
-        ];
-    var idLast = parseInt(plexData[plexData.length - 1].id);
+    ];
+    var idLast   = parseInt(plexData[plexData.length - 1].id);
     /** id to used to create the next issue */
 
     /**
@@ -165,7 +163,7 @@ var loremIpsum = function (start, len) {
                     ret = cb(null, JSON.stringify(body, null, '\t'));
                 } catch (e) {
                     res.statusCode = 400;
-                    ret = badRequest(body);
+                    ret            = badRequest(body);
                     console.log("Error = " + body);
                 }
                 //console.log(ret);
@@ -317,7 +315,7 @@ var loremIpsum = function (start, len) {
      * @returns  The requested note or 404
      */
     server.get('api/issues', function (req, res, next) {
-        var ret = [];
+        var ret   = [];
         var query = req.query.query;
 
         console.log("Processing GET api/issues");
@@ -405,7 +403,7 @@ var loremIpsum = function (start, len) {
             issue = req.body;
             idLast++;
             issue.id = idLast;
-            ret = issue;
+            ret      = issue;
             plexData.push(ret);
             saveIssues();
             res.statusCode = 201;
@@ -436,15 +434,15 @@ var loremIpsum = function (start, len) {
      */
     server.post('api/data/add/:count', function (req, res, next) {
         var issue;
-        var count = req.params.count;
+        var count   = req.params.count;
         var retJson = {
-            "jse_shortmsg": count +"Issues added",
+            "jse_shortmsg": count + "Issues added",
             "jse_info"    : {},
             "message"     : "Issues Successfully added",
             "statusCode"  : 201,
             "body"        : {
                 "code"   : "Created",
-                "message": "Successfully added "+ count +" issues."
+                "message": "Successfully added " + count + " issues."
             },
             "restCode"    : "Created"
         };
@@ -527,7 +525,7 @@ var loremIpsum = function (start, len) {
      */
     var notFound = function (res) {
         res.statusCode = 404;
-        var retJson = {
+        var retJson    = {
             "jse_shortmsg": "Issue not found",
             "jse_info"    : {},
             "message"     : "Requested issue was not found",
@@ -613,19 +611,19 @@ var loremIpsum = function (start, len) {
         };
 
         //console.log("idLast " + idLast);
-        issue.id = ++idLast;
-        issue.user = users[parseInt(Math.random() * users.length)];
+        issue.id       = ++idLast;
+        issue.user     = users[parseInt(Math.random() * users.length)];
         issue.priority = parseInt(Math.random() * plexPriorites.length);
         //console.log("issue.priority " + issue.priority);
-        issue.status = parseInt(Math.random() * plexStatuses.length);
-        issue.notes = loremIpsum();
+        issue.status   = parseInt(Math.random() * plexStatuses.length);
+        issue.notes    = loremIpsum();
 
         // Ensure we have at least 1 issueType.
         issueCnt = Math.max(1, parseInt(Math.random() * plexIssues.length));
         //console.log("issueCnt " + issueCnt);
         for (var j = 0; j < issueCnt; j++) {
             for (var k = 0; k < issueCnt; k++) {
-                issueNum = parseInt(Math.random() * plexIssues.length);
+                issueNum   = parseInt(Math.random() * plexIssues.length);
                 var isUsed = issue.issues.find(function (node) {
                     //console.log("node " + node);
                     return node == issueNum;

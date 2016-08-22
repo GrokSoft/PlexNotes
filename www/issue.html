@@ -3,21 +3,21 @@
   -->
 
 <div class="fluid">
-    
+
     <h3 class="issue-header">
         <span><b>Issue#</b> {{issue.id}}</span>
-        
+
         <span class="pull-right">
             <span><b>Status:</b> {{statuses()[issue.status]}}</span>
-           <!-- <a href="{{issue.html_url}}">
-                <span class="github grow grow-box-shadow"
-                        title="View the issue on GetHub"></span>
-            </a>-->
+            <!-- <a href="{{issue.html_url}}">
+                 <span class="github grow grow-box-shadow"
+                         title="View the issue on GetHub"></span>
+             </a>-->
         </span>
     </h3>
-    
+
     <div class="issue-sub-header bordered text-left">
-        
+
         <!-- ToDo: This has an artifact when expanding since I added Markdown.
             <span class="col-sm-1"><a class="accordion-toggle"
                 href="#issueBody{{issue.number}}"
@@ -26,19 +26,18 @@
                     title="Click to expand this issue"></span>
         </a></span>-->
         <span><b>User#</b> {{issue.user}}</span>
-        
+
         <span class="pull-right">
             <span><b>Priority:</b> {{priorities()[issue.priority]}}</span>
         </span>
     </div>
-    
+
     <div class="issue-notes bordered text-left">
         <b>Notes:</b> "{{issue.notes}}"
     </div>
-    
+
     <div class="issue">
-        <b>Issues:</b>
-        <br>
+        <b>Issues:</b> <br>
         <div ng-repeat="issuetype in issue.issues"> {{issueTypes()[issuetype]}}</div>
     </div>
 
