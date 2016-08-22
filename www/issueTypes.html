@@ -3,9 +3,7 @@
   -->
 
 
-<select multiple
-        class="combobox"
-        ng-model="newIssue.issues">
+<select multiple class="combobox" ng-model="newIssue.issues">
     <!--<option value="">Choose Issue Typess</option>-->
     <option ng-repeat="issueType in issueTypes() track by $index"
             value="{{$index+1}}">{{issueType}}
