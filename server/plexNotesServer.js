@@ -8,11 +8,13 @@
  * Test with:
  *
  *      curl -is http://localhost:8080/api/issues/:id
+ *      curl -is http://localhost:8080/api/issues?query=whatever
+ *      curl -is http://localhost:8080/api/issues
  *
  *      curl -is http://localhost:8080/api/data/add/:count
  *      curl -is http://localhost:8080/api/data/priorities
  *      curl -is http://localhost:8080/api/data/statuses
- *      curl -is http://localhost:8080/api/data/issues
+ *      curl -is http://localhost:8080/api/data/issuetypes
  */
 'use strict';
 

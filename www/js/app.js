@@ -181,7 +181,7 @@
                 $http.defaults.headers.post['Content-Type'] = 'application/json;charset=utf-8';
 
                 $scope.newIssueTemplate = {
-                    "id": 0, "user": "", "priority": "", "status": "", "note": "", "issues": [1, 2]
+                    "id": 0, "user": "", "priority": "", "status": "", "notes": "", "issues": [1, 2]
                 };
 
                 // Do a deep copy of the template
@@ -216,7 +216,6 @@
                         if (data.errors) {
                             alert("New issue was NOT created:" + JSON.stringify(errors, null, 4));
                         } else {
-                            $scope.message = data.message;
                             alert("New issue was created:" + JSON.stringify(data, null, 4));
                         }
                         console.log("Issue created: " + JSON.stringify(data));
