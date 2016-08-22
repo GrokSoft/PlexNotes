@@ -6,8 +6,29 @@ Created 8/14/16
 
 This project consists of a REST server developed with JavaScript & node. And a client developed with AngularJS & Bootstrap.
 
-A list of available route paths can be found using the url: `api/routes`
+* A list of available route paths can be found using the url: `api/routes`
+    ~~~~
+    {
+        "GET": [
+            "/www\\/?.*/",
+            "api/data/priorities",
+            "api/data/statuses",
+            "api/data/issuetypes",
+            "api/routes",
+            "api/issues",
+            "api/issues/:id"
+        ],
+        "PUT": [],
+        "POST": [
+            "api/issues",
+            "api/data/add/:count"
+        ],
+        "DELETE": []
+    }`
+    ~~~~
 
+* The server can be found under the `/server` directory.
+* The client can be found under the `/www` directory.
 
 ## Development notes
 
