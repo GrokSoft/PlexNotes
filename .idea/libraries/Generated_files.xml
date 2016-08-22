@@ -2,18 +2,19 @@
   <library name="Generated files" type="javaScript">
     <properties>
       <sourceFilesUrls>
-        <item url="file://$PROJECT_DIR$/server/plexNotesServer.min.js" />
-        <item url="file://$PROJECT_DIR$/www/js/media.min.js" />
         <item url="file://$PROJECT_DIR$/www/js/app.min.js" />
+        <item url="file://$PROJECT_DIR$/www/js/media.min.js" />
+        <item url="file://$PROJECT_DIR$/server/plexNotesServer.min.js" />
       </sourceFilesUrls>
     </properties>
     <CLASSES>
       <root url="file://$PROJECT_DIR$/www/js/require.min.js" />
-      <root url="file://$PROJECT_DIR$/server/plexNotesServer.min.js" />
-      <root url="file://$PROJECT_DIR$/www/js/media.min.js" />
       <root url="file://$PROJECT_DIR$/www/js/app.min.js" />
+      <root url="file://$PROJECT_DIR$/www/js/media.min.js" />
+      <root url="file://$PROJECT_DIR$/server/plexNotesServer.min.js" />
       <root url="file://$PROJECT_DIR$/www/js/bootstrap-combobox.min.js" />
     </CLASSES>
+    <JAVADOC />
     <SOURCES />
   </library>
 </component>

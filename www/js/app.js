@@ -37,9 +37,16 @@
 
         $scope.movies = [];
 
-        $http.get(urlBase + '/api/issues').success(function (issues) {
-            _issues = issues;
-            console.log("Data Read IssuesController " + issues.length + " items.");
+        $http.get(urlBase + '/api/issues').success(function (data) {
+            _issues = data;
+            console.log("Data Read IssuesController " + data.length + " items.");
+        }).error(function(data, status, headers, config){
+            /*console.log(JSON.stringify(data));
+            console.log(status);
+            console.log(headers);
+            console.log(JSON.stringify(config));
+            alert("error: "+data);*/
+            alert("Could not retrieve data from server, please verify the server is running and accessible!")
         });
 
         $http.get(urlBase + '/api/data/statuses').success(function (statuses) {

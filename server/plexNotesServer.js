@@ -19,16 +19,20 @@
 'use strict';
 
 /**
+ * @name loremIpsum
+ *
+ * @description
  * Get Lorem Ipsum text.
  * If start and/or end are not passed they will be randomly generated.
+ *
+ * NOTE: This function must come before the plexData object that is instantiated below
  *
  * @param start
  * @param len
  * @returns {string}
  */
 var loremIpsum = function (start, len) {
-    var MIN = 10;
-    /** The minimum number of characters to return. */
+    var MIN = 10;  /** The minimum number of characters to return. */
     var loremIpsumTxt = "Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur? Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur, vel illum qui dolorem eum fugiat quo voluptas nulla pariatur?";
 
     if (start == undefined)
@@ -148,6 +152,7 @@ var loremIpsum = function (start, len) {
      "10" : "See Notes"
      };*/
 
+
     // Create the restify server
     // Add a filter to beautify json output so it's on multiple lines.
     var server = restify.createServer({
@@ -226,53 +231,12 @@ var loremIpsum = function (start, len) {
     // Routes to get data for GUI components
     //
 
-    /**
-     * Create random issues for testing
-     *
-     * api/data/add/:count
-     *
-     * @param req   The Request
-     * @param res   The Response
-     * @param next  The Next rout in the chain
-     *
-     * @returns  Plex issue priorities
-     */
-    server.get('api/data/add/:count', function (req, res, next) {
-        var issue;
-        var count = req.params.count;
-        var retJson = {
-            "jse_shortmsg": "Issues added",
-            "jse_info"    : {},
-            "message"     : "Issues Successfully added",
-            "statusCode"  : 201,
-            "body"        : {
-                "code"   : "Created",
-                "message": "Successfully added "+ count +" issues."
-            },
-            "restCode"    : "Created"
-        };
-
-        console.log("Processing GET api/data/add/:count");
-
-        for (var i = 0; i < count; i++) {
-
-            issue = createRandomIssues();
-
-            plexData.push(issue);
-            console.log("issue = " + JSON.stringify(issue));
-        }
-
-        saveIssues();
-        setResponseHeader(res);
-
-        res.json(ret);
-        next();
-    });
 
     /**
+     * @name get api/data/priorities
+     *
+     * @description
      * Get the Plex issue priorities
-     *
-     * get api/data/priorities
      *
      * @param req   The Request
      * @param res   The Response
@@ -291,9 +255,10 @@ var loremIpsum = function (start, len) {
     });
 
     /**
-     * Get the Plex issue statuses
+     * @name get api/data/statuses
      *
-     * get api/data/statuses
+     * @description
+     * Get the Plex issue statuses
      *
      * @param req   The Request
      * @param res   The Response
@@ -312,9 +277,10 @@ var loremIpsum = function (start, len) {
     });
 
     /**
-     * Get the Plex issue issues
+     * @name get api/data/issuetypes
      *
-     * get api/data/issuetypes
+     * @description
+     * Get the Plex issue issues
      *
      * @param req   The Request
      * @param res   The Response
@@ -338,10 +304,11 @@ var loremIpsum = function (start, len) {
     //
 
     /**
-     * Get all issues with optional query parameter
-     *
-     * get api/issues
+     * @name get api/issues
      * get api/issues?query=movie
+     *
+     * @description
+     * Get all issues with optional query parameter
      *
      * @param req   The Request
      * @param res   The Response
@@ -371,9 +338,10 @@ var loremIpsum = function (start, len) {
 
 
     /**
-     * Get a issues by id
+     * @name get api/issues/{id}
      *
-     * get api/issues/{id}
+     * @description
+     * Get a issues by id
      *
      * @param req   The Request
      * @param res   The Response
@@ -397,9 +365,11 @@ var loremIpsum = function (start, len) {
     });
 
     /**
-     * Create a new issue
+     * @name post api/issues
      *
-     * post api/issues ( body = {
+     * @description
+     * Create a new issue
+     * ( body = {
      *  "id" : 1,
      *  "user" : "Bill",
      *  "priority" : 3,
@@ -452,12 +422,59 @@ var loremIpsum = function (start, len) {
         next();
     });
 
+    /**
+     * @name post api/data/add/:count
+     *
+     * @description
+     * Create random issues for testing
+     *
+     * @param req   The Request
+     * @param res   The Response
+     * @param next  The Next rout in the chain
+     *
+     * @returns  Plex issue priorities
+     */
+    server.post('api/data/add/:count', function (req, res, next) {
+        var issue;
+        var count = req.params.count;
+        var retJson = {
+            "jse_shortmsg": count +"Issues added",
+            "jse_info"    : {},
+            "message"     : "Issues Successfully added",
+            "statusCode"  : 201,
+            "body"        : {
+                "code"   : "Created",
+                "message": "Successfully added "+ count +" issues."
+            },
+            "restCode"    : "Created"
+        };
+
+        console.log("Processing POST api/data/add/:count");
+
+        for (var i = 0; i < count; i++) {
+
+            issue = createRandomIssue();
+
+            plexData.push(issue);
+            console.log("issue = " + JSON.stringify(issue));
+        }
+
+        saveIssues();
+        setResponseHeader(res);
+
+        res.json(retJson);
+        next();
+    });
+
     //
     // Misc functions
     //
 
 
     /**
+     * @name setResponseHeader
+     *
+     * @description
      * Set the header for the response
      *
      * Adds Access-Control-Allow-Origin *
@@ -476,6 +493,9 @@ var loremIpsum = function (start, len) {
     };
 
     /**
+     * @name badRequest
+     *
+     * @description
      * Return a json error showing a bad request
      *
      * @param body
@@ -497,6 +517,9 @@ var loremIpsum = function (start, len) {
     };
 
     /**
+     * @name notFound
+     *
+     * @description
      * Load the passed response with a 404 Not Found error and return the error text
      *
      * @param res  The response to modify
@@ -520,6 +543,9 @@ var loremIpsum = function (start, len) {
     };
 
     /**
+     * @name saveIssues
+     *
+     * @description
      * Save the notes to a file
      */
     var saveIssues = function () {
@@ -532,6 +558,9 @@ var loremIpsum = function (start, len) {
     };
 
     /**
+     * @name getIssues
+     *
+     * @description
      * Get the issues from the file.
      */
     var getIssues = function () {
@@ -564,11 +593,16 @@ var loremIpsum = function (start, len) {
         });
     };
 
-    var createRandomIssues = function () {
+    /**
+     * @name createRandomIssue
+     *
+     * @description
+     * Create a issue with random data and issueTypes.
+     */
+    var createRandomIssue = function () {
         var issueCnt;
         var issueNum;
-        var users = ["Bill" +
-        "", "Todd", "Sarah", "Reid", "Erin", "Ellissa"];
+        var users = ["Bill", "Todd", "Sarah", "Reid", "Erin", "Ellissa"];
         var issue = {
             "id"      : 0,
             "user"    : "",
@@ -578,27 +612,27 @@ var loremIpsum = function (start, len) {
             "issues"  : []
         };
 
-        console.log("idLast " + idLast);
+        //console.log("idLast " + idLast);
         issue.id = ++idLast;
         issue.user = users[parseInt(Math.random() * users.length)];
         issue.priority = parseInt(Math.random() * plexPriorites.length);
-        console.log("issue.priority " + issue.priority);
+        //console.log("issue.priority " + issue.priority);
         issue.status = parseInt(Math.random() * plexStatuses.length);
         issue.notes = loremIpsum();
 
-        // Ensure we have at least 1 issue.
+        // Ensure we have at least 1 issueType.
         issueCnt = Math.max(1, parseInt(Math.random() * plexIssues.length));
-        console.log("issueCnt " + issueCnt);
+        //console.log("issueCnt " + issueCnt);
         for (var j = 0; j < issueCnt; j++) {
             for (var k = 0; k < issueCnt; k++) {
                 issueNum = parseInt(Math.random() * plexIssues.length);
                 var isUsed = issue.issues.find(function (node) {
-                    console.log("node " + node);
+                    //console.log("node " + node);
                     return node == issueNum;
                 });
-                console.log("isUsed " + isUsed);
+                //console.log("isUsed " + isUsed);
                 if (isUsed == undefined) {
-                    console.log("issueNum" + issueNum);
+                    //console.log("issueNum" + issueNum);
                     issue.issues.push(issueNum);
                     break;
                 }
