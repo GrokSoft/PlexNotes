@@ -1,7 +1,13 @@
-#PlexNotes
-##The PlexNotes Project
+# PlexNotes
 
-Created 8/14
+## The PlexNotes Project
+
+Created 8/14/16
+
+This project consists of a REST server developed with JavaScript & node. And a client developed with AngularJS & Bootstrap.
+
+A list of available route paths can be found using the url: `api/routes`
+
 
 ## Development notes
 

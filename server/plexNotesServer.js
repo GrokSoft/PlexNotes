@@ -137,19 +137,14 @@ var loremIpsum = function (start, len) {
         "Add Artwork",
         "See Notes"
     ];
-    /*var plexIssues = {
-     "1" : "Needs Subtitles",
-     "2" : "Needs Forced Subtitles",
-     "3" : "Error Streaming",
-     "4" : "Choppy Streaming",
-     "5" : "Low Resolution",
-     "6" : "Bad Audio",
-     "7" : "Low Audio",
-     "8" : "High Audio",
-     "9" : "Add Artwork",
-     "10" : "See Notes"
-     };*/
 
+    var routes = {
+        "GET" : [],
+        "PUT" : [],
+        "POST" : [],
+        "DELETE" : []
+
+    };
 
     // Create the restify server
     // Add a filter to beautify json output so it's on multiple lines.
@@ -229,7 +224,6 @@ var loremIpsum = function (start, len) {
     // Routes to get data for GUI components
     //
 
-
     /**
      * @name get api/data/priorities
      *
@@ -298,8 +292,32 @@ var loremIpsum = function (start, len) {
     });
 
     //
-    // REST issues routes
+    // REST api routes
     //
+
+    /**
+     * @name get api/api/routes
+     *
+     * @description
+     * Get the routes from the server
+     *
+     * @param req   The Request
+     * @param res   The Response
+     * @param next  The Next rout in the chain
+     *
+     * @returns  A list of available routes
+     */
+    server.get('api/routes', function (req, res, next) {
+        var ret;
+
+        console.log("Processing GET api/api/routes");
+
+        ret = listAllRoutes(server);
+
+        setResponseHeader(res);
+        res.json(ret);
+        next();
+    });
 
     /**
      * @name get api/issues
@@ -640,12 +658,47 @@ var loremIpsum = function (start, len) {
         return issue;
     };
 
+    /**
+     * @name listAllRoutes
+     *
+     * @description
+     * Get all available route paths
+     *
+     * @param server
+     */
+    var listAllRoutes = function (server){
+
+        routes.GET = [];
+        server.router.routes.GET.forEach(
+            function(value){routes.GET.push(value.spec.path.toString());}
+        );
+        routes.PUT = [];
+        server.router.routes.PUT.forEach(
+            function(value){routes.PUT.push(value.spec.path.toString());}
+        );
+        routes.POST = [];
+        server.router.routes.POST.forEach(
+            function(value){routes.POST.push(value.spec.path.toString());}
+        );
+        routes.DELETE = [];
+        server.router.routes.DELETE.forEach(
+            function(value){routes.DELETE.push(value.spec.path.toString());}
+        );
+
+        //console.log(JSON.stringify(routes, null, 4));
+        return(routes);
+    };
+
     //
     // Initialization
     //
 
     // Load the issues if the file exists.
     getIssues();
+
+    // List all the routes
+    console.log("Available Route Paths: " + JSON.stringify(listAllRoutes(server),null,4));
+
 
     // Have restify listen on the configured port
     // server.use("../www");
