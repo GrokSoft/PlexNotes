@@ -6,6 +6,8 @@ Created 8/14/16
 
 This project consists of a REST server developed with JavaScript & node. And a client developed with AngularJS & Bootstrap.
 
+*Please note the UI is not designed yet. It consists of several components that are being developed and tested.*
+
 * A list of available route paths can be found using the url: `api/routes`
     ~~~~
     {

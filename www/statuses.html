@@ -1,16 +1,29 @@
 <!--
   ~ Copyright (c) 2016. GrokSoft LLC - All Rights Reserved
   -->
-
-<select class="combobox" ng-model="newIssue.status">
+<select class="combobox" ng-model="newIssue.status" required>
     <option value="">Choose a Status</option>
     <option type="number" ng-repeat="status in statuses() track by $index"
-            value="{{$index+1}}">{{status}}
+            value="{{$index}}" ng-show="$index!=0">{{status}}
     </option>
 </select>
 
+<!--<select name="issueStatus" class="combobox"
+        ng-model="StatusName"
+        ng-options="status.StatusID as status.StatusName for status in statusesCtrl.statuses track by status.StatusID"
+        ng-show="status.StatusID!=0"
+        required>
+    <option value="">Choose a Status</option>
+    &lt;!&ndash;<option type="number" ng-repeat="status in statuses() track by $index"
+            value="{{$index+1}}">
+    </option>&ndash;&gt;
+</select>
+<span ng-show="issueStatus.$error.required">Choose Status!</span>-->
 
-<!--<button type="button"
+
+<!--
+
+<button type="button"
         class="btn btn-primary dropdown-toggle"
         data-toggle="dropdown"
         aria-haspopup="true"
@@ -22,4 +35,5 @@
 <ul class="dropdown-menu"
         role="menu">
     <li ng-repeat="status in statusesCtrl.statuses"><a class="grow-sm">{{status}}</a></li>
-</ul>-->
+</ul>
+-->

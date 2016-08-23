@@ -21,11 +21,11 @@
     <script src="js/media.js"></script>
 </head>
 <body ng-controller="PlexNotesController as pnCtrl">
-<div class="container-fluid">
+<div class="col-lg-6">
+    <plex-jumbo class="container"></plex-jumbo>
+</div>
     <header class="container-fluid">
-        <div class="col-lg-6">
-            <plex-jumbo></plex-jumbo>
-        </div>
+
         <div class="col-lg-6">
             <h1 class="main-title text-center fluid">Plex Notes
                 <span style="font-size:smaller ">{{pnCtrl.getVersion()}}</span>
@@ -33,7 +33,7 @@
             <new-issue class="fluid"></new-issue>
         </div>
     </header>
-
+    <div class="container-fluid">
     <h3>Debug
         <span class="pull-right" style="padding-right: 40px"><issues-dropdown></issues-dropdown></span>
     </h3>

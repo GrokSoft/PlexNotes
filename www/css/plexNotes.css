@@ -14,6 +14,23 @@ new-issue {
     background-image: url("../images/paperBG3.jpg");
 }
 
+/*
+input[type="text"], textarea {
+    outline: none;
+    box-shadow:#2b2d2f !important;
+    background-color:#18b6d6;
+}
+*/
+
+.submitted .ng-invalid
+{
+    border: 1px solid red;
+}
+
+.error {
+    background-color: red; !important;
+}
+
 .form-group {
     vertical-align: middle;
 }

@@ -251,7 +251,7 @@
                 $http.defaults.headers.post['Content-Type'] = 'application/json;charset=utf-8';
 
                 $scope.newIssueTemplate = {
-                    "id": 0, "title": "", "user": "", "priority": "", "status": "", "notes": "", "issues": [1, 2]
+                    "id": 0, "title": "", "user": "", "priority": "", "status": "", "notes": "", "issues": []
                 };
 
                 // Do a deep copy of the template
@@ -271,6 +271,12 @@
                         return;
                     }
 
+                    // Reset the form's submitted flag, so it does show errors
+                    $scope.submitted=false;
+                    // Clear the form
+                    /*$scope.newIssueForm.$setPristine();
+                     $scope.newIssueForm.$setUntouched();*/
+
                     // Convert to numbers
                     // Todo There should be a better way of doing this with an angular filter, directive or something!
                     $scope.newIssue.status = parseInt($scope.newIssue.status);
@@ -284,6 +290,7 @@
                         data   : $scope.newIssue,
                         headers: {'content-Type': 'application/json'}
                     }).success(function (data, status, headers, config) {
+
                         if (data.errors) {
                             alert("New issue was NOT created:" + JSON.stringify(errors, null, 4));
                         } else {
@@ -317,10 +324,18 @@
             restrict    : "E",
             templateUrl : "statuses.html",
             controller  : function () {
-                this.statuses = function () {
+                var ctrl = this;
+                /*this.statuses = function () {
                     console.log("Getting statuses from statuses");
                     return _statuses;
-                };
+                };*/
+                this.statuses = [];
+
+                // Load the status array for the combobox
+                var i = 0;
+                _statuses.forEach(function (status) {
+                    ctrl.statuses.push({StatusID: i++, StatusName: status});
+                });
             },
             controllerAs: "statusesCtrl"
         };

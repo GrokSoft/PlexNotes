@@ -7,14 +7,16 @@
             style="font-size: x-large; font-weight: bold; color: #918f8b;">
         Create a new Issue
     </div>
-    <form name="newIssueForm" class="form-horizontal"
+
+    <form name="newIssueForm" class="form-horizontal" ng-class="{'submitted': submitted}"
             ng-submit="createIssue()">
         <br>
         <div class="form-group">
             <label class="col-xs-3 control-label">Title:</label>
             <div class="col-xs-5">
                 <input type="text" class="form-control" name="title"
-                        ng-model="newIssue.title"/>
+                        placeholder="Issue Title"
+                        ng-model="newIssue.title" required/>
             </div>
         </div>
 
@@ -22,7 +24,7 @@
             <label class="col-xs-3 control-label">User:</label>
             <div class="col-xs-5">
                 <input type="text" class="form-control" name="user"
-                        ng-model="newIssue.user"/>
+                        ng-model="newIssue.user" required/>
             </div>
         </div>
 
@@ -51,14 +53,14 @@
         <div class="form-group">
             <label class="col-xs-3 control-label">Issue Types:</label>
             <div class="col-xs-5 selectContainer">
-                <issue-types></issue-types>
+                <issue-types></issue-types >
             </div>
         </div>
 
         <div class="form-group">
             <label class="col-xs-3 control-label"></label>
             <div class="col-xs-8">
-                <button class="box-shadow" id="submitBtn" type="submit">Add
+                <button class="box-shadow" id="submitBtn" type="submit" ng-click="submitted=true;">Add
                     Issue
                 </button>
             </div>
