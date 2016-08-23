@@ -25,7 +25,7 @@
     app.controller('PlexNotesController', ['$scope', '$http', '$location', function ($scope, $http, $location) {
         var plexNotes = this;
         var ctrl = this;
-
+        var showing  = true;    // State for toggle all
 
         // ToDo Either change the port in the run configuration to run on to be the same as the servers or add logic to decide which to use, or Have the server configurable at the
         // GUI?????????
@@ -80,6 +80,30 @@
          */
         this.getVersion = function () {
             return "Version: " + VERSION;
+        };
+
+        /**
+         *  Toggle all the collapse elements
+         */
+        this.toggleAllCollapse = function () {
+            var chevron      = $('#chevron');
+            var allCollapsed = $('[data-toggle="collapse"]');
+            if (showing) {
+                allCollapsed.collapse('hide');
+                chevron.removeClass('glyphicon-chevron-up');
+                chevron.removeClass('glyphicon-chevron-up');
+                chevron.addClass('glyphicon-chevron-down');
+            }
+            else {
+                allCollapsed.collapse('show');
+                chevron.removeClass('glyphicon-chevron-down');
+                chevron.addClass('glyphicon-chevron-up');
+            }
+            showing = !showing;
+
+            // Stop the finger
+            /*            $('#finger2').removeClass('bounce-right');
+             $('#finger2').addClass('hidden');*/
         };
 
         // Set up the comboboxes
@@ -139,12 +163,33 @@
         };
     }]);
 
+    /**
+     * Directive issues
+     *
+     * @description
+     * Shows all the issues
+     */
     app.directive("issues", function () {
         return {
             restrict    : "E",   // By Attribute <div project-specs>
             templateUrl : "issues.html",
             controller  : 'IssuesController',
             controllerAs: "issuesCtrl"
+        }
+    });
+
+    /**
+     * Directive issues-list
+     *
+     * @description
+     * Shows all the issue titles in a list
+     */
+    app.directive("issuesList", function () {
+        return {
+            restrict    : "E",
+            templateUrl : "issuesList.html",
+            controller  : 'IssuesController',
+            controllerAs: "issuesListCtrl"
         }
     });
 
@@ -178,6 +223,8 @@
         }
     });
 
+
+
     app.directive("newIssue", function () {
         return {
             restrict    : "E",
@@ -188,7 +235,7 @@
                 $http.defaults.headers.post['Content-Type'] = 'application/json;charset=utf-8';
 
                 $scope.newIssueTemplate = {
-                    "id": 0, "user": "", "priority": "", "status": "", "notes": "", "issues": [1, 2]
+                    "id": 0, "title": "", "user": "", "priority": "", "status": "", "notes": "", "issues": [1, 2]
                 };
 
                 // Do a deep copy of the template
@@ -201,7 +248,8 @@
                     if ($scope.newIssue.status == "" ||
                         $scope.newIssue.priority == "" ||
                         $scope.newIssue.issues.length == 0 ||
-                        $scope.newIssue.user == "") {
+                        $scope.newIssue.user == "" ||
+                        $scope.newIssue.user == "" ) {
                         // Return an error!!!
                         alert("You must fill in all the data to save an issue!");
                         return;

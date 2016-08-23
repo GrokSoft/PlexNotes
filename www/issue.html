@@ -4,7 +4,9 @@
 
 <div class="fluid">
 
-    <h3 class="issue-header">
+    <h4 class="issue-header"> {{issue.title}} </h4>
+    <div class="issue-sub-header">
+    <h4 style="border-bottom: solid thin blue">
         <span><b>Issue#</b> {{issue.id}}</span>
 
         <span class="pull-right">
@@ -14,32 +16,34 @@
                          title="View the issue on GetHub"></span>
              </a>-->
         </span>
-    </h3>
+    </h4>
+        <h4 class=" bordered text-left">
 
-    <div class="issue-sub-header bordered text-left">
+            <!-- ToDo: This has an artifact when expanding since I added Markdown.
+                <span class="col-sm-1"><a class="accordion-toggle"
+                    href="#issueBody{{issue.number}}"
+                    data-toggle="collapse">
+                <span class="glyphicon glyphicon-chevron-up"
+                        title="Click to expand this issue"></span>
+            </a></span>-->
+            <span><b>User#</b> {{issue.user}}</span>
 
-        <!-- ToDo: This has an artifact when expanding since I added Markdown.
-            <span class="col-sm-1"><a class="accordion-toggle"
-                href="#issueBody{{issue.number}}"
-                data-toggle="collapse">
-            <span class="glyphicon glyphicon-chevron-up"
-                    title="Click to expand this issue"></span>
-        </a></span>-->
-        <span><b>User#</b> {{issue.user}}</span>
-
-        <span class="pull-right">
+            <span class="pull-right">
             <span><b>Priority:</b> {{priorities()[issue.priority]}}</span>
         </span>
+        </h4>
     </div>
+
 
     <div class="issue-notes bordered text-left">
         <b>Notes:</b> "{{issue.notes}}"
     </div>
 
-    <div class="issue">
+    <div class="issues">
         <b>Issues:</b> <br>
-        <div ng-repeat="issuetype in issue.issues">
-            {{issueTypes()[issuetype]}}
+            <div class="issue" ng-repeat="issuetype in issue.issues">
+                {{issueTypes()[issuetype]}}
+            </div>
         </div>
     </div>
 

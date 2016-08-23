@@ -1,6 +1,7 @@
 <!--
   ~ Copyright (c) 2016. GrokSoft LLC - All Rights Reserved
   -->
+
 <div class="fluid">
     <div class="text-center shadowed-dropped"
             style="font-size: x-large; font-weight: bold; color: #918f8b;">
@@ -9,6 +10,14 @@
     <form name="newIssueForm" method="post" class="form-horizontal"
             ng-submit="createIssue()">
         <br>
+               <div class="form-group">
+            <label class="col-xs-3 control-label">Title:</label>
+            <div class="col-xs-5">
+                <input type="text" class="form-control" name="title"
+                        ng-model="newIssue.title"/>
+            </div>
+        </div>
+
         <div class="form-group">
             <label class="col-xs-3 control-label">User:</label>
             <div class="col-xs-5">

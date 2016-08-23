@@ -58,6 +58,7 @@ var loremIpsum = function (start, len) {
     var plexData = [
         {
             "id"      : 1,
+            "title"   : "Title for default issue 1",
             "user"    : "Bill",
             "priority": 1,
             "status"  : 1,
@@ -69,6 +70,7 @@ var loremIpsum = function (start, len) {
         },
         {
             "id"      : 2,
+            "title"   : "Title for default issue 2",
             "user"    : "Todd",
             "priority": 2,
             "status"  : 2,
@@ -81,6 +83,7 @@ var loremIpsum = function (start, len) {
         },
         {
             "id"      : 3,
+            "title"   : "Title for default issue 3",
             "user"    : "Todd",
             "priority": 3,
             "status"  : 3,
@@ -387,6 +390,7 @@ var loremIpsum = function (start, len) {
      * Create a new issue
      * ( body = {
      *  "id" : 1,
+     *  "title"   : "",
      *  "user" : "Bill",
      *  "priority" : 3,
      *  "status" : 3,
@@ -454,9 +458,9 @@ var loremIpsum = function (start, len) {
         var issue;
         var count   = req.params.count;
         var retJson = {
-            "jse_shortmsg": count + "Issues added",
+            "jse_shortmsg": count + " Issues added",
             "jse_info"    : {},
-            "message"     : "Issues Successfully added",
+            "message"     : "Issues successfully added",
             "statusCode"  : 201,
             "body"        : {
                 "code"   : "Created",
@@ -468,9 +472,7 @@ var loremIpsum = function (start, len) {
         console.log("Processing POST api/data/add/:count");
 
         for (var i = 0; i < count; i++) {
-
             issue = createRandomIssue();
-
             plexData.push(issue);
             console.log("issue = " + JSON.stringify(issue));
         }
@@ -485,7 +487,6 @@ var loremIpsum = function (start, len) {
     //
     // Misc functions
     //
-
 
     /**
      * @name setResponseHeader
@@ -621,6 +622,7 @@ var loremIpsum = function (start, len) {
         var users = ["Bill", "Todd", "Sarah", "Reid", "Erin", "Ellissa"];
         var issue = {
             "id"      : 0,
+            "title"   : "",
             "user"    : "",
             "priority": 0,
             "status"  : 0,
@@ -630,6 +632,7 @@ var loremIpsum = function (start, len) {
 
         //console.log("idLast " + idLast);
         issue.id       = ++idLast;
+        issue.title    = "Issue Title for # "+issue.id;
         issue.user     = users[parseInt(Math.random() * users.length)];
         issue.priority = parseInt(Math.random() * plexPriorites.length);
         //console.log("issue.priority " + issue.priority);
