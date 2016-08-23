@@ -193,6 +193,22 @@
         }
     });
 
+    /**
+     * Directive issues-dropdown
+     *
+     * @description
+     * Shows all the issue titles in a list
+     */
+    app.directive("issuesDropdown", function () {
+        return {
+            restrict    : "E",
+            templateUrl : "issuesDropdown.html",
+            controller  : 'IssuesController',
+            controllerAs: "issuesDropdownCtrl"
+        }
+    });
+
+
     app.directive("issue", function () {
         return {
             restrict    : "E",   // By Attribute <div project-specs>

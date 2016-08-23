@@ -34,22 +34,25 @@
         </div>
     </header>
 
-    <h3>Debug</h3>
+    <h3>Debug
+        <span class="pull-right" style="padding-right: 40px"><issues-dropdown></issues-dropdown></span>
+    </h3>
     urlBase =
     <span>{{pnCtrl.getUrlBase()}}</span>
 
     <div class="fluid">
-       <issues-list></issues-list>
+        <issues-list></issues-list>
     </div>
     <h2 class="text-center shadowed" style="font-weight: bold; color: #587c91;">
-        Plex Issues
-    <span class="pull-left">
-        <button ng-click="pnCtrl.toggleAllCollapse();">
+
+        <button ng-click="pnCtrl.toggleAllCollapse();"
+                title="Click to Toggle Collapse state of all issues">
             <span id="chevron" class="glyphicon glyphicon-chevron-up"
                     style="font-size: x-large"></span>
-            <span style="font-size: x-large">Click to Toggle Collapse of all issues</span>
+            <!--<span style="font-size: x-large">Click to Toggle Collapse of all issues</span>-->
         </button>
-    </span></h2>
+        Plex Issues
+    </h2>
     <issues class="collapse in" data-toggle="collapse"></issues>
 
 </div>
