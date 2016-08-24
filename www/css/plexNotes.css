@@ -14,6 +14,14 @@ new-issue {
     background-image: url("../images/paperBG3.jpg");
 }
 
+.dropdown-menu > li {
+    transition: all 0.3s ease-in-out;
+}
+
+.dropdown-menu > li:hover {
+    transform: scale(1.1);
+}
+
 .carousel-sliders {
     opacity: 0.4;
 }
@@ -177,3 +185,126 @@ Inspired from:  http://codepen.io/Rowno/pen/Afykb
     }
 }
 
+/** From groksoft.css **/
+
+nav {
+    width: 100%;
+    display: block;
+}
+
+nav a {
+    color: #f5a06e;
+    text-transform: uppercase;
+    text-decoration: none;
+    display: inline-block;
+    font-weight: bold;
+    font-size: .9em;
+}
+
+nav a:hover {
+    color: #fff;
+    /*text-shadow: 0 0 3px rgba(0, 0, 0, 0.92);*/
+}
+
+.navbar-default {
+    background-color: rgba(224, 224, 224, 0.77);
+}
+.navbar-brand {
+    float: left;
+    height: 50px;
+    padding: 5px 15px;
+    font-size: 18px;
+    line-height: 20px;
+    margin-top: 15px;
+    margin-bottom: 5px;
+}
+
+.navbar-img {
+    margin-top: 15px;
+    cursor: pointer;
+}
+
+.navbar-gs {
+    background-color: #D87E4F;
+    border-color: #e7e7e7;
+}
+
+.navbar-custom {
+    background: rgba(166, 67, 10, 0.73); /* url(../_images/background_gradient.jpg) repeat-x 0 0; */
+    color: #ffffff;
+    border: outset rgba(166, 67, 10, 0.92);
+    border-radius: 10px;
+    margin-bottom: 8px;
+    min-width: 330px;
+}
+
+.navbar-custom .navbar-nav > li > a {
+    color: #fff;
+}
+
+.navbar-custom .navbar-nav > .active > a, .navbar-nav > .active > a:hover, .navbar-nav > .active > a:focus {
+    color: #ffffff;
+    background-color: transparent;
+}
+
+.navbar-custom .navbar-brand {
+    color: #eeeeee;
+}
+
+.navbar-custom:hover .navbar-brand:hover {
+    color: #212121;
+}
+
+.navbar-toggle {
+    position: relative;
+    float: right;
+    padding: 9px 10px;
+    margin-top: 18px;
+    margin-right: 15px;
+    margin-bottom: 8px;
+    background-color: transparent;
+    background-image: none;
+    border: 1px solid transparent;
+    border-radius: 4px;
+}
+
+
+.help-finger {
+    position: fixed;
+    right: 22px;
+    padding-right: 4px;
+    margin-top: 6px;
+    color: yellow;
+    font-size: 1em;
+    z-index: 1039;
+}
+
+.help-btn {
+    position: fixed;
+    right: 0;
+    padding-right: 4px;
+    margin-top: 2px;
+    font-size: large;
+    cursor: pointer;
+    z-index: 1039;
+}
+
+.help-gen > .arrow,
+.help-gen > .arrow:after {
+    top: 0;
+    left: 10%;
+    margin-left: -5px;
+    border-bottom-color: #000000; /* black */
+    border-width: 0 5px 5px;
+}
+
+.blur-it {
+    -webkit-filter: blur(3px);
+    filter: blur(3px);
+    /*filter:"progid:DXImageTransform.Microsoft.Blur(PixelRadius='3')";*/
+    -ms-filter: blur(3px);
+}
+
+.float-right {
+    float: right;
+}

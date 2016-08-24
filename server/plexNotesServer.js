@@ -60,6 +60,7 @@ var loremIpsum = function (start, len) {
             "id"      : 1,
             "title"   : "Title for default issue 1",
             "user"    : "Bill",
+            "emailme" : false,
             "priority": 1,
             "status"  : 1,
             "notes"   : loremIpsum(),
@@ -72,6 +73,7 @@ var loremIpsum = function (start, len) {
             "id"      : 2,
             "title"   : "Title for default issue 2",
             "user"    : "Todd",
+            "emailme" : true,
             "priority": 2,
             "status"  : 2,
             "notes"   : loremIpsum(),
@@ -85,6 +87,7 @@ var loremIpsum = function (start, len) {
             "id"      : 3,
             "title"   : "Title for default issue 3",
             "user"    : "Todd",
+            "emailme" : false,
             "priority": 3,
             "status"  : 3,
             "notes"   : loremIpsum(),
@@ -376,12 +379,16 @@ var loremIpsum = function (start, len) {
         if (ret === undefined) {
             ret = notFound(res);
         }
-        console.log("Processing GET api/issues/:id");
+        console.log("Processing GET api/issues/"+req.params.id);
 
         setResponseHeader(res);
         res.json(ret);
         next();
     });
+
+    //
+    // POST
+    //
 
     /**
      * @name post api/issues
@@ -469,7 +476,7 @@ var loremIpsum = function (start, len) {
             "restCode"    : "Created"
         };
 
-        console.log("Processing POST api/data/add/:count");
+        console.log("Processing POST api/data/add/"+count);
 
         for (var i = 0; i < count; i++) {
             issue = createRandomIssue();
@@ -481,6 +488,41 @@ var loremIpsum = function (start, len) {
         setResponseHeader(res);
 
         res.json(retJson);
+        next();
+    });
+
+    //
+    // DELETE
+    //
+
+    /**
+     * @name delete api/issues/{id}
+     *
+     * @description
+     * Delete an issues by id
+     *
+     * @param req   The Request
+     * @param res   The Response
+     * @param next  The Next rout in the chain
+     *
+     * @returns  The requested note or 404
+     */
+    server.del('api/issues/:id', function (req, res, next) {
+        // There can not be duplicate issues, so always use the first element returned.
+        var ret = plexData.filter(function (node) {
+            return node.id == req.params.id;
+        })[0];
+        if (ret === undefined) {
+            ret = notFound(res);
+        }else {
+            var index = plexData.indexOf(ret);
+            plexData.splice(index, 1);
+            saveIssues();
+        }
+        console.log("Processing DELETE api/issues/"+req.params.id);
+
+        setResponseHeader(res);
+        res.json(ret);
         next();
     });
 

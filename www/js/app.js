@@ -22,6 +22,7 @@
      $locationProvider.html5Mode(true);
      }*/);
 
+
     app.controller('PlexNotesController', ['$scope', '$http', '$location', '$anchorScroll', function ($scope, $http, $location, $anchorScroll) {
         var plexNotes = this;
         var ctrl = this;
@@ -30,7 +31,16 @@
         // ToDo Either change the port in the run configuration to run on to be the same as the servers or add logic to decide which to use, or Have the server configurable at the
         // GUI?????????
         urlBase = 'http://' + $location.absUrl().split("/")[2] || "Unknown";
-        //urlBase = 'http://localhost:8080'; // For debugging
+        urlBase = 'http://localhost:8080'; // For debugging
+
+        /**
+         * @name getUrlBase
+         *
+         * @description
+         * Get the urlBase for this web app
+         *
+         * @returns {string}
+         */
         this.getUrlBase = function () {
             return urlBase;
         };
@@ -154,9 +164,48 @@
 
     }]);
 
-    app.directive("plexJumbo", function () {
+    /**
+     * The restrict option is typically set to:
+     *
+     * 'A' - only matches attribute name    <div myAttribute>
+     * 'E' - only matches element name      <myDirective>
+     * 'C' - only matches class name        <div class="myClass"
+     * 'M' - only matches comment           ??????
+     */
+
+    app.directive('ngConfirmClick', [
+        function(){
+            return {
+                priority: -1,
+                restrict: 'A',
+                link: function(scope, element, attrs){
+                    element.bind('click', function(e){
+                        var message = attrs.ngConfirmClick;
+                        // confirm() requires jQuery
+                        if(message && !confirm(message)){
+                            e.stopImmediatePropagation();
+                            e.preventDefault();
+                        }
+                    });
+                }
+            }
+        }
+    ]);
+
+    app.directive("menu", function () {
         return {
             restrict    : "E",   // By Attribute <div project-specs>
+            templateUrl : "menu.html",
+            controller  : function () {
+
+            },
+            controllerAs: "menuCtrl"
+        };
+    });
+
+    app.directive("plexJumbo", function () {
+        return {
+            restrict    : "E",
             templateUrl : "plex-jumbo.html",
             controller  : function () {
                 // Init the carousel
@@ -166,7 +215,7 @@
         };
     });
 
-    app.controller('IssuesController', ['$scope', function ($scope) {
+    app.controller('IssuesController', ['$scope', '$http', function ($scope, $http) {
         var ctrl = this;
         /* var statuses = $scope.statuses;
          var priorities = $scope.priorities;
@@ -190,9 +239,42 @@
             return _issues;
         };
 
+        /**
+         * Make sure the key is an int
+         * @param key
+         * @returns {Number}
+         */
         $scope.intToString = function (key) {
             return (!isNaN(key)) ? parseInt(key) : key;
         };
+
+        /**
+         * @name deleteIssue
+         *
+         * @description
+         * Delete the passed issue
+         *
+         * @param id
+         */
+        $scope.deleteIssue = function (id) {
+            $http({
+                method : 'DELETE',
+                url    : "http://localhost:8080/api/issues/"+id,
+                data   : $scope.newIssue,
+                headers: {'content-Type': 'application/json'}
+            }).success(function (data, status, headers, config) {
+
+                // Note: Angular is handling field validation so this is not really needed
+                if (data.errors) {
+                    alert("Issue was NOT deleted:" + JSON.stringify(errors, null, 4));
+                } else {
+                    alert("Issue was deleted:" + JSON.stringify(data, null, 4));
+                }
+                console.log("Issue delete: " + JSON.stringify(data));
+
+                $scope.refreshIssues();
+            });
+        }
     }]);
 
 
@@ -334,7 +416,7 @@
                 $http.defaults.headers.post['Content-Type'] = 'application/json;charset=utf-8';
 
                 $scope.newIssueTemplate = {
-                    "id": 0, "title": "", "user": "", "priority": "", "status": "", "notes": "", "issues": []
+                    "id": 0, "title": "", "user": "","email": true,  "priority": "", "status": "", "notes": "", "issues": []
                 };
 
                 // Do a deep copy of the template
@@ -518,4 +600,41 @@
             $(theId).carousel('cycle');
         }, Carousel.carDelay);
     };
+
+
+    // Todo put this in the nac controller.
+    /**
+     * Handle locking the menu to the top of page when scrolled there.
+     */
+    function scrollScreen() {
+        //
+        // Don't bother with the menu when in phone mode.
+        // Instead of messing with making the mobile menu stick to top, just let it scroll with the page.
+        var MINWIDTH = 465;
+        var MAXSCROLLTOP = 593;//260;
+        var width = $(window).width();
+        if( width < MINWIDTH )
+            return;
+
+        var menu = $('.navbar');
+
+        var menuPos = menu.position().top;
+        var menuOffset = menu.offset().top;
+        var scrollTop = $(window).scrollTop();
+        //console.log("width" + width + " | " +"MenuPos"+menuPos + " | " + "menuOffset"+ menuOffset + " | " + "scrollTop"+scrollTop);
+
+        //if ($(window).scrollTop() >= origOffsetY)
+        if ((menuPos != 0) && $(window).scrollTop() > (menuOffset+20) ){
+            menu.addClass('navbar-fixed-top');
+            menu.addClass('fixed-menu');
+            $('#page').addClass('fixed-menu-content-padding');
+        } else if((width > MINWIDTH) && (menuPos == 0) && (scrollTop <= MAXSCROLLTOP)) {
+            menu.removeClass('navbar-fixed-top');
+            menu.removeClass('fixed-menu');
+            $('#page').removeClass('fixed-menu-content-padding');
+        }
+    }
+    // If the on scroll is not set - set it
+    if( document.onscroll == null)
+        document.onscroll = scrollScreen;
 })();

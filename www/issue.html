@@ -4,7 +4,11 @@
 
 <div class="fluid">
 
-    <h4 class="issue-header"> {{issue.title}} </h4>
+    <h4 class="issue-header"> {{issue.title}} <a style="color: white;
+    text-decoration: none"
+            class="pull-right grow glyphicon glyphicon-trash"
+            ng-click="deleteIssue(issue.id)"
+            ng-confirm-click="You are about to delete issue, are you sure you wish to continue?" ></a></h4>
     <div class="issue-sub-header">
     <h4 style="border-bottom: solid thin blue">
         <span><b>Issue#</b> {{issue.id}}</span>
@@ -15,6 +19,7 @@
                  <span class="github grow grow-box-shadow"
                          title="View the issue on GetHub"></span>
              </a>-->
+
         </span>
     </h4>
         <h4 class=" bordered text-left">
@@ -26,7 +31,11 @@
                 <span class="glyphicon glyphicon-chevron-up"
                         title="Click to expand this issue"></span>
             </a></span>-->
-            <span><b>User#</b> {{issue.user}}</span>
+            <span><b>User#</b> {{issue.user}} <span
+                    class="glyphicon glyphicon-envelope"
+                    ng-show="issue.email==true"
+                    title="{{issue.user}} will be emailed when issue is resolved"></span>
+            </span>
 
             <span class="pull-right">
             <span><b>Priority:</b> {{priorities()[issue.priority]}}</span>
