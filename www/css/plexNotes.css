@@ -25,6 +25,11 @@ input[type="text"], textarea {
 }
 */
 
+
+.collapse {
+    transition: all 3.22s ease-in-out;
+}
+
 .submitted .ng-invalid
 {
     border: 1px solid red;

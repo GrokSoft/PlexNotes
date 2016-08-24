@@ -22,7 +22,7 @@
      $locationProvider.html5Mode(true);
      }*/);
 
-    app.controller('PlexNotesController', ['$scope', '$http', '$location', function ($scope, $http, $location) {
+    app.controller('PlexNotesController', ['$scope', '$http', '$location', '$anchorScroll', function ($scope, $http, $location, $anchorScroll) {
         var plexNotes = this;
         var ctrl = this;
         var showing  = true;    // State for toggle all
@@ -65,6 +65,16 @@
         });
 
         /**
+         * ScrollTo
+         *
+         * Scroll to an anchore on a page
+         */
+        $scope.scrollTo = function(id) {
+            $location.hash(id);
+            $anchorScroll();
+        };
+
+        /**
          * Refresh the Issues daTA
          */
         $scope.refreshIssues = function () {
@@ -85,9 +95,31 @@
         /**
          *  Toggle all the collapse elements
          */
+        this.toggleCollapse = function (id) {
+            var chevron      = $('#'+id);
+
+            if (showing) {
+                chevron.removeClass('glyphicon-chevron-up');
+                chevron.addClass('glyphicon-chevron-down');
+            }
+            else {
+                chevron.removeClass('glyphicon-chevron-down');
+                chevron.addClass('glyphicon-chevron-up');
+            }
+            showing = !showing;
+
+            // Stop the finger
+            /*            $('#finger2').removeClass('bounce-right');
+             $('#finger2').addClass('hidden');*/
+        };
+
+        /**
+         *  Toggle all the collapse elements
+         */
         this.toggleAllCollapse = function () {
             var chevron      = $('#chevron');
-            var allCollapsed = $('[data-toggle="collapse"]');
+            //var allCollapsed = $('[data-toggle="collapse"]');
+            var allCollapsed = $('collapse');
             if (showing) {
                 allCollapsed.collapse('hide');
                 chevron.removeClass('glyphicon-chevron-up');

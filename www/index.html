@@ -14,6 +14,7 @@
     <script src="js/angular/angular.js"></script>
     <script src="js/jquery-1.11.3.min.js"></script>
     <script src="js/bootstrap.js"></script>
+    <script src="js/transition.js"></script>
     <script src="js/bootstrap-combobox.js"></script>
     <!--<script src="js/require.js"></script>-->
 
@@ -21,7 +22,8 @@
     <script src="js/media.js"></script>
 </head>
 <body ng-controller="PlexNotesController as pnCtrl">
-<div class="container-fluid">
+
+<div id="top" class="container-fluid">
     <div class="col-lg-8">
         <plex-jumbo class="container"></plex-jumbo>
     </div>
@@ -32,40 +34,92 @@
         <new-issue class="fluid "></new-issue>
     </div>
 </div>
+
 <div class="container-fluid">
     <div class="col-lg-4">
-    <h3>Debug
-        <span class="pull-right" style="padding-right: 40px"><issues-dropdown></issues-dropdown></span>
-    </h3>
-    urlBase =
-    <span>{{pnCtrl.getUrlBase()}}</span>
-</div>
+        <h3>Debug
+            <span class="pull-right" style="padding-right: 40px"><issues-dropdown></issues-dropdown></span>
+        </h3>
+        urlBase =
+        <span>{{pnCtrl.getUrlBase()}}</span>
+        <!-- Button to trigger modal -->
+        <a href="#myModal" role="button" class="btn" data-toggle="modal">Launch
+            demo modal</a>
+    </div>
     <div class="col-lg-4">
         <issues-carousel ng-init="issuesCarouselCtrl.init(1)"
-            class=""></issues-carousel>
+                class=""></issues-carousel>
     </div>
     <div class="col-lg-4">
         <issues-carousel ng-init="issuesCarouselCtrl.init(2)"
                 class=""></issues-carousel>
     </div>
-    <div class="fluid">
-        <issues-list></issues-list>
-    </div>
-    <h2 class="text-center shadowed" style="font-weight: bold; color: #587c91;">
+</div>
+    <div id="issueTitles" class="container-fluid">
+        <br>
+        <h2 class="text-center shadowed"
+                style="font-weight: bold; color: #587c91;">
+            <button href="#collapse-issue-titles" data-toggle="collapse"
+                    ng-click="pnCtrl.toggleCollapse('chevron-issue-titles')"
+                    title="Click to Toggle Collapse state of issue titles">
+            <span id="chevron-issue-titles"
+                    class="glyphicon glyphicon-chevron-up"
+                    style="font-size: x-large"></span>
+                <!--<span style="font-size: x-large">Click to Toggle Collapse of all issues</span>-->
+            </button>
+            Plex Issue Titles
+        </h2>
 
-        <button ng-click="pnCtrl.toggleAllCollapse();"
-                title="Click to Toggle Collapse state of all issues">
+        <div id="collapse-issue-titles" class="collapse in">
+            <div class="panel-body">
+                <issues-list></issues-list>
+            </div>
+        </div>
+    </div>
+    <div class="container-fluid">
+        <h2 class="text-center shadowed"
+                style="font-weight: bold; color: #587c91;">
+
+            <button href="#issues" data-toggle="collapse"
+                    ng-click="pnCtrl.toggleCollapse('chevron')"
+                    title="Click to Toggle Collapse state of all issues">
             <span id="chevron" class="glyphicon glyphicon-chevron-up"
                     style="font-size: x-large"></span>
-            <!--<span style="font-size: x-large">Click to Toggle Collapse of all issues</span>-->
-        </button>
-        Plex Issues
-    </h2>
-    <issues class="collapse in" data-toggle="collapse"></issues>
+                <!--<span style="font-size: x-large">Click to Toggle Collapse of all issues</span>-->
+            </button>
+            Plex Issues
+        </h2>
+        <div id="issues" class="collapse in">
+            <div class="panel-body">
+                <issues></issues>
+            </div>
+        </div>
+    </div>
 
+
+
+<div id="myModal" class="modal hide fade" tabindex="-1" role="dialog"
+        aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"
+                aria-hidden="true">×
+        </button>
+        <h3 id="myModalLabel">Modal header</h3>
+    </div>
+    <div class="modal-body">
+        <p>One fine body…</p>
+    </div>
+    <div class="modal-footer">
+        <button class="btn" data-dismiss="modal" aria-hidden="true">Close
+        </button>
+        <button class="btn btn-primary">Save changes</button>
+    </div>
 </div>
+
 <footer class="container-fluid">
     <hr>
+    <button class="glyphicon glyphicon-arrow-up"
+            ng-click="scrollTo('issueTitles')"></button>
     <span class="pull-right">Copyright &copy; 2016</span>
 </footer>
 
