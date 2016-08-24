@@ -1,6 +1,6 @@
 # ![alt text][plexLg]Notes
 
-## The PlexNotes Project
+### The ![alt text][plexSm]Notes Project
 
 Created 8/14/16
 
