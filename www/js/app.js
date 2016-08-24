@@ -30,7 +30,7 @@
         // ToDo Either change the port in the run configuration to run on to be the same as the servers or add logic to decide which to use, or Have the server configurable at the
         // GUI?????????
         urlBase = 'http://' + $location.absUrl().split("/")[2] || "Unknown";
-        urlBase = 'http://localhost:8080'; // For debugging
+        //urlBase = 'http://localhost:8080'; // For debugging
         this.getUrlBase = function () {
             return urlBase;
         };
