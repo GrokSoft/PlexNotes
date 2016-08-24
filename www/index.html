@@ -21,25 +21,33 @@
     <script src="js/media.js"></script>
 </head>
 <body ng-controller="PlexNotesController as pnCtrl">
-<div class="col-lg-6">
-    <plex-jumbo class="container"></plex-jumbo>
+<div class="container-fluid">
+    <div class="col-lg-8">
+        <plex-jumbo class="container"></plex-jumbo>
+    </div>
+    <div class="col-lg-4">
+        <h1 class="main-title text-center fluid">Plex Notes
+            <span style="font-size:smaller ">{{pnCtrl.getVersion()}}</span>
+        </h1>
+        <new-issue class="fluid "></new-issue>
+    </div>
 </div>
-    <header class="container-fluid">
-
-        <div class="col-lg-6">
-            <h1 class="main-title text-center fluid">Plex Notes
-                <span style="font-size:smaller ">{{pnCtrl.getVersion()}}</span>
-            </h1>
-            <new-issue class="fluid"></new-issue>
-        </div>
-    </header>
-    <div class="container-fluid">
+<div class="container-fluid">
+    <div class="col-lg-4">
     <h3>Debug
         <span class="pull-right" style="padding-right: 40px"><issues-dropdown></issues-dropdown></span>
     </h3>
     urlBase =
     <span>{{pnCtrl.getUrlBase()}}</span>
-
+</div>
+    <div class="col-lg-4">
+        <issues-carousel ng-init="issuesCarouselCtrl.init(1)"
+            class=""></issues-carousel>
+    </div>
+    <div class="col-lg-4">
+        <issues-carousel ng-init="issuesCarouselCtrl.init(2)"
+                class=""></issues-carousel>
+    </div>
     <div class="fluid">
         <issues-list></issues-list>
     </div>

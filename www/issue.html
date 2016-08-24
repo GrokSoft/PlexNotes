@@ -35,11 +35,13 @@
     </div>
 
 
-    <div class="issue-notes bordered text-left">
+    <div class="issue-notes bordered text-left" style="height: 166px;
+    overflow: auto">
         <b>Notes:</b> "{{issue.notes}}"
     </div>
 
-    <div class="issues">
+    <div class="issues" style="height: 106px;
+    overflow: auto">
         <b>Issues:</b> <br>
             <div class="issue" ng-repeat="issuetype in issue.issues">
                 {{issueTypes()[issuetype]}}

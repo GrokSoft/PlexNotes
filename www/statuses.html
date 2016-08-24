@@ -8,7 +8,9 @@
     </option>
 </select>
 
-<!--<select name="issueStatus" class="combobox"
+<!-- This is another way to do a selection list. But by $index was not
+working with this one!
+select name="issueStatus" class="combobox"
         ng-model="StatusName"
         ng-options="status.StatusID as status.StatusName for status in statusesCtrl.statuses track by status.StatusID"
         ng-show="status.StatusID!=0"

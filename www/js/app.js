@@ -134,7 +134,7 @@
         };
     });
 
-    app.controller('IssuesController', ['$scope', '$http', function ($scope) {
+    app.controller('IssuesController', ['$scope', function ($scope) {
         var ctrl = this;
         /* var statuses = $scope.statuses;
          var priorities = $scope.priorities;
@@ -162,6 +162,7 @@
             return (!isNaN(key)) ? parseInt(key) : key;
         };
     }]);
+
 
     /**
      * Directive issues
@@ -205,6 +206,56 @@
             templateUrl : "issuesDropdown.html",
             controller  : 'IssuesController',
             controllerAs: "issuesDropdownCtrl"
+        }
+    });
+
+    app.controller('IssuesCarouselController', ['$scope', function ($scope) {
+        var ctrl = this;
+
+        $scope.init = function(id)
+        {
+            //This function is sort of private constructor for controller
+            $scope.id = id;
+            //Based on passed argument you can make a call to resource
+            //and initialize more objects
+            //$resource.getMeBond(007)
+        };
+
+        $scope.getId = function () {
+            return $scope.id;
+        };
+
+        /**
+         * Initialize the carousel
+         */
+        this.setCarousel = function () {
+            // Init the carousel
+            new Carousel($scope.id);
+        };
+
+        /**
+         * Get the issues
+         * @returns {Array}
+         */
+        $scope.issues = function () {
+            console.log("Getting issues from IssuesCarouselController");
+            return _issues;
+        };
+    }]);
+
+    /**
+     * Directive issues-carousel
+     *
+     * @description
+     * Shows all the issue titles in a carousel
+     */
+    app.directive("issuesCarousel", function () {
+        var carNum = 0;
+        return {
+            restrict    : "E",
+            templateUrl : "issuesCarousel.html",
+            controller  : 'IssuesCarouselController',
+            controllerAs: "issuesCarouselCtrl"
         }
     });
 
@@ -291,6 +342,7 @@
                         headers: {'content-Type': 'application/json'}
                     }).success(function (data, status, headers, config) {
 
+                        // Note: Angular is handling field validation so this is not really needed
                         if (data.errors) {
                             alert("New issue was NOT created:" + JSON.stringify(errors, null, 4));
                         } else {

@@ -8,7 +8,8 @@
         Create a new Issue
     </div>
 
-    <form name="newIssueForm" class="form-horizontal" ng-class="{'submitted': submitted}"
+    <form name="newIssueForm" class="form-horizontal "
+            ng-class="{'submitted': submitted}"
             ng-submit="createIssue()">
         <br>
         <div class="form-group">
@@ -24,6 +25,7 @@
             <label class="col-xs-3 control-label">User:</label>
             <div class="col-xs-5">
                 <input type="text" class="form-control" name="user"
+                        placeholder="User Name"
                         ng-model="newIssue.user" required/>
             </div>
         </div>
@@ -46,6 +48,7 @@
             <label class="col-xs-3 control-label">Note:</label>
             <div class="col-xs-8">
                 <textarea name="notes" class="form-control" rows="2"
+                        placeholder="Any optional notes about the issue"
                         ng-model="newIssue.notes"></textarea>
             </div>
         </div>
