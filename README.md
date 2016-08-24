@@ -8,7 +8,7 @@ This project consists of a REST server developed with JavaScript, node and resti
 
 *Please note the UI is not designed yet. It consists of several components that are being developed and tested.*
 
-The goal of the project is to have a way for family and friends that use my Plex media server to report any issues with the content. Request new content, etc...
+The goal of the project is to have a way for family and friends that use my ![alt text][plexVs] media server to report any issues with the content. Request new content, etc...
 
 * A list of available route paths can be found using the url: `api/routes`
     ~~~~
@@ -41,3 +41,5 @@ Note that in IntelliJ, when a run configuration is created, by default the port 
 This may change in the future to have a configurable url
 
 [plexLg]: http://groksoft.net/plex/_images/PLEX-sm.png
+[plexSm]: http://groksoft.net/plex/_images/PLEX-vsmall.png
+[plexVs]: http://groksoft.net/plex/_images/PLEX-tiny.png
