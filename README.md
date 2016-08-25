@@ -1,4 +1,4 @@
-# ![alt text][plexLg] Notes
+# ![alt text][plexLg]Notes
 
 ### The ![alt text][plexSm]Notes Project
 

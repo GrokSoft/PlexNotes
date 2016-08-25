@@ -48,10 +48,10 @@
         <b>Notes:</b> "{{issue.notes}}"
     </div>
 
-    <div class="issues" style="height: 106px;
+    <div class="issue-types" style="height: 106px;
     overflow: auto">
         <b>Issues:</b> <br>
-            <div class="issue" ng-repeat="issuetype in issue.issues">
+            <div class="issue-type-issue" ng-repeat="issuetype in issue.issues">
                 {{issueTypes()[issuetype]}}
             </div>
         </div>

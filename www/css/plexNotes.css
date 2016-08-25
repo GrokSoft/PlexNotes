@@ -2,18 +2,56 @@
  * Copyright (c) 2016. GrokSoft LLC - All Rights Reserved
  */
 
+/* Optional theme */
+/*@import url('//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-theme.min.css');*/
+
+body {
+    background-color: rgba(31, 31, 31, 1);
+    color: #e0e0e0;
+}
 
 issue {
     border: outset;
-    background-image: url("../images/paperBG.jpg");
+    /*background-image: url("../images/paperBG.jpg");*/
 }
 
 new-issue {
     border: outset;
-    background-color: #c5d6b2;
+    background-color: transparent;
     background-image: url("../images/paperBG3.jpg");
+    color: #949494;
 }
 
+/*!* Checkbox *!
+input[type="checkbox"] {
+    !* IE opacity hacks *!
+    -ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";
+    filter: alpha(opacity=0);
+    opacity: 0;
+    margin-left: 100px;
+}
+.cb-label {
+    position: relative;
+}
+.cb-label:before {
+    content: ' ';
+    position: absolute;
+    background: transparent url('../images/switch.jpg') no-repeat scroll 0 0;
+    height: 41px;
+    width: 143px;
+    left: -150px
+}
+input[type="checkbox"]:checked ~ .cb-label:before,
+    !* the .checked class is used by IE only *!
+input[type="checkbox"].checked ~ .cb-label:before {
+    background-position: 0 -40px;
+}*/
+.big-checkbox {width: 22px; height: 22px;}
+
+/* Menu and drop downs */
+.menu {
+    background-color: rgba(51, 51, 51, 1);
+}
 .dropdown-menu > li {
     transition: all 0.3s ease-in-out;
 }
@@ -21,6 +59,8 @@ new-issue {
 .dropdown-menu > li:hover {
     transform: scale(1.1);
 }
+
+
 
 .carousel-sliders {
     opacity: 0.4;
@@ -33,7 +73,6 @@ input[type="text"], textarea {
 }
 */
 
-
 .collapse {
     transition: all 3.22s ease-in-out;
 }
@@ -41,10 +80,7 @@ input[type="text"], textarea {
 .submitted .ng-invalid
 {
     border: 1px solid red;
-}
-
-.error {
-    background-color: red; !important;
+    box-shadow: 0 0 6px 0 rgba(255, 0, 0, .8);
 }
 
 .form-group {
@@ -53,35 +89,49 @@ input[type="text"], textarea {
 
 .form-group > label {
     font-size: large;
+    text-shadow: 2px 2px 2px rgba(2, 2, 0, 0.82);
 }
 
-.issue-header, .issue-sub-header, .issue-notes, .issues{
+
+.form-control {
+    background-color: rgba(51, 51, 51, 1);
+    color: #949494;
+}
+
+select {
+    background-color: rgba(51, 51, 51, 1);
+}
+select > option  {
+    color: #949494;
+}
+
+.issue-header, .issue-sub-header, .issue-notes, .issue-types {
     padding: 4px 10px 4px 10px;
 }
 
 .issue-header {
     background-color: #1b6d85;
-    color: white;
+    color: #dadada;
     font-weight: bold;
     text-shadow: 2px 2px 2px rgba(2, 2, 0, 0.82);
 }
 
 .issue-sub-header {
-    background-color: #2bafd6;
+    background-color: rgba(45, 121, 163, 0.55);
     border-bottom: outset blue ;
+    color: #dadada;
 }
 
 .issue-notes {
-    background-color: #9f9f9f;
+    background-color: rgba(51, 51, 51, 0.88);
 }
 
-.issues {
-    background-color: #e0e0e0;
+.issue-types {
+    background-color: rgba(71, 71, 71, 0.88);
 }
 
-.issue {
+.issue-type-issue {
     padding-left: 20px;
-    background-color: #e0e0e0;
 }
 
 .fluid {
@@ -94,6 +144,10 @@ input[type="text"], textarea {
 
 .plex-logo {
     padding-bottom: 6px;
+}
+
+.text-smaller {
+    font-size: smaller;
 }
 
 .img-shadowed {
@@ -159,6 +213,9 @@ input[type="text"], textarea {
     text-shadow: 0px 0px 6px rgba(49, 53, 211, 0.82);
 }
 
+.jumbotron {
+    background-color: rgba(51, 51, 51, 1);
+}
 /*
 Bootstrap Carousel Fade Transition (for Bootstrap 3.3.x)
 CSS from:       http://codepen.io/transportedman/pen/NPWRGq
@@ -206,6 +263,10 @@ Inspired from:  http://codepen.io/Rowno/pen/Afykb
 
 /** From groksoft.css **/
 
+/**
+ *  Menus and Dropdowns
+ */
+
 nav {
     width: 100%;
     display: block;
@@ -221,13 +282,21 @@ nav a {
 }
 
 nav a:hover {
-    color: #fff;
+    color: white;
     /*text-shadow: 0 0 3px rgba(0, 0, 0, 0.92);*/
 }
 
 .navbar-default {
-    background-color: rgba(224, 224, 224, 0.77);
+    background-color: rgba(51, 51, 51, 1);
+    color: white;
 }
+
+.navbar-default .navbar-nav > .open > a, .navbar-default .navbar-nav > .open > a:hover, .navbar-default .navbar-nav > .open > a:focus, .navbar-default .navbar-nav > li > a:hover
+{
+    background-color: rgba(51, 51, 51, 1);
+    color: #636363;
+}
+
 .navbar-brand {
     float: left;
     height: 50px;
@@ -238,6 +307,8 @@ nav a:hover {
     margin-bottom: 5px;
 }
 
+
+/*
 .navbar-img {
     margin-top: 15px;
     cursor: pointer;
@@ -249,7 +320,7 @@ nav a:hover {
 }
 
 .navbar-custom {
-    background: rgba(166, 67, 10, 0.73); /* url(../_images/background_gradient.jpg) repeat-x 0 0; */
+    background: rgba(166, 67, 10, 1); !* url(../_images/background_gradient.jpg) repeat-x 0 0; *!
     color: #ffffff;
     border: outset rgba(166, 67, 10, 0.92);
     border-radius: 10px;
@@ -260,12 +331,14 @@ nav a:hover {
 .navbar-custom .navbar-nav > li > a {
     color: #fff;
 }
+*/
 
-.navbar-custom .navbar-nav > .active > a, .navbar-nav > .active > a:hover, .navbar-nav > .active > a:focus {
-    color: #ffffff;
-    background-color: transparent;
-}
+/*.navbar-custom .navbar-nav > .active > a, .navbar-nav > .active > a:hover, .navbar-nav > .active > a:focus {
+    background-color: rgba(51, 51, 51, 1);
+    color: #636363;
+}*/
 
+/*
 .navbar-custom .navbar-brand {
     color: #eeeeee;
 }
@@ -286,8 +359,39 @@ nav a:hover {
     border: 1px solid transparent;
     border-radius: 4px;
 }
+*/
 
+.dropdown:hover {
+    color: #000;
+}
 
+.dropdown-menu {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    z-index: 1000;
+    display: none;
+    float: left;
+    min-width: 120px;
+    padding: 3px 0;
+    margin: 2px 0 0;
+    font-size: 14px;
+    text-align: left;
+    list-style: none;
+    background-color: rgba(51, 51, 51, 1);;
+
+    -webkit-background-clip: padding-box;
+    background-clip: padding-box;
+
+    border: 1px solid rgba(0, 0, 0, .15);
+    border-radius: 4px;
+    -webkit-box-shadow: 0 6px 12px rgba(0, 0, 0, .175);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, .175);
+}
+
+.dropdown-menu > li > a {
+    color: #949494;
+}
 .help-finger {
     position: fixed;
     right: 22px;
