@@ -1,4 +1,4 @@
-# ![alt text][plexLg]Notes
+# ![alt text][plexLg] Notes
 
 ### The ![alt text][plexSm]Notes Project
 
@@ -40,6 +40,6 @@ You must run the web app on the same port as the server is running.
 Note that in IntelliJ, when a run configuration is created, by default the port is for the intelliJ web server. Right now PlexNotes is meant to be ran on the same server as the data server!!!!
 This may change in the future to have a configurable url
 
-[plexLg]: http://groksoft.net/plex/_images/PLEX-sm.png
+[plexLg]: http://groksoft.net/plex/_images/Plex-h2.png
 [plexSm]: http://groksoft.net/plex/_images/PLEX-vsmall.png
 [plexVs]: http://groksoft.net/plex/_images/PLEX-tiny.png
