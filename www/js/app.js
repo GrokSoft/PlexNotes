@@ -416,7 +416,7 @@
                 $http.defaults.headers.post['Content-Type'] = 'application/json;charset=utf-8';
 
                 $scope.newIssueTemplate = {
-                    "id": 0, "title": "", "user": "","email": true,  "priority": "", "status": "", "notes": "", "issues": []
+                    "id": 0, "title": "", "user": "","emailme": true,  "priority": "", "status": "", "notes": "", "issues": []
                 };
 
                 // Do a deep copy of the template

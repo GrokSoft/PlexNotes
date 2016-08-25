@@ -399,6 +399,7 @@ var loremIpsum = function (start, len) {
      *  "id" : 1,
      *  "title"   : "",
      *  "user" : "Bill",
+     *  "emailme", false,
      *  "priority" : 3,
      *  "status" : 3,
      *  "notes" : "",
@@ -666,6 +667,7 @@ var loremIpsum = function (start, len) {
             "id"      : 0,
             "title"   : "",
             "user"    : "",
+            "emailme" : false,
             "priority": 0,
             "status"  : 0,
             "notes"   : loremIpsum(),
@@ -676,6 +678,7 @@ var loremIpsum = function (start, len) {
         issue.id       = ++idLast;
         issue.title    = "Issue Title for # "+issue.id;
         issue.user     = users[parseInt(Math.random() * users.length)];
+        issue.emailme  = Math.random()<.5;
         issue.priority = parseInt(Math.random() * plexPriorites.length);
         //console.log("issue.priority " + issue.priority);
         issue.status   = parseInt(Math.random() * plexStatuses.length);

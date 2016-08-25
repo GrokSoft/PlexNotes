@@ -8,7 +8,8 @@
     text-decoration: none"
             class="pull-right grow glyphicon glyphicon-trash"
             ng-click="deleteIssue(issue.id)"
-            ng-confirm-click="You are about to delete issue, are you sure you wish to continue?" ></a></h4>
+            ng-confirm-click="You are about to delete issue, are you sure you wish to continue?"
+            title="Click this to delete the issue."></a></h4>
     <div class="issue-sub-header">
     <h4 style="border-bottom: solid thin blue">
         <span><b>Issue#</b> {{issue.id}}</span>
@@ -22,7 +23,7 @@
 
         </span>
     </h4>
-        <h4 class=" bordered text-left">
+        <h4 class="bordered text-left" style="height: 18px">
 
             <!-- ToDo: This has an artifact when expanding since I added Markdown.
                 <span class="col-sm-1"><a class="accordion-toggle"
@@ -31,15 +32,13 @@
                 <span class="glyphicon glyphicon-chevron-up"
                         title="Click to expand this issue"></span>
             </a></span>-->
-            <span><b>User#</b> {{issue.user}} <span
+            <span class=""><b>User#</b> {{issue.user}} <span
                     class="glyphicon glyphicon-envelope"
-                    ng-show="issue.email==true"
-                    title="{{issue.user}} will be emailed when issue is resolved"></span>
+                    ng-show="issue.emailme==true"
+                    title="{{issue.user}} will be emailed when the issue is resolved"></span>
             </span>
+            <span class="pull-right"><b>Priority:</b> {{priorities()[issue.priority]}}</span>
 
-            <span class="pull-right">
-            <span><b>Priority:</b> {{priorities()[issue.priority]}}</span>
-        </span>
         </h4>
     </div>
 

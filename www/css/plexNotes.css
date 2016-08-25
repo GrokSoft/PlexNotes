@@ -92,6 +92,25 @@ input[type="text"], textarea {
     display: block;
 }
 
+.plex-logo {
+    padding-bottom: 6px;
+}
+
+.img-shadowed {
+    -webkit-filter: drop-shadow(2px 2px 4px rgba(0, 0, 0, 0.80));
+    filter: drop-shadow(2px 2px 4px rgba(0, 0, 0, 0.80));
+    -ms-filter: "progid:DXImageTransform.Microsoft.Shadow(Color=#cccccc, Strength=5, Direction=135))";
+    /*filter: progid:DXImageTransform.Microsoft.Shadow(Strength=4, Direction=135, Color='#000000');*/
+
+}
+
+.img-shadowed-frame {
+    -webkit-filter: drop-shadow(0px 0px 4px rgba(0, 0, 0, 0.80));
+    filter: drop-shadow(0px 0px 4px rgba(0, 0, 0, 0.80));
+    -ms-filter: "progid:DXImageTransform.Microsoft.Shadow(Color=#cccccc, Strength=5, Direction=135))";
+    /*filter: progid:DXImageTransform.Microsoft.Shadow(Strength=4, Direction=135, Color='#000000');*/
+}
+
 .shadowed {
     text-shadow: 0px 0px 3px rgba(0, 0, 0, 0.82);
 }
@@ -137,7 +156,7 @@ input[type="text"], textarea {
 .main-title {
     font-weight: bold;
     color: #f8f4ed;
-    text-shadow: 0px 0px 4px rgba(0, 0, 0, 0.82);
+    text-shadow: 0px 0px 6px rgba(49, 53, 211, 0.82);
 }
 
 /*
@@ -213,7 +232,7 @@ nav a:hover {
     float: left;
     height: 50px;
     padding: 5px 15px;
-    font-size: 18px;
+    font-size: 28px;
     line-height: 20px;
     margin-top: 15px;
     margin-bottom: 5px;
