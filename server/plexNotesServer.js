@@ -86,7 +86,7 @@ var loremIpsum = function (start, len) {
         {
             "id"      : 3,
             "title"   : "Title for default issue 3",
-            "user"    : "Todd",
+            "user"    : "Sarah",
             "emailme" : false,
             "priority": 3,
             "status"  : 3,
@@ -102,7 +102,7 @@ var loremIpsum = function (start, len) {
 
     ];
     var idLast   = parseInt(plexData[plexData.length - 1].id);
-    /** id to used to create the next issue */
+    /** id to used when creating the next issue */
 
     /**
      * Issue Priorities
@@ -676,7 +676,7 @@ var loremIpsum = function (start, len) {
 
         //console.log("idLast " + idLast);
         issue.id       = ++idLast;
-        issue.title    = "Issue Title for # "+issue.id;
+        issue.title    = "Title for #"+issue.id+" (Random generated)";
         issue.user     = users[parseInt(Math.random() * users.length)];
         issue.emailme  = Math.random()<.5;
         issue.priority = parseInt(Math.random() * plexPriorites.length);

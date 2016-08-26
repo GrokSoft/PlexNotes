@@ -1,3 +1,7 @@
 <component name="CopyrightManager">
-  <settings default="GrokSoft" />
+  <settings default="GrokSoft">
+    <module2copyright>
+      <element module="All" copyright="GrokSoft" />
+    </module2copyright>
+  </settings>
 </component>

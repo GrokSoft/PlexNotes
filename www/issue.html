@@ -11,7 +11,7 @@
             ng-confirm-click="You are about to delete issue, are you sure you wish to continue?"
             title="Click this to delete the issue."></a></h4>
     <div class="issue-sub-header">
-    <h4 style="border-bottom: solid thin blue">
+    <h4 style="border-bottom: solid thin">
         <span><b>Issue#</b> {{issue.id}}</span>
 
         <span class="pull-right">
@@ -32,7 +32,7 @@
                 <span class="glyphicon glyphicon-chevron-up"
                         title="Click to expand this issue"></span>
             </a></span>-->
-            <span class=""><b>User#</b> {{issue.user}} <span
+            <span class=""><b>User</b> {{issue.user}} <span
                     class="glyphicon glyphicon-envelope"
                     ng-show="issue.emailme==true"
                     title="{{issue.user}} will be emailed when the issue is resolved"></span>

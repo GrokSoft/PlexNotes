@@ -46,12 +46,16 @@ input[type="checkbox"]:checked ~ .cb-label:before,
 input[type="checkbox"].checked ~ .cb-label:before {
     background-position: 0 -40px;
 }*/
-.big-checkbox {width: 22px; height: 22px;}
+.big-checkbox {
+    width: 22px;
+    height: 22px;
+}
 
 /* Menu and drop downs */
 .menu {
     background-color: rgba(51, 51, 51, 1);
 }
+
 .dropdown-menu > li {
     transition: all 0.3s ease-in-out;
 }
@@ -60,11 +64,10 @@ input[type="checkbox"].checked ~ .cb-label:before {
     transform: scale(1.1);
 }
 
-
-
 .carousel-sliders {
     opacity: 0.4;
 }
+
 /*
 input[type="text"], textarea {
     outline: none;
@@ -77,8 +80,7 @@ input[type="text"], textarea {
     transition: all 3.22s ease-in-out;
 }
 
-.submitted .ng-invalid
-{
+.submitted .ng-invalid {
     border: 1px solid red;
     box-shadow: 0 0 6px 0 rgba(255, 0, 0, .8);
 }
@@ -92,7 +94,6 @@ input[type="text"], textarea {
     text-shadow: 2px 2px 2px rgba(2, 2, 0, 0.82);
 }
 
-
 .form-control {
     background-color: rgba(51, 51, 51, 1);
     color: #949494;
@@ -101,7 +102,8 @@ input[type="text"], textarea {
 select {
     background-color: rgba(51, 51, 51, 1);
 }
-select > option  {
+
+select > option {
     color: #949494;
 }
 
@@ -118,7 +120,7 @@ select > option  {
 
 .issue-sub-header {
     background-color: rgba(45, 121, 163, 0.55);
-    border-bottom: outset blue ;
+    border-bottom: outset #000000;
     color: #dadada;
 }
 
@@ -216,6 +218,7 @@ select > option  {
 .jumbotron {
     background-color: rgba(51, 51, 51, 1);
 }
+
 /*
 Bootstrap Carousel Fade Transition (for Bootstrap 3.3.x)
 CSS from:       http://codepen.io/transportedman/pen/NPWRGq
@@ -291,8 +294,7 @@ nav a:hover {
     color: white;
 }
 
-.navbar-default .navbar-nav > .open > a, .navbar-default .navbar-nav > .open > a:hover, .navbar-default .navbar-nav > .open > a:focus, .navbar-default .navbar-nav > li > a:hover
-{
+.navbar-default .navbar-nav > .open > a, .navbar-default .navbar-nav > .open > a:hover, .navbar-default .navbar-nav > .open > a:focus, .navbar-default .navbar-nav > li > a:hover {
     background-color: rgba(51, 51, 51, 1);
     color: #636363;
 }
@@ -300,14 +302,17 @@ nav a:hover {
 .navbar-brand {
     float: left;
     height: 50px;
-    padding: 5px 15px;
+    min-width: 200px;
+    padding: 5px 5px;
     font-size: 28px;
     line-height: 20px;
     margin-top: 15px;
     margin-bottom: 5px;
 }
 
-
+.navbar-toggle-wrapper {
+    padding-top: 0px;
+}
 /*
 .navbar-img {
     margin-top: 15px;
@@ -392,6 +397,11 @@ nav a:hover {
 .dropdown-menu > li > a {
     color: #949494;
 }
+
+.dropdown-menu > li > a:hover {
+    background-color: #828282;
+}
+
 .help-finger {
     position: fixed;
     right: 22px;

@@ -28,8 +28,8 @@
     </div>
     <div class="col-lg-4">
         <h1 class="main-title text-center fluid"><img
-                src="images/Plex-h1-white.png" class="plex-logo img-shadowed-frame">
-                Notes
+                src="images/Plex-h1-white.png"
+                class="plex-logo img-shadowed-frame"> Notes
             <span style="font-size:smaller ">{{pnCtrl.getVersion()}}</span>
         </h1>
         <new-issue class="fluid "></new-issue>
@@ -37,7 +37,7 @@
 </div>
 
 <nav class="navbar navbar-default ">
-<menu></menu>
+    <menu></menu>
 </nav>
 
 <div class="container-fluid">
@@ -51,57 +51,51 @@
         <!--<a href="#myModal" role="button" class="btn" data-toggle="modal">Launch
             demo modal</a>-->
     </div>
-    <div class="col-lg-4">
+    <div class="col-lg-8">
         <issues-carousel ng-init="issuesCarouselCtrl.init(1)"
                 class=""></issues-carousel>
     </div>
-    <div class="col-lg-4">
-        <issues-carousel ng-init="issuesCarouselCtrl.init(2)"
-                class=""></issues-carousel>
+</div>
+<div id="issueTitles" class="container-fluid">
+    <br>
+    <h2 class="text-center shadowed" style="font-weight: bold; color: #587c91;">
+        <span href="#collapse-issue-titles" class="" data-toggle="collapse"
+                ng-click="pnCtrl.toggleCollapse('chevron-issue-titles')"
+                title="Click to Toggle Collapse state of issue titles">
+            <span id="chevron-issue-titles"
+                    class="glyphicon glyphicon-chevron-up grow"
+                    style="font-size: x-large"></span>
+            <!--<span style="font-size: x-large">Click to Toggle Collapse of all issues</span>-->
+        </span>
+        <img src="images/Plex-h2-white.png"
+                class="plex-logo img-shadowed-frame"> Issue Titles
+    </h2>
+
+    <div id="collapse-issue-titles" class="collapse in">
+        <div class="panel-body">
+            <issues-list></issues-list>
+        </div>
     </div>
 </div>
-    <div id="issueTitles" class="container-fluid">
-        <br>
-        <h2 class="text-center shadowed"
-                style="font-weight: bold; color: #587c91;">
-            <button href="#collapse-issue-titles" data-toggle="collapse"
-                    ng-click="pnCtrl.toggleCollapse('chevron-issue-titles')"
-                    title="Click to Toggle Collapse state of issue titles">
-            <span id="chevron-issue-titles"
-                    class="glyphicon glyphicon-chevron-up"
-                    style="font-size: x-large"></span>
-                <!--<span style="font-size: x-large">Click to Toggle Collapse of all issues</span>-->
-            </button>
-            <img src="images/Plex-h2-white.png" class="plex-logo img-shadowed-frame"> Issue Titles
-        </h2>
+<div class="container-fluid">
+    <h2 class="text-center shadowed" style="font-weight: bold; color: #587c91;">
 
-        <div id="collapse-issue-titles" class="collapse in">
-            <div class="panel-body">
-                <issues-list></issues-list>
-            </div>
-        </div>
-    </div>
-    <div class="container-fluid">
-        <h2 class="text-center shadowed"
-                style="font-weight: bold; color: #587c91;">
-
-            <button href="#issues" data-toggle="collapse"
-                    ng-click="pnCtrl.toggleCollapse('chevron')"
-                    title="Click to Toggle Collapse state of all issues">
+        <span href="#issues" class="grow badge" data-toggle="collapse"
+                ng-click="pnCtrl.toggleCollapse('chevron')"
+                title="Click to Toggle Collapse state of all issues">
             <span id="chevron" class="glyphicon glyphicon-chevron-up"
                     style="font-size: x-large"></span>
-                <!--<span style="font-size: x-large">Click to Toggle Collapse of all issues</span>-->
-            </button>
-            <img src="images/Plex-h2-white.png" class="plex-logo img-shadowed-frame"> Issues
-        </h2>
-        <div id="issues" class="collapse in">
-            <div class="panel-body">
-                <issues></issues>
-            </div>
+            <!--<span style="font-size: x-large">Click to Toggle Collapse of all issues</span>-->
+        </span>
+        <img src="images/Plex-h2-white.png"
+                class="plex-logo img-shadowed-frame"> Issues
+    </h2>
+    <div id="issues" class="collapse in">
+        <div class="panel-body">
+            <issues></issues>
         </div>
     </div>
-
-
+</div>
 
 <div id="myModal" class="modal hide fade" tabindex="-1" role="dialog"
         aria-labelledby="myModalLabel" aria-hidden="true">
