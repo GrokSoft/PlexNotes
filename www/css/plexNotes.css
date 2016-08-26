@@ -46,6 +46,43 @@ input[type="checkbox"]:checked ~ .cb-label:before,
 input[type="checkbox"].checked ~ .cb-label:before {
     background-position: 0 -40px;
 }*/
+
+.blurred-background {
+    background-image: url("../images/bg1.png");
+    position: absolute;
+    top:0;
+    left:0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    filter: blur(9px);
+    -webkit-filter: blur(9px);
+}
+
+.blur-it {
+    -webkit-filter: blur(3px);
+    filter: blur(3px);
+    /*filter:"progid:DXImageTransform.Microsoft.Blur(PixelRadius='3')";*/
+    -ms-filter: blur(3px);
+}
+
+.blur-it-bad {
+    -webkit-filter: blur(9px);
+    filter: blur(9px);
+    /*filter:"progid:DXImageTransform.Microsoft.Blur(PixelRadius='3')";*/
+    -ms-filter: blur(9px);
+}
+
+.new-issue-blurred {
+    top:60px;
+    left:0;
+}
+
+.new-user-bg {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+}
 .big-checkbox {
     width: 22px;
     height: 22px;
@@ -431,12 +468,7 @@ nav a:hover {
     border-width: 0 5px 5px;
 }
 
-.blur-it {
-    -webkit-filter: blur(3px);
-    filter: blur(3px);
-    /*filter:"progid:DXImageTransform.Microsoft.Blur(PixelRadius='3')";*/
-    -ms-filter: blur(3px);
-}
+
 
 .float-right {
     float: right;

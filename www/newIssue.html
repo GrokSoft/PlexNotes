@@ -2,6 +2,7 @@
   ~ Copyright (c) 2016. GrokSoft LLC - All Rights Reserved
   -->
 
+
 <div class="fluid">
     <div class="text-center shadowed-dropped"
             style="font-size: x-large; font-weight: bold; color: #918f8b;">
@@ -9,15 +10,17 @@
     </div>
 
     <form name="newIssueForm" class="form-horizontal "
-            ng-class="{'submitted': submitted}"
-            ng-submit="createIssue()">
+            ng-class="{'submitted': submitted}" ng-submit="createIssue()">
+        <div class=" blurred-background new-issue-blurred" style="overflow: hidden">
+            <!--<img src="images/plex-bg1.png" class="blur-it-bad">-->
+        </div>
         <br>
         <div class="form-group">
             <label class="col-xs-3 control-label">Title:</label>
             <div class="col-xs-5">
                 <input type="text" class="form-control" name="title"
-                        placeholder="Issue Title"
-                        ng-model="newIssue.title" required/>
+                        placeholder="Issue Title" ng-model="newIssue.title"
+                        required/>
             </div>
         </div>
 
@@ -25,16 +28,29 @@
             <label class="col-xs-3 control-label">User:</label>
             <div class="col-xs-5">
                 <input type="text" class="form-control" name="user"
-                        placeholder="User Name"
-                        ng-model="newIssue.user" required/>
-                <label> <input type=checkbox
-                        class="big-checkbox shadowed-dropped"> <span class="text-smaller"
-                        style="color: #2342e0; font-style: italic">Email when issue
-                    is
-                    resolved</span> </label>
+                        placeholder="User Name" ng-model="newIssue.user"
+                        required/>
+               <!-- <label>  <input id="cb1" type=checkbox
+                    class="big-checkbox shadowed-dropped">
+                    <label class="text-smaller" style="color: #2342e0; font-style:
+                    italic; margin-top: -30px" for="cb1">Email when issue is
+                    resolved
+                    </label>-->
+            </label>
             </div>
         </div>
 
+
+        <div class="form-group">
+            <label class="col-xs-3 control-label">E-mail:</label>
+            <div class="col-xs-5 selectContainer">
+                <input id="cb1" type=checkbox
+                        class="big-checkbox shadowed-dropped">
+                <label class="text-smaller" style="color: #b0b8e0; font-style:
+                italic;  for="cb1">Email when issue is
+                    resolved</label>
+            </div>
+        </div>
 
         <div class="form-group">
             <label class="col-xs-3 control-label">Status:</label>
@@ -62,15 +78,15 @@
         <div class="form-group">
             <label class="col-xs-3 control-label">Issue Types:</label>
             <div class="col-xs-5 selectContainer">
-                <issue-types></issue-types >
+                <issue-types></issue-types>
             </div>
         </div>
 
         <div class="form-group">
             <label class="col-xs-3 control-label"></label>
             <div class="col-xs-8">
-                <button class="box-shadow" id="submitBtn" type="submit" ng-click="submitted=true;">Add
-                    Issue
+                <button class="box-shadow" id="submitBtn" type="submit"
+                        ng-click="submitted=true;">Add Issue
                 </button>
             </div>
         </div>
