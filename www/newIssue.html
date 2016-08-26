@@ -3,16 +3,21 @@
   -->
 
 
-<div class="fluid">
-    <div class="text-center shadowed-dropped"
-            style="font-size: x-large; font-weight: bold; color: #918f8b;">
-        Create a new Issue
+<div class="fluid " style="max-height: 520px">
+    <div class="blurred-background" style="overflow: hidden">
+        <!-- NOTE: This img only sets the size of the bacground. The image is
+         the
+         one in blurred-background -->
+        <img src="images/bg2.png">
     </div>
 
     <form name="newIssueForm" class="form-horizontal "
-            ng-class="{'submitted': submitted}" ng-submit="createIssue()">
-        <div class=" blurred-background new-issue-blurred" style="overflow: hidden">
-            <!--<img src="images/plex-bg1.png" class="blur-it-bad">-->
+            ng-class="{'submitted': submitted}" ng-submit="createIssue()"
+            style="position: relative; top: -580px; left: 0;">
+
+        <div class="form-group text-center shadowed-dropped"
+                style="font-size: xx-large; font-weight: bold; color: #4b4945;">
+            Create a new Plex Issue
         </div>
         <br>
         <div class="form-group">
@@ -30,13 +35,12 @@
                 <input type="text" class="form-control" name="user"
                         placeholder="User Name" ng-model="newIssue.user"
                         required/>
-               <!-- <label>  <input id="cb1" type=checkbox
-                    class="big-checkbox shadowed-dropped">
-                    <label class="text-smaller" style="color: #2342e0; font-style:
-                    italic; margin-top: -30px" for="cb1">Email when issue is
-                    resolved
-                    </label>-->
-            </label>
+                <!-- <label>  <input id="cb1" type=checkbox
+                     class="big-checkbox shadowed-dropped">
+                     <label class="text-smaller" style="color: #2342e0; font-style:
+                     italic; margin-top: -30px" for="cb1">Email when issue is
+                     resolved
+                     </label>--></label>
             </div>
         </div>
 
@@ -45,10 +49,9 @@
             <label class="col-xs-3 control-label">E-mail:</label>
             <div class="col-xs-5 selectContainer">
                 <input id="cb1" type=checkbox
-                        class="big-checkbox shadowed-dropped">
-                <label class="text-smaller" style="color: #b0b8e0; font-style:
-                italic;  for="cb1">Email when issue is
-                    resolved</label>
+                        class="big-checkbox shadowed-dropped"> <label
+                    class="text-smaller" style="color: #b0b8e0; font-style:
+                italic;  for=" cb1">Email when issue is resolved</label>
             </div>
         </div>
 

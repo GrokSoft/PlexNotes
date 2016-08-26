@@ -42,14 +42,14 @@
 
 <div class="container-fluid">
     <div class="col-lg-4">
-        <h3>Debug
-            <span class="pull-right" style="padding-right: 40px"><issues-dropdown></issues-dropdown></span>
-        </h3>
-        urlBase =
-        <span>{{pnCtrl.getUrlBase()}}</span>
+        <h3>Debug </h3>
+       <div> urlBase =
+        <span>{{pnCtrl.getUrlBase()}}</span></div>
         <!-- Button to trigger modal -->
         <!--<a href="#myModal" role="button" class="btn" data-toggle="modal">Launch
             demo modal</a>-->
+        <br>
+        <div style="overflow: hidden"><issues-dropdown></issues-dropdown></div>
     </div>
     <div class="col-lg-8">
         <issues-carousel ng-init="issuesCarouselCtrl.init(1)"
@@ -71,12 +71,13 @@
                 class="plex-logo img-shadowed-frame"> Issue Titles
     </h2>
 
-    <div id="collapse-issue-titles" class="collapse in">
-        <div class="panel-body">
+    <div id="collapse-issue-titles" class="collapse in ">
+        <div class="panel-body ">
             <issues-list></issues-list>
         </div>
     </div>
 </div>
+<hr>
 <div class="container-fluid">
     <h2 class="text-center shadowed" style="font-weight: bold; color: #587c91;">
 

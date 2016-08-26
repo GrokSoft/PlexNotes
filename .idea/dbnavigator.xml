@@ -59,7 +59,7 @@
           <description value="plexDB" />
           <database-type value="SQLITE" />
           <config-type value="BASIC" />
-          <database-version value="9999.0" />
+          <database-version value="3.0" />
           <driver-source value="BUILTIN" />
           <driver-library value="" />
           <driver value="" />

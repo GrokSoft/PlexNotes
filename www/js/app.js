@@ -103,7 +103,7 @@
         };
 
         /**
-         *  Toggle all the collapse elements
+         *  Toggle all the collapse elements Chevron
          */
         this.toggleCollapse = function (id) {
             var chevron      = $('#'+id);

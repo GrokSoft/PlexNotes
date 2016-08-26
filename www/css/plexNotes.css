@@ -47,18 +47,6 @@ input[type="checkbox"].checked ~ .cb-label:before {
     background-position: 0 -40px;
 }*/
 
-.blurred-background {
-    background-image: url("../images/bg1.png");
-    position: absolute;
-    top:0;
-    left:0;
-    width: 100%;
-    height: 100%;
-    overflow: hidden;
-    filter: blur(9px);
-    -webkit-filter: blur(9px);
-}
-
 .blur-it {
     -webkit-filter: blur(3px);
     filter: blur(3px);
@@ -67,15 +55,23 @@ input[type="checkbox"].checked ~ .cb-label:before {
 }
 
 .blur-it-bad {
-    -webkit-filter: blur(9px);
-    filter: blur(9px);
+    -webkit-filter: blur(49px);
+    filter: blur(49px);
     /*filter:"progid:DXImageTransform.Microsoft.Blur(PixelRadius='3')";*/
-    -ms-filter: blur(9px);
+    -ms-filter: blur(49px);
 }
 
-.new-issue-blurred {
-    top:60px;
+.blurred-background {
+    background: url("../images/bg2.png") ;
+    position:static;
+    top:0;
     left:0;
+
+    overflow: hidden;
+    filter: blur(12px);
+    -webkit-filter: blur(12px);
+    -ms-filter: blur(12px);
+    opacity: .81;
 }
 
 .new-user-bg {
@@ -113,8 +109,8 @@ input[type="text"], textarea {
 }
 */
 
-.collapse {
-    transition: all 3.22s ease-in-out;
+.slow-collapse {
+    transition: all 2.22s ease-in-out;
 }
 
 .submitted .ng-invalid {
