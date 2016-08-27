@@ -7,7 +7,6 @@
     var theApp = this;
     var VERSION = "0.0.1";
     var urlBase;
-
     var _issues = [];
     var _priorities = [];
     var _statuses = [];
@@ -21,7 +20,6 @@
     var app = angular.module('plexNotes', ['media-directives']/*,function($locationProvider){
      $locationProvider.html5Mode(true);
      }*/);
-
 
     app.controller('PlexNotesController', ['$scope', '$http', '$location', '$anchorScroll', function ($scope, $http, $location, $anchorScroll) {
         var plexNotes = this;
@@ -77,7 +75,7 @@
         /**
          * ScrollTo
          *
-         * Scroll to an anchore on a page
+         * Scroll to an anchor on a page
          */
         $scope.scrollTo = function(id) {
             $location.hash(id);
@@ -85,7 +83,7 @@
         };
 
         /**
-         * Refresh the Issues daTA
+         * Refresh the Issues data
          */
         $scope.refreshIssues = function () {
             $http.get(urlBase + '/api/issues').success(function (issues) {
@@ -248,6 +246,27 @@
             return (!isNaN(key)) ? parseInt(key) : key;
         };
 
+        /**
+         * Toggle the hover zoom of the passed issue
+         *
+         * @param id - the id of the issue
+         */
+        $scope.zoom = function (id) {
+            var element = $('#issue'+id);
+            var zoomIcon;
+            if( element.hasClass('grow-md') ) {
+                zoomIcon = element.find('.glyphicon-zoom-out:first');
+                zoomIcon.removeClass('glyphicon-zoom-out');
+                zoomIcon.addClass('glyphicon-zoom-in');
+                element.removeClass('grow-md');
+            }
+            else {
+                zoomIcon = element.find('.glyphicon-zoom-in:first');
+                zoomIcon.removeClass('glyphicon-zoom-in');
+                zoomIcon.addClass('glyphicon-zoom-out');
+                element.addClass('grow-md');
+            }
+        };
         /**
          * @name deleteIssue
          *

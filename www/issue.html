@@ -2,9 +2,13 @@
   ~ Copyright (c) 2016. GrokSoft LLC - All Rights Reserved
   -->
 
-<div class="fluid">
+<div  class="fluid">
 
-    <h4 class="issue-header"> {{issue.title}} <a style="color: white;
+    <h4 class="issue-header"><a class="glyphicon glyphicon-zoom-in"
+            ng-click="zoom(issue.id)"
+            title="Click to toggle the hover zoom fo this issue"></a>
+        {{issue.title}} <a
+            style="color: white;
     text-decoration: none"
             class="pull-right grow glyphicon glyphicon-trash"
             ng-click="deleteIssue(issue.id)"
