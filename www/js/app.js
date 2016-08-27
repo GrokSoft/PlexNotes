@@ -106,7 +106,7 @@
         this.toggleCollapse = function (id) {
             var chevron      = $('#'+id);
 
-            if (showing) {
+            if (chevron.hasClass('glyphicon-chevron-up')) {
                 chevron.removeClass('glyphicon-chevron-up');
                 chevron.addClass('glyphicon-chevron-down');
             }
@@ -114,7 +114,7 @@
                 chevron.removeClass('glyphicon-chevron-down');
                 chevron.addClass('glyphicon-chevron-up');
             }
-            showing = !showing;
+            //showing = !showing;
 
             // Stop the finger
             /*            $('#finger2').removeClass('bounce-right');

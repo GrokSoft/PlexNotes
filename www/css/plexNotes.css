@@ -7,7 +7,7 @@
 
 body {
     background-color: rgba(31, 31, 31, 1);
-    color: #e0e0e0;
+    color: #eeeeee;
 }
 
 issue {
@@ -51,6 +51,9 @@ input[type="checkbox"].checked ~ .cb-label:before {
     background-position: 0 -40px;
 }*/
 
+.glyphicon, .glyphicon:hover {
+    text-decoration: none;
+}
 .blur-it {
     -webkit-filter: blur(3px);
     filter: blur(3px);
@@ -163,10 +166,14 @@ select > option {
 
 .issue-notes {
     background-color: rgba(51, 51, 51, 1);
+    height: 166px;
+    overflow: auto
 }
 
 .issue-types {
     background-color: rgba(71, 71, 71, 1);
+    height: 106px;
+    overflow: auto
 }
 
 .issue-type-issue {
@@ -252,7 +259,7 @@ select > option {
 
 .main-title {
     font-weight: bold;
-    color: #f8f4ed;
+    color: #eeeeee;
     text-shadow: 0px 0px 6px rgba(49, 53, 211, 0.82);
 }
 
@@ -326,13 +333,13 @@ nav a {
 }
 
 nav a:hover {
-    color: white;
+    color: #eeeeee;
     /*text-shadow: 0 0 3px rgba(0, 0, 0, 0.92);*/
 }
 
 .navbar-default {
     background-color: rgba(51, 51, 51, 1);
-    color: white;
+    color: #eeeeee;
 }
 
 .navbar-default .navbar-nav > .open > a, .navbar-default .navbar-nav > .open > a:hover, .navbar-default .navbar-nav > .open > a:focus, .navbar-default .navbar-nav > li > a:hover {
