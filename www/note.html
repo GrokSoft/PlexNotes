@@ -1,0 +1,74 @@
+<!--
+  ~ Copyright (c) 2016. GrokSoft LLC - All Rights Reserved
+  -->
+
+<div class="fluid">
+
+    <h4 class="note-header">
+
+        <!--<span id="chevron{{note.id}}" href="javascript:;"
+                class="glyphicon glyphicon-chevron-down grow"
+                style="font-size: x-large" data-toggle="collapse"
+                data-target="#collapse-note{{note.id}}"
+                ng-click="pnCtrl.toggleCollapse('chevron'+note.id)"
+                title="Click to Toggle Collapse state of note titles">
+        </span>-->
+
+        <a class="glyphicon glyphicon-zoom-in" style="color: #eeeeee"
+                ng-click="zoom(note.id)"
+                title="Click to toggle the hover zoom for this note"></a>
+        {{note.title}} <a style="color: #eeeeee;
+    text-decoration: none" class="pull-right grow glyphicon glyphicon-trash"
+            ng-click="deleteNote(note.id)"
+            ng-confirm-click="You are about to delete this note, are you sure you wish to continue?"
+            title="Click this to delete the note."></a>
+    </h4>
+
+    <div id="collapse-note{{note.id}}" class="collapse in">
+        <div class="panel-body ">
+            <div class="note-sub-header">
+                <h4 style="border-bottom: solid thin">
+                    <span><b>Note#</b> {{note.id}}</span>
+
+                    <span class="pull-right">
+                        <span><b>Status:</b> {{statuses()[note.status]}}</span>
+                        <!-- <a href="{{note.html_url}}">
+                             <span class="github grow grow-box-shadow"
+                                     title="View the note on GetHub"></span>
+                         </a>-->
+                    </span>
+                </h4>
+                <h4 class="bordered text-left" style="height: 18px">
+
+                    <!-- ToDo: This has an artifact when expanding since I added Markdown.
+                        <span class="col-sm-1"><a class="accordion-toggle"
+                            href="#noteBody{{note.number}}"
+                            data-toggle="collapse">
+                        <span class="glyphicon glyphicon-chevron-up"
+                                title="Click to expand this note"></span>
+                    </a></span>-->
+                    <span class=""><b>User</b> {{note.user}} <span
+                            class="glyphicon glyphicon-envelope"
+                            ng-show="note.emailme==true"
+                            title="{{note.user}} will be emailed when the note is resolved"></span>
+                    </span>
+                    <span class="pull-right"><b>Priority:</b> {{priorities()[note.priority]}}</span>
+
+                </h4>
+            </div>
+
+
+            <div class="note-notes bordered text-left">
+                <b>Notes:</b> "{{note.details}}"
+            </div>
+
+            <div class="issue-types">
+                <b>Issues:</b> <br>
+                <div class="issue-type-issue"
+                        ng-repeat="issuetype in note.issues">
+                    {{issueTypes()[issuetype]}}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

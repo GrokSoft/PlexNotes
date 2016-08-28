@@ -58,12 +58,12 @@ var loremIpsum = function (start, len) {
     var plexData = [
         {
             "id"      : 1,
-            "title"   : "Title for default issue 1",
+            "title"   : "Title for default note 1",
             "user"    : "Bill",
             "emailme" : false,
             "priority": 1,
             "status"  : 1,
-            "notes"   : loremIpsum(),
+            "details" : loremIpsum(),
             "issues"  : [
                 1,
                 2
@@ -71,12 +71,12 @@ var loremIpsum = function (start, len) {
         },
         {
             "id"      : 2,
-            "title"   : "Title for default issue 2",
+            "title"   : "Title for default note 2",
             "user"    : "Todd",
             "emailme" : true,
             "priority": 2,
             "status"  : 2,
-            "notes"   : loremIpsum(),
+            "details" : loremIpsum(),
             "issues"  : [
                 3,
                 4,
@@ -85,12 +85,12 @@ var loremIpsum = function (start, len) {
         },
         {
             "id"      : 3,
-            "title"   : "Title for default issue 3",
+            "title"   : "Title for default note 3",
             "user"    : "Sarah",
             "emailme" : false,
             "priority": 3,
             "status"  : 3,
-            "notes"   : loremIpsum(),
+            "details" : loremIpsum(),
             "issues"  : [
                 6,
                 7,
@@ -102,10 +102,10 @@ var loremIpsum = function (start, len) {
 
     ];
     var idLast   = parseInt(plexData[plexData.length - 1].id);
-    /** id to used when creating the next issue */
+    /** id to used when creating the next note */
 
     /**
-     * Issue Priorities
+     * note Priorities
      */
     var plexPriorites = [
         "None",
@@ -115,7 +115,7 @@ var loremIpsum = function (start, len) {
     ];
 
     /**
-     * Issue Statuses
+     * Note Statuses
      */
     var plexStatuses = [
         "None",
@@ -131,7 +131,7 @@ var loremIpsum = function (start, len) {
      */
     var plexIssues = [
         "None",
-        "See Notes",
+        "See Details",
         "Needs Subtitles",
         "Needs Forced Subtitles",
         "Error Streaming",
@@ -140,8 +140,7 @@ var loremIpsum = function (start, len) {
         "Bad Audio",
         "Low Audio",
         "High Audio",
-        "Add Artwork",
-        "See Notes"
+        "Add Artwork"
     ];
 
     var routes = {
@@ -234,13 +233,13 @@ var loremIpsum = function (start, len) {
      * @name get api/data/priorities
      *
      * @description
-     * Get the Plex issue priorities
+     * Get the Plex note priorities
      *
      * @param req   The Request
      * @param res   The Response
      * @param next  The Next rout in the chain
      *
-     * @returns  Plex issue priorities
+     * @returns  Plex note priorities
      */
     server.get('api/data/priorities', function (req, res, next) {
         var ret = plexPriorites;
@@ -256,13 +255,13 @@ var loremIpsum = function (start, len) {
      * @name get api/data/statuses
      *
      * @description
-     * Get the Plex issue statuses
+     * Get the Plex note statuses
      *
      * @param req   The Request
      * @param res   The Response
      * @param next  The Next rout in the chain
      *
-     * @returns  Plex issue statuses
+     * @returns  Plex note statuses
      */
     server.get('api/data/statuses', function (req, res, next) {
         var ret = plexStatuses;
@@ -278,19 +277,19 @@ var loremIpsum = function (start, len) {
      * @name get api/data/issuetypes
      *
      * @description
-     * Get the Plex issue issues
+     * Get the Plex note issues
      *
      * @param req   The Request
      * @param res   The Response
      * @param next  The Next rout in the chain
      *
-     * @returns  Plex issue issues
+     * @returns  Plex note issues
      */
     // Todo - Is there a better names for these, since the whole thing is already an issue
     server.get('api/data/issuetypes', function (req, res, next) {
         var ret = plexIssues;
 
-        console.log("Processing GET api/data/issues");
+        console.log("Processing GET api/data/notes");
 
         setResponseHeader(res);
         res.json(ret);
@@ -326,11 +325,11 @@ var loremIpsum = function (start, len) {
     });
 
     /**
-     * @name get api/issues
-     * get api/issues?query=movie
+     * @name get api/notes
+     * get api/notes?query=movie
      *
      * @description
-     * Get all issues with optional query parameter
+     * Get all notes with optional query parameter
      *
      * @param req   The Request
      * @param res   The Response
@@ -338,11 +337,11 @@ var loremIpsum = function (start, len) {
      *
      * @returns  The requested note or 404
      */
-    server.get('api/issues', function (req, res, next) {
+    server.get('api/notes', function (req, res, next) {
         var ret   = [];
         var query = req.query.query;
 
-        console.log("Processing GET api/issues");
+        console.log("Processing GET api/notes");
 
         plexData.forEach(function (node) {
             // Test for a query string
@@ -360,10 +359,10 @@ var loremIpsum = function (start, len) {
 
 
     /**
-     * @name get api/issues/{id}
+     * @name get api/notes/{id}
      *
      * @description
-     * Get a issues by id
+     * Get a notes by id
      *
      * @param req   The Request
      * @param res   The Response
@@ -371,7 +370,7 @@ var loremIpsum = function (start, len) {
      *
      * @returns  The requested note or 404
      */
-    server.get('api/issues/:id', function (req, res, next) {
+    server.get('api/notes/:id', function (req, res, next) {
         // There can not be duplicate notes, so always use the first element returned.
         var ret = plexData.filter(function (node) {
             return node.id == req.params.id;
@@ -379,7 +378,7 @@ var loremIpsum = function (start, len) {
         if (ret === undefined) {
             ret = notFound(res);
         }
-        console.log("Processing GET api/issues/"+req.params.id);
+        console.log("Processing GET api/notes/"+req.params.id);
 
         setResponseHeader(res);
         res.json(ret);
@@ -391,10 +390,10 @@ var loremIpsum = function (start, len) {
     //
 
     /**
-     * @name post api/issues
+     * @name post api/notes
      *
      * @description
-     * Create a new issue
+     * Create a new note
      * ( body = {
      *  "id" : 1,
      *  "title"   : "",
@@ -402,7 +401,7 @@ var loremIpsum = function (start, len) {
      *  "emailme", false,
      *  "priority" : 3,
      *  "status" : 3,
-     *  "notes" : "",
+     *  "details" : "",
      *  "issues" : [
      *  "3",
      *  "6"
@@ -412,38 +411,38 @@ var loremIpsum = function (start, len) {
      * @param res   The Response
      * @param next  The Next rout in the chain
      *
-     * @returns  The new issue, or 400 if the issue could not be created.
+     * @returns  The new note, or 400 if the note could not be created.
      */
-    server.post('api/issues', function (req, res, next) {
+    server.post('api/notes', function (req, res, next) {
         var ret;
 
-        console.log("Processing POST api/issues");
+        console.log("Processing POST api/notes");
 
         // Get the notes in case they were change
-        getIssues();
+        getNotes();
 
         // Check the body for valid data
         try {
             // Handle the body coming in as a JSON object or string.
-            var issue;
+            var note;
             /* = typeof req.body !== "string"
              ? req.body.toString()
              : JSON.parse(req.body).body;*/
 
-            issue = req.body;
+            note = req.body;
             idLast++;
-            issue.id = idLast;
-            ret      = issue;
+            note.id = idLast;
+            ret      = note;
             plexData.push(ret);
-            saveIssues();
+            saveNotes();
             res.statusCode = 201;
         }
         catch (e) {
-            console.log("Error " + issue);
+            console.log("Error " + note);
             res.statusCode = 400;
 
 
-            ret = badRequest(issue);
+            ret = badRequest(note);
         }
         setResponseHeader(res);
         res.json(ret);
@@ -454,25 +453,25 @@ var loremIpsum = function (start, len) {
      * @name post api/data/add/:count
      *
      * @description
-     * Create random issues for testing
+     * Create random notes for testing
      *
      * @param req   The Request
      * @param res   The Response
      * @param next  The Next rout in the chain
      *
-     * @returns  Plex issue priorities
+     * @returns  Plex note priorities
      */
     server.post('api/data/add/:count', function (req, res, next) {
-        var issue;
+        var note;
         var count   = req.params.count;
         var retJson = {
-            "jse_shortmsg": count + " Issues added",
+            "jse_shortmsg": count + " Notes added",
             "jse_info"    : {},
-            "message"     : "Issues successfully added",
+            "message"     : "Notes successfully added",
             "statusCode"  : 201,
             "body"        : {
                 "code"   : "Created",
-                "message": "Successfully added " + count + " issues."
+                "message": "Successfully added " + count + " notes."
             },
             "restCode"    : "Created"
         };
@@ -480,12 +479,12 @@ var loremIpsum = function (start, len) {
         console.log("Processing POST api/data/add/"+count);
 
         for (var i = 0; i < count; i++) {
-            issue = createRandomIssue();
-            plexData.push(issue);
-            console.log("issue = " + JSON.stringify(issue));
+            note = createRandomNote();
+            plexData.push(note);
+            console.log("note = " + JSON.stringify(note));
         }
 
-        saveIssues();
+        saveNotes();
         setResponseHeader(res);
 
         res.json(retJson);
@@ -497,10 +496,10 @@ var loremIpsum = function (start, len) {
     //
 
     /**
-     * @name delete api/issues/{id}
+     * @name delete api/notes/{id}
      *
      * @description
-     * Delete an issues by id
+     * Delete an notes by id
      *
      * @param req   The Request
      * @param res   The Response
@@ -508,8 +507,8 @@ var loremIpsum = function (start, len) {
      *
      * @returns  The requested note or 404
      */
-    server.del('api/issues/:id', function (req, res, next) {
-        // There can not be duplicate issues, so always use the first element returned.
+    server.del('api/notes/:id', function (req, res, next) {
+        // There can not be duplicate notes, so always use the first element returned.
         var ret = plexData.filter(function (node) {
             return node.id == req.params.id;
         })[0];
@@ -518,9 +517,9 @@ var loremIpsum = function (start, len) {
         }else {
             var index = plexData.indexOf(ret);
             plexData.splice(index, 1);
-            saveIssues();
+            saveNotes();
         }
-        console.log("Processing DELETE api/issues/"+req.params.id);
+        console.log("Processing DELETE api/notes/"+req.params.id);
 
         setResponseHeader(res);
         res.json(ret);
@@ -588,13 +587,13 @@ var loremIpsum = function (start, len) {
     var notFound = function (res) {
         res.statusCode = 404;
         var retJson    = {
-            "jse_shortmsg": "Issue not found",
+            "jse_shortmsg": "Note not found",
             "jse_info"    : {},
-            "message"     : "Requested issue was not found",
+            "message"     : "Requested note was not found",
             "statusCode"  : 404,
             "body"        : {
                 "code"   : "NotFound",
-                "message": "Issue was not found!"
+                "message": "Note was not found!"
             },
             "restCode"    : "NotFound"
         };
@@ -603,27 +602,27 @@ var loremIpsum = function (start, len) {
     };
 
     /**
-     * @name saveIssues
+     * @name saveNotes
      *
      * @description
      * Save the notes to a file
      */
-    var saveIssues = function () {
+    var saveNotes = function () {
         fs.writeFile(dataFile, JSON.stringify(plexData, null, 4), function (err) {
             if (err) {
                 return console.log(err);
             }
-            console.log("The file was saved with %d issues.", plexData.length);
+            console.log("The file was saved with %d notes.", plexData.length);
         });
     };
 
     /**
-     * @name getIssues
+     * @name getNotes
      *
      * @description
-     * Get the issues from the file.
+     * Get the notes from the file.
      */
-    var getIssues = function () {
+    var getNotes = function () {
         fs.exists(dataFile, function (exists) {
             if (exists) {
                 fs.readFile(dataFile, function (err, data) {
@@ -644,7 +643,7 @@ var loremIpsum = function (start, len) {
                         idLast = parseInt(Math.max(idLast, parseInt(node.id)));
                     });
                     //console.log("idLast = " + idLast);
-                    console.log("There are %d issues available.", plexData.length);
+                    console.log("There are %d notes available.", plexData.length);
                 });
             }
             else {
@@ -654,56 +653,56 @@ var loremIpsum = function (start, len) {
     };
 
     /**
-     * @name createRandomIssue
+     * @name createRandomNote
      *
      * @description
-     * Create a issue with random data and issueTypes.
+     * Create a note with random data and noteTypes.
      */
-    var createRandomIssue = function () {
-        var issueCnt;
-        var issueNum;
+    var createRandomNote= function () {
+        var noteCnt;
+        var noteNum;
         var users = ["Bill", "Todd", "Sarah", "Reid", "Erin", "Ellissa"];
-        var issue = {
+        var note = {
             "id"      : 0,
             "title"   : "",
             "user"    : "",
             "emailme" : false,
             "priority": 0,
             "status"  : 0,
-            "notes"   : loremIpsum(),
+            "details" : loremIpsum(),
             "issues"  : []
         };
 
         //console.log("idLast " + idLast);
-        issue.id       = ++idLast;
-        issue.title    = "Title for #"+issue.id+" (Random generated)";
-        issue.user     = users[parseInt(Math.random() * users.length)];
-        issue.emailme  = Math.random()<.5;
-        issue.priority = parseInt(Math.random() * plexPriorites.length);
-        //console.log("issue.priority " + issue.priority);
-        issue.status   = parseInt(Math.random() * plexStatuses.length);
-        issue.notes    = loremIpsum();
+        note.id       = ++idLast;
+        note.title    = "Title for #"+note.id+" (Random generated)";
+        note.user     = users[parseInt(Math.random() * users.length)];
+        note.emailme  = Math.random()<.5;
+        note.priority = parseInt(Math.random() * plexPriorites.length);
+        //console.log("note.priority " + note.priority);
+        note.status   = parseInt(Math.random() * plexStatuses.length);
+        note.details  = loremIpsum();
 
         // Ensure we have at least 1 issueType.
-        issueCnt = Math.max(1, parseInt(Math.random() * plexIssues.length));
-        //console.log("issueCnt " + issueCnt);
-        for (var j = 0; j < issueCnt; j++) {
-            for (var k = 0; k < issueCnt; k++) {
-                issueNum   = parseInt(Math.random() * plexIssues.length);
-                var isUsed = issue.issues.find(function (node) {
+        noteCnt = Math.max(1, parseInt(Math.random() * plexIssues.length));
+        //console.log("noteCnt " + noteCnt);
+        for (var j = 0; j < noteCnt; j++) {
+            for (var k = 0; k < noteCnt; k++) {
+                noteNum   = parseInt(Math.random() * plexNotes.length);
+                var isUsed = note.issues.find(function (node) {
                     //console.log("node " + node);
-                    return node == issueNum;
+                    return node == noteNum;
                 });
                 //console.log("isUsed " + isUsed);
                 if (isUsed == undefined) {
-                    //console.log("issueNum" + issueNum);
-                    issue.issues.push(issueNum);
+                    //console.log("noteNum" + noteNum);
+                    note.issues.push(noteNum);
                     break;
                 }
             }
         }
-        console.log("createIssue = " + JSON.stringify(issue));
-        return issue;
+        console.log("createNote = " + JSON.stringify(note));
+        return note;
     };
 
     /**
@@ -741,8 +740,8 @@ var loremIpsum = function (start, len) {
     // Initialization
     //
 
-    // Load the issues if the file exists.
-    getIssues();
+    // Load the notes if the file exists.
+    getNotes();
 
     // List all the routes
     console.log("Available Route Paths: " + JSON.stringify(listAllRoutes(server),null,4));

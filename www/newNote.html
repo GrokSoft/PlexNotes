@@ -11,20 +11,20 @@
         <img src="images/bg2.png">
     </div>
 
-    <form name="newIssueForm" class="form-horizontal "
-            ng-class="{'submitted': submitted}" ng-submit="createIssue()"
+    <form name="newNoteForm" class="form-horizontal "
+            ng-class="{'submitted': submitted}" ng-submit="createNote()"
             style="position: relative; top: -580px; left: 0;">
 
         <div class="form-group text-center shadowed-dropped"
                 style="font-size: xx-large; font-weight: bold; color: #4b4945;">
-            Create a new Plex Issue
+            Create a new Plex Note
         </div>
         <br>
         <div class="form-group">
             <label class="col-xs-3 control-label">Title:</label>
             <div class="col-xs-5">
                 <input type="text" class="form-control" name="title"
-                        placeholder="Issue Title" ng-model="newIssue.title"
+                        placeholder="Note Title" ng-model="newNote.title"
                         required/>
             </div>
         </div>
@@ -33,12 +33,12 @@
             <label class="col-xs-3 control-label">User:</label>
             <div class="col-xs-5">
                 <input type="text" class="form-control" name="user"
-                        placeholder="User Name" ng-model="newIssue.user"
+                        placeholder="User Name" ng-model="newNote.user"
                         required/>
                 <!-- <label>  <input id="cb1" type=checkbox
                      class="big-checkbox shadowed-dropped">
                      <label class="text-smaller" style="color: #2342e0; font-style:
-                     italic; margin-top: -30px" for="cb1">Email when issue is
+                     italic; margin-top: -30px" for="cb1">Email when note is
                      resolved
                      </label>--></label>
             </div>
@@ -46,12 +46,12 @@
 
 
         <div class="form-group">
-            <label class="col-xs-3 control-label">E-mail:</label>
-            <div class="col-xs-5 selectContainer">
+            <label class="col-xs-3 control-label" for="email">E-mail:</label>
+            <div id="email" class="col-xs-5 selectContainer">
                 <input id="cb1" type=checkbox
                         class="big-checkbox shadowed-dropped"> <label
                     class="text-smaller" style="color: #b0b8e0; font-style:
-                italic;  for=" cb1">Email when issue is resolved</label>
+                italic;"  for="cb1">Email when note is resolved</label>
             </div>
         </div>
 
@@ -70,11 +70,11 @@
         </div>
 
         <div class="form-group">
-            <label class="col-xs-3 control-label">Note:</label>
+            <label class="col-xs-3 control-label">Details:</label>
             <div class="col-xs-8">
                 <textarea name="notes" class="form-control" rows="2"
-                        placeholder="Any optional notes about the issue"
-                        ng-model="newIssue.notes"></textarea>
+                        placeholder="Any optional notes about the note"
+                        ng-model="newNote.details"></textarea>
             </div>
         </div>
 
@@ -88,8 +88,8 @@
         <div class="form-group">
             <label class="col-xs-3 control-label"></label>
             <div class="col-xs-8">
-                <button class="box-shadow" id="submitBtn" type="submit"
-                        ng-click="submitted=true;">Add Issue
+                <button id="submitBtn" class="box-shadow" type="submit" style="color: black;"
+                        ng-click="submitted=true;">Add Note
                 </button>
             </div>
         </div>

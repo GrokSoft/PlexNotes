@@ -7,7 +7,7 @@
     var theApp = this;
     var VERSION = "0.0.1";
     var urlBase;
-    var _issues = [];
+    var _notes = [];
     var _priorities = [];
     var _statuses = [];
     var _issueTypes = [];
@@ -45,9 +45,9 @@
 
         $scope.movies = [];
 
-        $http.get(urlBase + '/api/issues').success(function (data) {
-            _issues = data;
-            console.log("Data Read IssuesController " + data.length + " items.");
+        $http.get(urlBase + '/api/notes').success(function (data) {
+            _notes = data;
+            console.log("Data Read NotesController " + data.length + " items.");
         }).error(function (data, status, headers, config) {
             /*console.log(JSON.stringify(data));
             console.log(status);
@@ -83,12 +83,12 @@
         };
 
         /**
-         * Refresh the Issues data
+         * Refresh the Notes data
          */
-        $scope.refreshIssues = function () {
-            $http.get(urlBase + '/api/issues').success(function (issues) {
-                _issues = issues;
-                console.log("Data Read IssuesController " + issues.length + " items.");
+        $scope.refreshNotes = function () {
+            $http.get(urlBase + '/api/notes').success(function (notes) {
+                _notes = notes;
+                console.log("Data Read NotesController " + notes.length + " items.");
             });
         };
 
@@ -213,28 +213,28 @@
         };
     });
 
-    app.controller('IssuesController', ['$scope', '$http', function ($scope, $http) {
+    app.controller('NotesController', ['$scope', '$http', function ($scope, $http) {
         var ctrl = this;
         /* var statuses = $scope.statuses;
          var priorities = $scope.priorities;
          var issueTypes = $scope.issueTypes;
-         var issues = $scope.issues;*/
+         var notes = $scope.notes;*/
 
         $scope.statuses = function () {
-            console.log("Getting statuses from IssuesController");
+            console.log("Getting statuses from NotesController");
             return _statuses;
         };
         $scope.priorities = function () {
-            console.log("Getting priorities from IssuesController");
+            console.log("Getting priorities from NotesController");
             return _priorities;
         };
         $scope.issueTypes = function () {
-            console.log("Getting issueTypes from IssuesController");
+            console.log("Getting issueTypes from NotesController");
             return _issueTypes;
         };
-        $scope.issues = function () {
-            console.log("Getting issues from IssuesController");
-            return _issues;
+        $scope.notes = function () {
+            console.log("Getting notes from NotesController");
+            return _notes;
         };
 
         /**
@@ -247,12 +247,12 @@
         };
 
         /**
-         * Toggle the hover zoom of the passed issue
+         * Toggle the hover zoom of the passed note
          *
-         * @param id - the id of the issue
+         * @param id - the id of the note
          */
         $scope.zoom = function (id) {
-            var element = $('#issue'+id);
+            var element = $('#note'+id);
             var zoomIcon;
             if( element.hasClass('grow-md') ) {
                 zoomIcon = element.find('.glyphicon-zoom-out:first');
@@ -268,81 +268,81 @@
             }
         };
         /**
-         * @name deleteIssue
+         * @name deleteNote
          *
          * @description
-         * Delete the passed issue
+         * Delete the passed note
          *
          * @param id
          */
-        $scope.deleteIssue = function (id) {
+        $scope.deleteNote = function (id) {
             $http({
                 method : 'DELETE',
-                url    : "http://localhost:8080/api/issues/"+id,
-                data   : $scope.newIssue,
+                url    : "http://localhost:8080/api/notes/"+id,
+                data   : $scope.newNote,
                 headers: {'content-Type': 'application/json'}
             }).success(function (data, status, headers, config) {
 
                 // Note: Angular is handling field validation so this is not really needed
                 if (data.errors) {
-                    alert("Issue was NOT deleted:" + JSON.stringify(errors, null, 4));
+                    alert("Note was NOT deleted:" + JSON.stringify(errors, null, 4));
                 } else {
-                    alert("Issue was deleted:" + JSON.stringify(data, null, 4));
+                    alert("Note was deleted:" + JSON.stringify(data, null, 4));
                 }
-                console.log("Issue delete: " + JSON.stringify(data));
+                console.log("Note delete: " + JSON.stringify(data));
 
-                $scope.refreshIssues();
+                $scope.refreshNotes();
             });
         }
     }]);
 
 
     /**
-     * Directive issues
+     * Directive notes
      *
      * @description
-     * Shows all the issues
+     * Shows all the notes
      */
-    app.directive("issues", function () {
+    app.directive("notes", function () {
         return {
             restrict    : "E",   // By Attribute <div project-specs>
-            templateUrl : "issues.html",
-            controller  : 'IssuesController',
-            controllerAs: "issuesCtrl"
+            templateUrl : "notes.html",
+            controller  : 'NotesController',
+            controllerAs: "notesCtrl"
         }
     });
 
     /**
-     * Directive issues-list
+     * Directive notes-list
      *
      * @description
-     * Shows all the issue titles in a list
+     * Shows all the note titles in a list
      */
-    app.directive("issuesList", function () {
+    app.directive("notesList", function () {
         return {
             restrict    : "E",
-            templateUrl : "issuesList.html",
-            controller  : 'IssuesController',
-            controllerAs: "issuesListCtrl"
+            templateUrl : "notesList.html",
+            controller  : 'NotesController',
+            controllerAs: "notesListCtrl"
         }
     });
 
     /**
-     * Directive issues-dropdown
+     * Directive notes-dropdown
      *
      * @description
-     * Shows all the issue titles in a list
+     * Shows all the note titles in a list
      */
-    app.directive("issuesDropdown", function () {
+    app.directive("notesDropdown", function () {
         return {
             restrict    : "E",
-            templateUrl : "issuesDropdown.html",
-            controller  : 'IssuesController',
-            controllerAs: "issuesDropdownCtrl"
+            templateUrl : "notesDropdown.html",
+            controller  : 'NotesController',
+            controllerAs: "notesDropdownCtrl"
         }
     });
 
-    app.controller('IssuesCarouselController', ['$scope', function ($scope) {
+    app.controller('NotesCarouselController', ['$scope', function ($scope) {
         var ctrl = this;
 
         $scope.init = function(id)
@@ -367,136 +367,136 @@
         };
 
         /**
-         * Get the issues
+         * Get the notes
          * @returns {Array}
          */
-        $scope.issues = function () {
-            console.log("Getting issues from IssuesCarouselController");
-            return _issues;
+        $scope.notes = function () {
+            console.log("Getting notes from NotesCarouselController");
+            return _notes;
         };
     }]);
 
     /**
-     * Directive issues-carousel
+     * Directive notes-carousel
      *
      * @description
-     * Shows all the issue titles in a carousel
+     * Shows all the note titles in a carousel
      */
-    app.directive("issuesCarousel", function () {
+    app.directive("notesCarousel", function () {
         var carNum = 0;
         return {
             restrict    : "E",
-            templateUrl : "issuesCarousel.html",
-            controller  : 'IssuesCarouselController',
-            controllerAs: "issuesCarouselCtrl"
+            templateUrl : "notesCarousel.html",
+            controller  : 'NotesCarouselController',
+            controllerAs: "notesCarouselCtrl"
         }
     });
 
 
-    app.directive("issue", function () {
+    app.directive("note", function () {
         return {
             restrict    : "E",   // By Attribute <div project-specs>
-            templateUrl : "issue.html",
+            templateUrl : "note.html",
             controller  : function ($scope) {
                 $scope.statuses = function () {
-                    console.log("Getting statuses from Issue-Controller");
+                    console.log("Getting statuses from Note-Controller");
                     return _statuses;
                 };
                 $scope.priorities = function () {
-                    console.log("Getting priorities from Issue-Controller");
+                    console.log("Getting priorities from Note-Controller");
                     return _priorities;
                 };
-                $scope.issueTypes = function () {
-                    console.log("Getting issueTypes from Issue-Controller");
+                $scope.noteTypes = function () {
+                    console.log("Getting issueTypes from Note-Controller");
                     return _issueTypes;
                 };
-                $scope.issues = function () {
-                    console.log("Getting issues from Issue-Controller");
-                    return _issues;
+                $scope.notes = function () {
+                    console.log("Getting notes from Note-Controller");
+                    return _notes;
                 };
 
                 $scope.intToString = function (key) {
                     return (!isNaN(key)) ? parseInt(key) : key;
                 };
             },
-            controllerAs: "issueCtrl"
+            controllerAs: "noteCtrl"
         }
     });
 
 
 
-    app.directive("newIssue", function () {
+    app.directive("newNote", function () {
         return {
             restrict    : "E",
-            templateUrl : "newIssue.html",
+            templateUrl : "newNote.html",
             controller  : function ($scope, $http) {
 
                 // todo get rid of this if not needed
                 $http.defaults.headers.post['Content-Type'] = 'application/json;charset=utf-8';
 
-                $scope.newIssueTemplate = {
-                    "id": 0, "title": "", "user": "","emailme": true,  "priority": "", "status": "", "notes": "", "issues": []
+                $scope.newNoteTemplate = {
+                    "id": 0, "title": "", "user": "","emailme": true,  "priority": "", "status": "", "details": "", "issues": []
                 };
 
                 // Do a deep copy of the template
-                $scope.newIssue = JSON.parse(JSON.stringify($scope.newIssueTemplate));
+                $scope.newNote = JSON.parse(JSON.stringify($scope.newNoteTemplate));
 
-                $scope.createIssue = function () {
-                    var issue = $scope.newIssue;
+                $scope.createNote = function () {
+                    var note = $scope.newNote;
 
                     // Verify the data has been filled out
-                    if ($scope.newIssue.status == "" ||
-                        $scope.newIssue.priority == "" ||
-                        $scope.newIssue.issues.length == 0 ||
-                        $scope.newIssue.user == "" ||
-                        $scope.newIssue.user == "" ) {
+                    if ($scope.newNote.status == "" ||
+                        $scope.newNote.priority == "" ||
+                        $scope.newNote.issues.length == 0 ||
+                        $scope.newNote.user == "" ||
+                        $scope.newNote.user == "" ) {
                         // Return an error!!!
-                        alert("You must fill in all the data to save an issue!");
+                        alert("You must fill in all the data to save an note!");
                         return;
                     }
 
                     // Reset the form's submitted flag, so it does show errors
                     $scope.submitted=false;
                     // Clear the form
-                    /*$scope.newIssueForm.$setPristine();
-                     $scope.newIssueForm.$setUntouched();*/
+                    /*$scope.newNoteForm.$setPristine();
+                     $scope.newNoteForm.$setUntouched();*/
 
                     // Convert to numbers
                     // Todo There should be a better way of doing this with an angular filter, directive or something!
-                    $scope.newIssue.status = parseInt($scope.newIssue.status);
-                    $scope.newIssue.priority = parseInt($scope.newIssue.priority);
-                    for (var i = 0; i < $scope.newIssue.issues.length; i++)
-                        $scope.newIssue.issues[i] = parseInt($scope.newIssue.issues[i]);
+                    $scope.newNote.status = parseInt($scope.newNote.status);
+                    $scope.newNote.priority = parseInt($scope.newNote.priority);
+                    for (var i = 0; i < $scope.newNote.issues.length; i++)
+                        $scope.newNote.issues[i] = parseInt($scope.newNote.issues[i]);
 
                     $http({
                         method : 'POST',
-                        url    : "http://localhost:8080/api/issues",
-                        data   : $scope.newIssue,
+                        url    : "http://localhost:8080/api/notes",
+                        data   : $scope.newNote,
                         headers: {'content-Type': 'application/json'}
                     }).success(function (data, status, headers, config) {
 
                         // Note: Angular is handling field validation so this is not really needed
                         if (data.errors) {
-                            alert("New issue was NOT created:" + JSON.stringify(errors, null, 4));
+                            alert("New note was NOT created:" + JSON.stringify(errors, null, 4));
                         } else {
-                            alert("New issue was created:" + JSON.stringify(data, null, 4));
+                            alert("New note was created:" + JSON.stringify(data, null, 4));
                         }
-                        console.log("Issue created: " + JSON.stringify(data));
+                        console.log("Note created: " + JSON.stringify(data));
 
-                        $scope.refreshIssues();
+                        $scope.refreshNotes();
 
-                        // Todo figure out why I had to put http call in the main controller and call it from here with refreshIssue()????
-                        // Refresh the issues
-                        /* $http.post(urlBase+'/api/issues', issue).success(function (data, status, headers, config) {
-                         _issues = data;
+                        // Todo figure out why I had to put http call in the main controller and call it from here with refreshNote()????
+                        // Refresh the notes
+                        /* $http.post(urlBase+'/api/notes', note).success(function (data, status, headers, config) {
+                         _notes = data;
 
-                         console.log("Data Read " + JSON.stringify(data) + " issues");
+                         console.log("Data Read " + JSON.stringify(data) + " notes");
                          });*/
                     });
-                    $scope.newIssue = JSON.parse(JSON.stringify($scope.newIssueTemplate));
+                    $scope.newNote = JSON.parse(JSON.stringify($scope.newNoteTemplate));
                 }
             },
-            controllerAs: "newIssueCtrl"
+            controllerAs: "newNoteCtrl"
         };
     });
 

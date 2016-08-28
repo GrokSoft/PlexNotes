@@ -9,10 +9,10 @@
         setTimeout("$('#topCarousel').carousel('cycle');", 4000);
     </script>-->
 
-    Issues carousel
+    Notes carousel
 
     <!-- Todo Fix the ID, all carousels are getting the same id -->
-    <div id="issuesCarousel{{issuesCarouselCtrl.getId()}}"
+    <div id="notesCarousel{{notesCarouselCtrl.getId()}}"
 
             class="carousel slide"
             data-interval="false"
@@ -20,26 +20,26 @@
         <!--<ol class="carousel-indicators">
             <li data-target='#topCarousel' data-slide-to="0"
                     class="active"></li>
-            <li data-target='#issuesCarousel' data-slide-to="1"></li>
-            <li data-target='#issuesCarousel' data-slide-to="2"></li>
-            <li data-target='#issuesCarousel' data-slide-to="3"></li>
+            <li data-target='#notesCarousel' data-slide-to="1"></li>
+            <li data-target='#notesCarousel' data-slide-to="2"></li>
+            <li data-target='#notesCarousel' data-slide-to="3"></li>
         </ol>-->
         <div class="carousel-inner" role="listbox">
 
-            <a ng-repeat="issue in issues() track by $index"
+            <a ng-repeat="note in notes() track by $index"
                     ng-class="{active:$index==0}" class="item alphaHover"
                     href="#">
-                <issue alt="{{issue.title}}" class="center-block"></issue>
-                <div class="carousel-caption">Issue #{{issue.id}}</div>
+                <note alt="{{note.title}}" class="center-block"></note>
+                <div class="carousel-caption">Note #{{note.id}}</div>
             </a>
         </div>
-        <a class="left carousel-control" ng-href="#issuesCarousel{{issuesCarouselCtrl.getId()}}"
+        <a class="left carousel-control" ng-href="#notesCarousel{{notesCarouselCtrl.getId()}}"
                 role="button"
                 data-slide="prev">
                 <span class="glyphicon glyphicon-chevron-left carousel-sliders"
                         aria-hidden="true"></span>
             <span class="sr-only">Previous</span>
-        </a> <a class="right carousel-control" ng-href="#issuesCarousel{{issuesCarouselCtrl.getId()}}"
+        </a> <a class="right carousel-control" ng-href="#notesCarousel{{notesCarouselCtrl.getId()}}"
             role="button" data-slide="next">
             <span class="glyphicon glyphicon-chevron-right carousel-sliders"
                     aria-hidden="true"></span>

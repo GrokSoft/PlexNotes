@@ -34,7 +34,7 @@
                 class="plex-logo img-shadowed-frame"> Notes
             <span style="font-size:smaller ">{{pnCtrl.getVersion()}}</span>
         </h1>
-        <new-issue class="fluid " style="overflow: hidden"></new-issue>
+        <new-note class="fluid " style="overflow: hidden"></new-note>
     </div>
 </div>
 
@@ -52,32 +52,32 @@
         <!--<a href="#myModal" role="button" class="btn" data-toggle="modal">Launch
             demo modal</a>--><br>
         <div style="overflow: hidden">
-            <issues-dropdown></issues-dropdown>
+            <notes-dropdown></notes-dropdown>
         </div>
     </div>
     <div class="col-lg-8">
-        <issues-carousel ng-init="issuesCarouselCtrl.init(1)"
-                class=""></issues-carousel>
+        <notes-carousel ng-init="notesCarouselCtrl.init(1)"
+                class=""></notes-carousel>
     </div>
 </div>
-<div id="issueTitles" class="container-fluid">
+<div id="noteTitles" class="container-fluid">
     <br>
     <h2 class="text-center shadowed" style="font-weight: bold; color: #587c91;">
-        <span href="#collapse-issue-titles" class="" data-toggle="collapse"
-                ng-click="pnCtrl.toggleCollapse('chevron-issue-titles')"
-                title="Click to Toggle Collapse state of issue titles">
-            <span id="chevron-issue-titles"
+        <span href="#collapse-note-titles" class="" data-toggle="collapse"
+                ng-click="pnCtrl.toggleCollapse('chevron-note-titles')"
+                title="Click to Toggle Collapse state of note titles">
+            <span id="chevron-note-titles"
                     class="glyphicon glyphicon-chevron-up grow"
                     style="font-size: x-large"></span>
-            <!--<span style="font-size: x-large">Click to Toggle Collapse of all issues</span>-->
+            <!--<span style="font-size: x-large">Click to Toggle Collapse of all notes</span>-->
         </span>
         <img src="images/Plex-h2-white.png"
-                class="plex-logo img-shadowed-frame"> Issue Titles
+                class="plex-logo img-shadowed-frame"> Note Titles
     </h2>
 
-    <div id="collapse-issue-titles" class="collapse in ">
+    <div id="collapse-note-titles" class="collapse in ">
         <div class="panel-body ">
-            <issues-list></issues-list>
+            <notes-list></notes-list>
         </div>
     </div>
 </div>
@@ -85,19 +85,19 @@
 <div class="container-fluid">
     <h2 class="text-center shadowed" style="font-weight: bold; color: #587c91;">
 
-        <span href="#issues" class="grow badge" data-toggle="collapse"
+        <span href="#notes" class="grow badge" data-toggle="collapse"
                 ng-click="pnCtrl.toggleCollapse('chevron')"
-                title="Click to Toggle Collapse state of all issues">
+                title="Click to Toggle Collapse state of all notes">
             <span id="chevron" class="glyphicon glyphicon-chevron-up"
                     style="font-size: x-large"></span>
-            <!--<span style="font-size: x-large">Click to Toggle Collapse of all issues</span>-->
+            <!--<span style="font-size: x-large">Click to Toggle Collapse of all notes</span>-->
         </span>
         <img src="images/Plex-h2-white.png"
-                class="plex-logo img-shadowed-frame"> Issues
+                class="plex-logo img-shadowed-frame"> Notes
     </h2>
-    <div id="issues" class="collapse in">
+    <div id="notes" class="collapse in">
         <div class="panel-body">
-            <issues></issues>
+            <notes></notes>
         </div>
     </div>
 </div>
@@ -123,7 +123,7 @@
 <footer class="container-fluid">
     <hr>
     <button class="glyphicon glyphicon-arrow-up"
-            ng-click="scrollTo('issueTitles')"></button>
+            ng-click="scrollTo('noteTitles')"></button>
     <span class="pull-right">Copyright &copy; 2016</span>
 </footer>
 
