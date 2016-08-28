@@ -3,8 +3,6 @@
  */
 
 /**
- * Created by trh on 8/13/16.
- *
  * Test with:
  *
  *      curl -is http://localhost:8080/api/issues/:id
@@ -207,7 +205,7 @@ var loremIpsum = function (start, len) {
     }));
 
     //
-    // Common REST routs
+    // Common REST routes
     //
 
     /**
@@ -301,7 +299,7 @@ var loremIpsum = function (start, len) {
     //
 
     /**
-     * @name get api/api/routes
+     * @name get api/routes
      *
      * @description
      * Get the routes from the server
@@ -315,7 +313,7 @@ var loremIpsum = function (start, len) {
     server.get('api/routes', function (req, res, next) {
         var ret;
 
-        console.log("Processing GET api/api/routes");
+        console.log("Processing GET api/routes");
 
         ret = listAllRoutes(server);
 
