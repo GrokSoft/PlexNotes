@@ -2,7 +2,7 @@
 
 ### The ![alt text][plexSm]Notes Project
 
-Created 8/14/16
+Created August 14, 2016
 
 This project consists of a REST server developed with JavaScript, node and restify. And a REST client developed with AngularJS & Bootstrap.
 
@@ -38,7 +38,17 @@ The goal of the project is to have a way for family and friends that use my ![al
 
 You must run the web app on the same port as the server is running.
 Note that in IntelliJ, when a run configuration is created, by default the port is for the intelliJ web server. Right now PlexNotes is meant to be ran on the same server as the data server!!!!
-This may change in the future to have a configurable url
+This may change in the future to have a configurable url.
+
+
+<br/>
+<br/>
+<br/>
+<br/>
+
+----
+Although PlexNotes is designed specifically for Plex Media Server(s) the PlexNotes project is 
+not affiliated with Plex Inc.  All trademarks and copyrights are the property of their respective owners.
 
 [plexLg]: http://groksoft.net/plex/_images/Plex-h2.png
 [plexSm]: http://groksoft.net/plex/_images/PLEX-vsmall.png
