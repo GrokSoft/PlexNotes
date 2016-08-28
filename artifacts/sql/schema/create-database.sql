@@ -16,7 +16,7 @@ CREATE TABLE notes
   created_date TEXT,
   modified_date TEXT,
   last_utc INTEGER DEFAULT 0,
-  user_opt_in INTEGER DEFAULT 1,
+  opt_in INTEGER DEFAULT 1,
   title TEXT,
   details TEXT,
   FOREIGN KEY (fk_category_uuid) REFERENCES categories (uuid) DEFERRABLE INITIALLY DEFERRED,
@@ -41,6 +41,6 @@ CREATE TABLE users
   uuid TEXT PRIMARY KEY,
   friendly_name TEXT,
   email TEXT,
-  optin INTEGER DEFAULT 1,
+  opt_in INTEGER DEFAULT 1,
   last_utc INTEGER DEFAULT 0
 );
