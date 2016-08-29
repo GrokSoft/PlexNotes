@@ -3,8 +3,8 @@
 Questions related to the PlexNotes project - in no particular order.
 
  1. Should the formal software name have a space or not?
-    a. Plex Notes
-    b. PlexNotes  :white_check_mark:
+    * Plex Notes
+    * PlexNotes :white_check_mark:
  
  2. What are the features of the notes themselves?
  
