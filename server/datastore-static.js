@@ -13,83 +13,65 @@
  */
 var DatastoreStatic = (function () {
 
-    /**
-     * @name loremIpsum
-     *
-     * @description
-     * Get Lorem Ipsum text.
-     * If start and/or end are not passed they will be randomly generated.
-     *
-     * NOTE: This function must come before the plexData object that is instantiated below
-     *
-     * @param start
-     * @param len
-     * @returns {string}
-     */
-    var loremIpsum = function (start, len) {
-        var MIN = 10;
-        /** The minimum number of characters to return. */
-        var loremIpsumTxt = "Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur? Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur, vel illum qui dolorem eum fugiat quo voluptas nulla pariatur?";
-
-        if (start == undefined)
-            start = Math.random() * loremIpsumTxt.length - MIN;
-        if (len == undefined)
-            len = Math.max(start - 1, parseInt(Math.random() * loremIpsumTxt.length - MIN));
-
-        return loremIpsumTxt.substr(start, len);
-    };
-
     // ----------------------------------------------------------------------------------------------------------------
     /**
-     * @type {notes}
+     * @name getAllNotes
+     *
+     * @description Returns an array of ALL notes records
+     *
+     * @returns {uuid, fk_category_uuid, fk_priority_uuid, fk_status_uuid, fk_user_uuid,
+     *          fk_modified_user_uuid, server_uuid, created_date, modified_date, last_utc, opt_in, title, details}
      */
-    var notes = [
-        {
-            'uuid' : '1e9ac7ad-c221-48b3-b99e-111778ba7511',
-            'fk_category_uuid' : 'de85a7a4-395f-41ad-ab45-31a47fa37c14',
-            'fk_priority_uuid' : 'd6b096bf-5b0e-4eaf-b25b-e42e10e75d84',
-            'fk_status_uuid' : '3d9c3886-ca2d-49c5-8490-f8d5d919e211',
-            'fk_user_uuid' : 'ef97cacf-f75e-4b22-9a7b-ad3d2ed95ec3',
-            'fk_modified_user_uuid' : 'ef97cacf-f75e-4b22-9a7b-ad3d2ed95ec3',
-            'server_uuid' : '33948bce-2a07-4aab-ab29-69cec4c72dc4',     // random
-            'created_date' : '1472526797',
-            'modified_date' : '1472526825',
-            'last_utc' : 1472526825,
-            'opt_in' : 1,
-            "title": "Title for the first note",
-            "details" : "This is the first static note."
-        },
-        {
-            "uuid": '20ef38ed-df3e-4095-aab6-5f0a39fa0375',
-            'fk_category_uuid' : 'd7e7bfdf-9651-47d6-b81f-6fa0210b79d8',
-            'fk_priority_uuid' : 'fae24113-356c-4954-947d-83716946292b',
-            'fk_status_uuid' : '93a30a13-140d-418a-8c71-f8c9a5c59628',
-            'fk_user_uuid' : '77dfcc17-9f4f-4bc9-a3a7-59d8a19b7781',
-            'fk_modified_user_uuid' : 'ef97cacf-f75e-4b22-9a7b-ad3d2ed95ec3',
-            'server_uuid' : '7c29fe13-cd4f-444a-8105-99708e80d013',     // random
-            'created_date' : '1472527280',
-            'modified_date' : '1472527288',
-            'last_utc' : 1472527288,
-            'opt_in' : 1,
-            "title": "Title for the second note. This content is generated.",
-            "details": loremIpsum()
-        },
-        {
-            "uuid": '9ac88ff2-fd90-45b0-80de-31bf8cbee12c',
-            'fk_category_uuid' : 'fbd99efe-b7f8-476f-97f7-41936fc0b636',
-            'fk_priority_uuid' : '4928cde2-c372-42dd-b56c-b5152a814bb4',
-            'fk_status_uuid' : '7946f084-c489-4612-ac25-23dd9e40f336',
-            'fk_user_uuid' : 'ef97cacf-f75e-4b22-9a7b-ad3d2ed95ec3',
-            'fk_modified_user_uuid' : '77dfcc17-9f4f-4bc9-a3a7-59d8a19b7781',
-            'server_uuid' : '7c29fe13-cd4f-444a-8105-99708e80d013',     // random
-            'created_date' : '1472527523',
-            'modified_date' : '1472527531',
-            'last_utc' : 1472527531,
-            'opt_in' : 1,
-            "title": "Title for the third note. This content is also generated.",
-            "details": loremIpsum()
-        }
-    ];
+    var getAllNotes = function () {
+        var notes = [
+            {
+                'uuid': '1e9ac7ad-c221-48b3-b99e-111778ba7511',
+                'fk_category_uuid': 'de85a7a4-395f-41ad-ab45-31a47fa37c14',
+                'fk_priority_uuid': 'd6b096bf-5b0e-4eaf-b25b-e42e10e75d84',
+                'fk_status_uuid': '3d9c3886-ca2d-49c5-8490-f8d5d919e211',
+                'fk_user_uuid': 'ef97cacf-f75e-4b22-9a7b-ad3d2ed95ec3',
+                'fk_modified_user_uuid': 'ef97cacf-f75e-4b22-9a7b-ad3d2ed95ec3',
+                'server_uuid': '33948bce-2a07-4aab-ab29-69cec4c72dc4',     // random
+                'created_date': '1472526797',
+                'modified_date': '1472526825',
+                'last_utc': 1472526825,
+                'opt_in': 1,
+                "title": "Title for the first note",
+                "details": "This is the first static note."
+            },
+            {
+                "uuid": '20ef38ed-df3e-4095-aab6-5f0a39fa0375',
+                'fk_category_uuid': 'd7e7bfdf-9651-47d6-b81f-6fa0210b79d8',
+                'fk_priority_uuid': 'fae24113-356c-4954-947d-83716946292b',
+                'fk_status_uuid': '93a30a13-140d-418a-8c71-f8c9a5c59628',
+                'fk_user_uuid': '77dfcc17-9f4f-4bc9-a3a7-59d8a19b7781',
+                'fk_modified_user_uuid': 'ef97cacf-f75e-4b22-9a7b-ad3d2ed95ec3',
+                'server_uuid': '7c29fe13-cd4f-444a-8105-99708e80d013',     // random
+                'created_date': '1472527280',
+                'modified_date': '1472527288',
+                'last_utc': 1472527288,
+                'opt_in': 1,
+                "title": "Title for the second note. This content is generated.",
+                "details": loremIpsum()
+            },
+            {
+                "uuid": '9ac88ff2-fd90-45b0-80de-31bf8cbee12c',
+                'fk_category_uuid': 'fbd99efe-b7f8-476f-97f7-41936fc0b636',
+                'fk_priority_uuid': '4928cde2-c372-42dd-b56c-b5152a814bb4',
+                'fk_status_uuid': '7946f084-c489-4612-ac25-23dd9e40f336',
+                'fk_user_uuid': 'ef97cacf-f75e-4b22-9a7b-ad3d2ed95ec3',
+                'fk_modified_user_uuid': '77dfcc17-9f4f-4bc9-a3a7-59d8a19b7781',
+                'server_uuid': '7c29fe13-cd4f-444a-8105-99708e80d013',     // random
+                'created_date': '1472527523',
+                'modified_date': '1472527531',
+                'last_utc': 1472527531,
+                'opt_in': 1,
+                "title": "Title for the third note. This content is also generated.",
+                "details": loremIpsum()
+            }
+        ];
+        return notes;
+    };
 
     // ----------------------------------------------------------------------------------------------------------------
     /**
@@ -194,9 +176,9 @@ var DatastoreStatic = (function () {
                 'uuid': 'fae24113-356c-4954-947d-83716946292b',
                 'value': "Critical",
                 'last_utc': 1472525722
-            },
+            }
         ];
-        return plexUsers;
+        return plexPriorities;
     };
 
     // ----------------------------------------------------------------------------------------------------------------
@@ -327,6 +309,33 @@ var DatastoreStatic = (function () {
 
     // ----------------------------------------------------------------------------------------------------------------
     /**
+     * @name loremIpsum
+     *
+     * @description
+     * Get Lorem Ipsum text.
+     * If start and/or end are not passed they will be randomly generated.
+     *
+     * NOTE: This function must come before the plexData object that is instantiated below
+     *
+     * @param start
+     * @param len
+     * @returns {string}
+     */
+    var loremIpsum = function (start, len) {
+        var MIN = 10;
+        /** The minimum number of characters to return. */
+        var loremIpsumTxt = "Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur? Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur, vel illum qui dolorem eum fugiat quo voluptas nulla pariatur?";
+
+        if (start == undefined)
+            start = Math.random() * loremIpsumTxt.length - MIN;
+        if (len == undefined)
+            len = Math.max(start - 1, parseInt(Math.random() * loremIpsumTxt.length - MIN));
+
+        return loremIpsumTxt.substr(start, len);
+    };
+
+    // ----------------------------------------------------------------------------------------------------------------
+    /**
      * @name saveNotes
      *
      * @description
@@ -382,10 +391,20 @@ var DatastoreStatic = (function () {
     // ----------------------------------------------------------------------------------------------------------------
     // exports
     return {
+        getAllNotes: getAllNotes,
+        getCategories: getCategories,
+        getPriorities: getPriorities,
+        getStatuses: getStatuses,
+        getUsers: getUsers,
         saveNotes: saveNotes,
         getNotes: getNotes
-    }
+    };
 })();
 
+exports.getAllNotes = DatastoreStatic.getAllNotes();
+exports.getCategories = DatastoreStatic.getCategories();
+exports.getPriorities = DatastoreStatic.getPriorities();
+exports.getStatuses = DatastoreStatic.getStatuses();
+exports.getUsers = DatastoreStatic.getUsers();
 exports.saveNotes = DatastoreStatic.saveNotes();
 exports.getNotes = DatastoreStatic.getNotes();
