@@ -15,13 +15,15 @@
     /**
      * Main plexNotes module
      *
+     * Note: ui-bootstrap requires nganimate
+     *
      * @type {angular.Module}
      */
-    var app = angular.module('plexNotes', ['media-directives']/*,function($locationProvider){
+    var app = angular.module('plexNotes', ['ui.bootstrap', 'ngAnimate', 'media-directives']/*,function($locationProvider){
      $locationProvider.html5Mode(true);
      }*/);
 
-    app.controller('PlexNotesController', ['$scope', '$http', '$location', '$anchorScroll', function ($scope, $http, $location, $anchorScroll) {
+    app.controller('PlexNotesController', ['$scope', '$http', '$location', '$anchorScroll', '$element', function ($scope, $http, $location, $anchorScroll, $element) {
         var plexNotes = this;
         var ctrl = this;
         var showing  = true;    // State for toggle all
@@ -104,7 +106,8 @@
          *  Toggle all the collapse elements Chevron
          */
         this.toggleCollapse = function (id) {
-            var chevron      = $('#'+id);
+            var domElement = document.querySelector('#'+id);
+            var chevron      = angular.element(domElement);
 
             if (chevron.hasClass('glyphicon-chevron-up')) {
                 chevron.removeClass('glyphicon-chevron-up');
@@ -117,17 +120,17 @@
             //showing = !showing;
 
             // Stop the finger
-            /*            $('#finger2').removeClass('bounce-right');
-             $('#finger2').addClass('hidden');*/
+            /*            $element.find('#finger2').removeClass('bounce-right');
+             $element.find('#finger2').addClass('hidden');*/
         };
 
         /**
          *  Toggle all the collapse elements
          */
         this.toggleAllCollapse = function () {
-            var chevron      = $('#chevron');
+            var chevron      = $element.find('#chevron');
             //var allCollapsed = $('[data-toggle="collapse"]');
-            var allCollapsed = $('collapse');
+            var allCollapsed = $element.find('collapse');
             if (showing) {
                 allCollapsed.collapse('hide');
                 chevron.removeClass('glyphicon-chevron-up');
@@ -142,14 +145,13 @@
             showing = !showing;
 
             // Stop the finger
-            /*            $('#finger2').removeClass('bounce-right');
-             $('#finger2').addClass('hidden');*/
+            /*            $element.find('#finger2').removeClass('bounce-right');
+             $element.find('#finger2').addClass('hidden');*/
         };
 
         // Set up the comboboxes
-        $(document).ready(function () {
-            $('.combobox').combobox();
-        });
+        //$element.find( '.combobox' ).combobox();
+
 
         // Show info
         //console.log("$route = "+$route);
@@ -213,7 +215,7 @@
         };
     });
 
-    app.controller('NotesController', ['$scope', '$http', function ($scope, $http) {
+    app.controller('NotesController', ['$scope', '$http', '$element', function ($scope, $http, $element) {
         var ctrl = this;
         /* var statuses = $scope.statuses;
          var priorities = $scope.priorities;
@@ -252,7 +254,8 @@
          * @param id - the id of the note
          */
         $scope.zoom = function (id) {
-            var element = $('#note'+id);
+            //var element = $element( document.querySelector( '#note'+id ));
+            var element = $element.find( '#note'+id );
             var zoomIcon;
             if( element.hasClass('grow-md') ) {
                 zoomIcon = element.find('.glyphicon-zoom-out:first');
@@ -294,6 +297,15 @@
                 $scope.refreshNotes();
             });
         }
+
+        //
+        // Handle collapse
+        //
+        $scope.isCollapsedNotes = false;
+        $scope.isCollapsedHorizontal = false;
+        $scope.isCollapsedList = false;
+
+
     }]);
 
 
@@ -342,7 +354,7 @@
         }
     });
 
-    app.controller('NotesCarouselController', ['$scope', function ($scope) {
+    app.controller('NotesCarouselController', ['$scope', '$document',function ($scope, $document) {
         var ctrl = this;
 
         $scope.init = function(id)
@@ -363,7 +375,7 @@
          */
         this.setCarousel = function () {
             // Init the carousel
-            new Carousel($scope.id);
+            new Carousel($document, $scope.id);
         };
 
         /**
@@ -565,11 +577,11 @@
      * @param aInterval
      * @constructor
      */
-    var Carousel = function (aId, aInc, aInterval) {
+    var Carousel = function (doc, aId, aInc, aInterval) {
         var theId = aId;
         Object.defineProperties(this, {
             carId: {
-                value: $(aId)
+                value: angular.element( document.querySelector( aId ))
             },
 
             inc: {
@@ -584,7 +596,7 @@
         });
 
         // See if the ID passed is really a carousel
-        //   if( !$(this.carId).is(".carousel") ) {
+        //   if( !$element.find(this.carId).is(".carousel") ) {
         //       throw new Error("Id passed is NOT a carousel!");
         //   }
 
@@ -600,25 +612,46 @@
             Carousel.running = true;
 
             // Make the carousel pause when hovered over.
-            $(document).on('mouseleave', '.carousel', function () {
+            /** todo use angular for this
+             *  ng-mouseenter="onScreen($event)"
+             ng-mouseleave="offScreen($event)"
+             */
+            /*angular.document.on('mouseleave', '.carousel', function () {
                 if (Carousel.running == true)
-                    $(this).carousel('cycle');
+             aangular.element( document.querySelector(this)).carousel('cycle');
             });
-            $(document).on('mouseenter', '.carousel', function () {
-                $(this).carousel('pause');
-            });
+            angular.document.on('mouseenter', '.carousel', function () {
+             angular.element( document.querySelector(this)).carousel('pause');
+            });*/
         }
 
         // Setup the Carousel's initial state and create the timeout function to start it cycling
-        this.carId.carousel({interval: this.carInterval});
-        this.carId.carousel("pause");
+        /** TODO FIx this
+         * Broke when I took jQuery out
+         *
+         */
+        /*this.carId.carousel({interval: this.carInterval});
+        this.carId.carousel("pause");*/
         Carousel.carDelay += this.inc;
 
         // After timeout, start the carousel cycling
         setTimeout(function () {
-            $(theId).carousel('cycle');
+            //angular.element( document.querySelector(theId)).carousel('cycle');
         }, Carousel.carDelay);
     };
+
+    function offset(elm) {
+        try {return elm.offset();} catch(e) {}
+        var rawDom = elm[0];
+        var _x = 0;
+        var _y = 0;
+        var body = document.documentElement || document.body;
+        var scrollX = window.pageXOffset || body.scrollLeft;
+        var scrollY = window.pageYOffset || body.scrollTop;
+        _x = rawDom.getBoundingClientRect().left + scrollX;
+        _y = rawDom.getBoundingClientRect().top + scrollY;
+        return { left: _x, top: _y };
+    }
 
 
     // Todo put this in the nac controller.
@@ -631,26 +664,29 @@
         // Instead of messing with making the mobile menu stick to top, just let it scroll with the page.
         var MINWIDTH = 465;
         var MAXSCROLLTOP = 593;//260;
-        var width = $(window).width();
+        var width = window.innerWidth;
         if( width < MINWIDTH )
             return;
 
-        var menu = $('.navbar');
+        var body = document.documentElement || document.body;
+        var scrollY = window.pageYOffset || body.scrollTop;
 
-        var menuPos = menu.position().top;
-        var menuOffset = menu.offset().top;
-        var scrollTop = $(window).scrollTop();
+        var menu = angular.element(document.querySelector( '.navbar'));
+
+        var menuPos = menu.prop('offsetTop');//menu.position().top;
+        var menuOffset = offset(menu);//menu.offset().top;
+        var scrollTop = window.pageYOffset || body.scrollTop;//window.scrollTop();
         //console.log("width" + width + " | " +"MenuPos"+menuPos + " | " + "menuOffset"+ menuOffset + " | " + "scrollTop"+scrollTop);
 
-        //if ($(window).scrollTop() >= origOffsetY)
-        if ((menuPos != 0) && $(window).scrollTop() > (menuOffset+20) ){
+        //if ($element.find(window).scrollTop() >= origOffsetY)
+        if ((menuPos != 0) && scrollTop > (menuOffset+20) ){
             menu.addClass('navbar-fixed-top');
             menu.addClass('fixed-menu');
-            $('#page').addClass('fixed-menu-content-padding');
+            angular.element.find('#page').addClass('fixed-menu-content-padding');
         } else if((width > MINWIDTH) && (menuPos == 0) && (scrollTop <= MAXSCROLLTOP)) {
             menu.removeClass('navbar-fixed-top');
             menu.removeClass('fixed-menu');
-            $('#page').removeClass('fixed-menu-content-padding');
+            angular.element.find('#page').removeClass('fixed-menu-content-padding');
         }
     }
     // If the on scroll is not set - set it

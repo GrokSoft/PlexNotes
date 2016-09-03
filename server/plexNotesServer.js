@@ -13,6 +13,13 @@
  *      curl -is http://localhost:8080/api/data/priorities
  *      curl -is http://localhost:8080/api/data/statuses
  *      curl -is http://localhost:8080/api/data/issuetypes
+ *
+ *      Get the Plex User's Data
+ *      https://plex.tv/api/resources
+ *
+ *      Plex API
+ *      https://github.com/Arcanemagus/plex-api/wiki
+ *
  */
 'use strict';
 
