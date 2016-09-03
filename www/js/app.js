@@ -104,6 +104,11 @@
 
         /**
          *  Toggle all the collapse elements Chevron
+         *
+         *  Note: This function is not needed.
+         *  It's better to use angular to change the icons.
+         *  On the chevron you want to change add the following using the correct isCollapsed??? variable
+         *  ng-class="[{'glyphicon-chevron-down':isCollapsedList}, {'glyphicon-chevron-up':!isCollapsedList}]"
          */
         this.toggleCollapse = function (id) {
             var domElement = document.querySelector('#'+id);
@@ -163,6 +168,85 @@
          console.log("pId = "+pId);*/
 
     }]);
+
+
+    /**
+     * Horizontal collapse
+     */
+    app.directive('collapseWidth', ['$transition', '$timeout', function ($transition, $timeout) {
+
+        return {
+            link: function (scope, element, attrs) {
+
+                var initialAnimSkip = true;
+                var currentTransition;
+
+                function doTransition(change) {
+                    var newTransition = $transition(element, change);
+                    if (currentTransition) {
+                        currentTransition.cancel();
+                    }
+                    currentTransition = newTransition;
+                    newTransition.then(newTransitionDone, newTransitionDone);
+                    return newTransition;
+
+                    function newTransitionDone() {
+                        // Make sure it's this transition, otherwise, leave it alone.
+                        if (currentTransition === newTransition) {
+                            currentTransition = undefined;
+                        }
+                    }
+                }
+
+                function expand() {
+                    if (initialAnimSkip) {
+                        initialAnimSkip = false;
+                        expandDone();
+                    } else {
+                        element.removeClass('collapse').addClass('collapsing-width');
+                        doTransition({ width: element[0].scrollWidth + 'px' }).then(expandDone);
+                    }
+                }
+
+                function expandDone() {
+                    element.removeClass('collapsing-width');
+                    element.addClass('collapse in');
+                    element.css({width: 'auto'});
+                }
+
+                function collapse() {
+                    if (initialAnimSkip) {
+                        initialAnimSkip = false;
+                        collapseDone();
+                        element.css({width: 0});
+                    } else {
+                        // CSS transitions don't work with height: auto, so we have to manually change the height to a specific value
+                        element.css({ width: element[0].scrollWidth + 'px' });
+                        //trigger reflow so a browser realizes that height was updated from auto to a specific value
+                        var x = element[0].offsetHeight;
+
+                        element.removeClass('collapse in').addClass('collapsing-width');
+
+                        doTransition({ width: 0 }).then(collapseDone);
+                    }
+                }
+
+                function collapseDone() {
+                    element.removeClass('collapsing-width');
+                    element.addClass('collapse');
+                }
+
+                scope.$watch(attrs.collapseWidth, function (shouldCollapse) {
+                    if (shouldCollapse) {
+                        collapse();
+                    } else {
+                        expand();
+                    }
+                });
+            }
+        };
+    }]);
+
 
     /**
      * The restrict option is typically set to:
@@ -253,18 +337,18 @@
          *
          * @param id - the id of the note
          */
-        $scope.zoom = function (id) {
-            //var element = $element( document.querySelector( '#note'+id ));
-            var element = $element.find( '#note'+id );
-            var zoomIcon;
+        $scope.zoom = function (id, evt) {
+            var domElement = document.querySelector('#'+id);
+            var element      = angular.element(domElement);
+            var zoomIcon = angular.element(evt.target);
             if( element.hasClass('grow-md') ) {
-                zoomIcon = element.find('.glyphicon-zoom-out:first');
+                //zoomIcon = element.find('.glyphicon-zoom-out:first');
                 zoomIcon.removeClass('glyphicon-zoom-out');
                 zoomIcon.addClass('glyphicon-zoom-in');
                 element.removeClass('grow-md');
             }
             else {
-                zoomIcon = element.find('.glyphicon-zoom-in:first');
+                //zoomIcon = element.find('.glyphicon-zoom-in:first');
                 zoomIcon.removeClass('glyphicon-zoom-in');
                 zoomIcon.addClass('glyphicon-zoom-out');
                 element.addClass('grow-md');
@@ -305,6 +389,11 @@
         $scope.isCollapsedHorizontal = false;
         $scope.isCollapsedList = false;
 
+        $scope.getWidth = function (elem) {
+            var domElement = elem;
+            var theDiv      = angular.element(domElement);
+            return theDiv.width;
+        }
 
     }]);
 

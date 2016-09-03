@@ -80,8 +80,8 @@
         <span  class="grow badge"
                 ng-click="isCollapsedList = !isCollapsedList"
                 title="Click to Toggle Collapse state of note titles">
-            <span id="chevron-note-titles" class="glyphicon"
-                    ng-class="[{'glyphicon-chevron-down':isCollapsedList}, {'glyphicon-chevron-up':!isCollapsedList}]"
+            <span id="chevron-note-titles" class="glyphicon glyphicon-chevron-down ease-all"
+                    ng-class="[{'gly-flip-vertical':isCollapsedList}]"
                     style="font-size: x-large"></span>
             <!--<span style="font-size: x-large">Click to Toggle Collapse of all notes</span>-->
         </span>
@@ -90,7 +90,7 @@
     </h2>
 
     <div collapse="isCollapsedList" >
-        <div class="panel-body slow-collapse">
+        <div class="panel-body slow-ease-all">
             <notes-list></notes-list>
         </div>
     </div>
@@ -99,7 +99,7 @@
 <div class="container-fluid" ng-controller="NotesController as notesCtrl">
     <h2 class="text-center shadowed" style="font-weight: bold; color: #587c91;">
 
-        <span  class="grow badge"
+        <span  class="grow badge slow-ease-all"
                 ng-click="isCollapsedNotes = !isCollapsedNotes; pnCtrl.toggleCollapse('chevron')"
                 title="Click to Toggle Collapse state of all notes">
             <span id="chevron" class="glyphicon glyphicon-chevron-up"

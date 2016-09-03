@@ -14,17 +14,19 @@
                 title="Click to Toggle Collapse state of note titles">
         </span>-->
 
-        <a class="glyphicon glyphicon-zoom-in" style="color: #eeeeee"
-                ng-click="zoom(note.id)"
-                title="Click to toggle the hover zoom for this note"></a>
-        {{note.title}} <a style="color: #eeeeee;
-    text-decoration: none" class="pull-right grow glyphicon glyphicon-trash"
+        <a class="glyphicon glyphicon-zoom-in"
+                style="color: #eeeeee"
+                ng-click="zoom('note'+note.id, $event)"
+                title="Click to toggle the hover zoom for this note"></a> {{note.title}} <a style="color: #eeeeee;
+    text-decoration: none"
+            class="pull-right grow glyphicon glyphicon-trash"
             ng-click="deleteNote(note.id)"
             ng-confirm-click="You are about to delete this note, are you sure you wish to continue?"
             title="Click this to delete the note."></a>
     </h4>
 
-    <div id="collapse-note{{note.id}}" class="collapse in">
+    <div id="collapse-note{{note.id}}"
+            class="collapse in">
         <div class="panel-body ">
             <div class="note-sub-header">
                 <h4 style="border-bottom: solid thin">
@@ -38,30 +40,35 @@
                          </a>-->
                     </span>
                 </h4>
-                <h4 class="bordered text-left" style="height: 18px">
+                <h4 class="bordered text-left"
+                        style="height: 18px">
 
-                    <!-- ToDo: This has an artifact when expanding since I added Markdown.
-                        <span class="col-sm-1"><a class="accordion-toggle"
-                            href="#noteBody{{note.number}}"
-                            data-toggle="collapse">
-                        <span class="glyphicon glyphicon-chevron-up"
-                                title="Click to expand this note"></span>
-                    </a></span>-->
-                    <span class=""><b>User</b> {{note.user}} <span
-                            class="glyphicon glyphicon-envelope"
-                            ng-show="note.emailme==true"
-                            title="{{note.user}} will be emailed when the note is resolved"></span>
+                    <span class="grow badge"
+                            ng-click="isCollapsedNote = !isCollapsedNote"
+                            title="Click to Toggle Collapse state of note titles">
+                        <span id="chevron-note-titles"
+                                class="glyphicon glyphicon-chevron-up ease-all"
+                                ng-class="[{'gly-rotate-180':isCollapsedNote}]"
+                                style="font-size: x-large"></span>
+                        <!--<span style="font-size: x-large">Click to Toggle Collapse of all notes</span>-->
+                    </span>
+                    <span><b>User</b> {{note.user}}
+                        <span class="glyphicon glyphicon-envelope"
+                                ng-show="note.emailme==true"
+                                title="{{note.user}} will be emailed when the note is resolved"></span>
                     </span>
                     <span class="pull-right"><b>Priority:</b> {{priorities()[note.priority]}}</span>
 
                 </h4>
             </div>
 
-
-            <div class="note-notes bordered text-left">
-                <b>Notes:</b> "{{note.details}}"
+            <div class="slow-ease-all"
+                    collapse-width="isCollapsedNote">
+                <div class="note-notes bordered text-left"
+                        ng-style="{'width':getWidth(this)}">
+                    <b>Notes:</b> "{{note.details}}"
+                </div>
             </div>
-
             <div class="issue-types">
                 <b>Issues:</b> <br>
                 <div class="issue-type-issue"
