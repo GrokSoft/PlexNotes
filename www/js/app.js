@@ -468,13 +468,14 @@
         $scope.isCollapsedList = false;
 
         $scope.getWidth = function (elem) {
-            /*var domElement = elem;
+            var domElement = elem;
             var theDiv      = angular.element(domElement);
             var w = domElement.clientWidth;
             var w1 = theDiv.clientWidth;
-            var w3 = elem.clientWidth;*/
-            var divsize = angular.element(document.getElementById(elem)).prop('offsetWidth');
-            return w;
+            var w3 = elem.clientWidth;
+            var element = document.getElementById(elem);
+            var divsize = angular.element(domElement).prop('offsetWidth');
+            return divsize;
         }
 
     }]);

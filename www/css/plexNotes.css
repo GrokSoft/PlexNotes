@@ -70,6 +70,14 @@ input[type="checkbox"].checked ~ .cb-label:before {
     -o-animation: spin 2s infinite linear;
     animation: spin 2s infinite linear;
 }
+
+.gly-spin-slow {
+    -webkit-animation: spin 6s infinite linear;
+    -moz-animation: spin 6s infinite linear;
+    -o-animation: spin 6s infinite linear;
+    animation: spin 6s infinite linear;
+}
+
 @-moz-keyframes spin {
     0% {
         -moz-transform: rotate(0deg);
@@ -340,8 +348,10 @@ select > option {
 }
 
 .grow, .grow-md, .grow-sm {
+    /*background: transparent; This does nothing but if you do it as a style on the element using grow it works!*/
     transition: all .2s ease-in-out;
-    cursor: pointer
+    cursor: pointer;
+
 }
 
 .grow:hover {

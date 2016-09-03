@@ -49,7 +49,7 @@
                         <span id="chevron-note-titles"
                                 class="glyphicon glyphicon-chevron-up ease-all"
                                 ng-class="[{'gly-rotate-180':isCollapsedNote}]"
-                                style="font-size: x-large"></span>
+                                ></span>
                         <!--<span style="font-size: x-large">Click to Toggle Collapse of all notes</span>-->
                     </span>
                     <span><b>User</b> {{note.user}}
@@ -65,7 +65,7 @@
             <div class="slow-ease-all"
                      collapse-width-height="isCollapsedNote" >
                 <div id="details+{{note.id}}" class="note-notes bordered text-left"
-                        ng-style="{'width':getWidth('details'+note.id)}">
+                        ng-style="{'width':getWidth(this)}">
                     <b>Details:</b> "{{note.details}}"
                 </div>
             </div>
