@@ -172,6 +172,27 @@ input[type="checkbox"].checked ~ .cb-label:before {
     opacity: .81;
 }
 
+
+.collapsing-width {
+    position: relative;
+    overflow: hidden;
+    -webkit-transition: width 0.35s ease;
+    -moz-transition: width 0.35s ease;
+    -o-transition: width 0.35s ease;
+    transition: width 0.35s ease;
+}
+
+
+.collapsing-width-height {
+    position: relative;
+    overflow: hidden;
+    -webkit-transition: width 0.35s ease, height 0.35s ease;
+    -moz-transition: width 0.35s ease, height 0.35s ease;
+    -o-transition: width 0.35s ease, height 0.35s ease;
+    transition: width 0.35s ease, height 0.35s ease;
+}
+
+
 .new-user-bg {
     position: absolute;
     top: 0;
@@ -564,15 +585,6 @@ nav a:hover {
     margin-left: -5px;
     border-bottom-color: #000000; /* black */
     border-width: 0 5px 5px;
-}
-
-.collapsing-width {
-    position: relative;
-    overflow: hidden;
-    -webkit-transition: width 0.35s ease;
-    -moz-transition: width 0.35s ease;
-    -o-transition: width 0.35s ease;
-    transition: width 0.35s ease;
 }
 
 .float-right {

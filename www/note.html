@@ -63,13 +63,13 @@
             </div>
 
             <div class="slow-ease-all"
-                    collapse-width="isCollapsedNote">
-                <div class="note-notes bordered text-left"
-                        ng-style="{'width':getWidth(this)}">
-                    <b>Notes:</b> "{{note.details}}"
+                     collapse-width-height="isCollapsedNote" >
+                <div id="details+{{note.id}}" class="note-notes bordered text-left"
+                        ng-style="{'width':getWidth('details'+note.id)}">
+                    <b>Details:</b> "{{note.details}}"
                 </div>
             </div>
-            <div class="issue-types">
+            <div class="issue-types slow-ease-all">
                 <b>Issues:</b> <br>
                 <div class="issue-type-issue"
                         ng-repeat="issuetype in note.issues">
