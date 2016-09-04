@@ -2,13 +2,16 @@
   ~ Copyright (c) 2016. GrokSoft LLC - All Rights Reserved
   -->
 
-<html ng-app="plexNotes" lang="en">
+<html ng-app="plexNotes"
+        lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Plex Notes</title>
 
-    <link href="css/bootstrap.css" rel="stylesheet">
-    <link href="css/plexNotes.css" rel="stylesheet">
+    <link href="css/bootstrap.css"
+            rel="stylesheet">
+    <link href="css/plexNotes.css"
+            rel="stylesheet">
 
     <!-- See https://angular-ui.github.io/bootstrap/ for info on angular & bootstrap -->
     <script src="js/angular.js"></script>
@@ -21,17 +24,18 @@
 </head>
 <body ng-controller="PlexNotesController as pnCtrl">
 
-<div id="top" class="container-fluid">
+<div id="top"
+        class="container-fluid">
     <div class="col-lg-8">
-       <!-- <plex-jumbo class="container"></plex-jumbo>-->
+        <!-- <plex-jumbo class="container"></plex-jumbo>-->
     </div>
     <div class="col-lg-4">
-        <h1 class="main-title text-center fluid"><img
-                src="images/Plex-h1-white.png"
+        <h1 class="main-title text-center fluid"><img src="images/Plex-h1-white.png"
                 class="plex-logo img-shadowed-frame"> Notes
             <span style="font-size:smaller ">{{pnCtrl.getVersion()}}</span>
         </h1>
-        <new-note class="fluid " style="overflow: hidden"></new-note>
+        <new-note class="fluid "
+                style="overflow: hidden"></new-note>
     </div>
 </div>
 
@@ -53,17 +57,21 @@
         </div>
     </div>
     <div class="col-lg-8">
-       <!-- <notes-carousel ng-init="notesCarouselCtrl.init(1)"
-                class=""></notes-carousel>-->
+        <!-- <notes-carousel ng-init="notesCarouselCtrl.init(1)"
+                 class=""></notes-carousel>-->
     </div>
 </div>
-<div id="noteTitles" class="container-fluid" ng-controller="NotesController as notesCtrl">
+<div id="noteTitles"
+        class="container-fluid"
+        ng-controller="NotesController as notesCtrl">
     <br>
-    <h2 class="text-center shadowed" style="font-weight: bold; color: #587c91;">
-        <span  class="grow badge"
+    <h2 class="text-center shadowed"
+            style="font-weight: bold; color: #587c91;">
+        <span class="grow badge"
                 ng-click="isCollapsedList = !isCollapsedList"
                 title="Click to Toggle Collapse state of note titles">
-            <span id="chevron-note-titles" class="glyphicon glyphicon-chevron-up ease-all"
+            <span id="chevron-note-titles"
+                    class="glyphicon glyphicon-chevron-up ease-all"
                     ng-class="[{'gly-flip-vertical':isCollapsedList}]"
                     style="font-size: x-large"></span>
             <!--<span style="font-size: x-large">Click to Toggle Collapse of all notes</span>-->
@@ -72,37 +80,47 @@
                 class="plex-logo img-shadowed-frame"> Note Titles
     </h2>
 
-    <div collapse="isCollapsedList" >
+    <div collapse="isCollapsedList">
         <div class="panel-body slow-ease-all">
             <notes-list></notes-list>
         </div>
     </div>
 </div>
 <hr>
-<div class="container-fluid" ng-controller="NotesController as notesCtrl">
-    <h2 class="text-center shadowed" style="font-weight: bold; color: #587c91;">
+<div class="container-fluid"
+        ng-controller="NotesController as notesCtrl">
+    <h2 class="text-center shadowed"
+            style="font-weight: bold; color: #587c91;">
 
-        <span  class="grow badge slow-ease-all"
+        <span class="grow badge slow-ease-all"
                 ng-click="isCollapsedNotes = !isCollapsedNotes; pnCtrl.toggleCollapse('chevron')"
                 title="Click to Toggle Collapse state of all notes">
-            <span id="chevron" class="glyphicon glyphicon-chevron-up"
+            <span id="chevron"
+                    class="glyphicon glyphicon-chevron-up"
                     style="font-size: x-large"></span>
             <!--<span style="font-size: x-large">Click to Toggle Collapse of all notes</span>-->
         </span>
         <img src="images/Plex-h2-white.png"
                 class="plex-logo img-shadowed-frame"> Notes
     </h2>
-    <div id="notes" collapse="isCollapsedNotes">
+    <div id="notes"
+            collapse="isCollapsedNotes">
         <div class="panel-body">
             <notes></notes>
         </div>
     </div>
 </div>
 
-<div id="myModal" class="modal hide fade" tabindex="-1" role="dialog"
-        aria-labelledby="myModalLabel" aria-hidden="true">
+<div id="myModal"
+        class="modal hide fade"
+        tabindex="-1"
+        role="dialog"
+        aria-labelledby="myModalLabel"
+        aria-hidden="true">
     <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal"
+        <button type="button"
+                class="close"
+                data-dismiss="modal"
                 aria-hidden="true">×
         </button>
         <h3 id="myModalLabel">Modal header</h3>
@@ -111,7 +129,9 @@
         <p>One fine body…</p>
     </div>
     <div class="modal-footer">
-        <button class="btn" data-dismiss="modal" aria-hidden="true">Close
+        <button class="btn"
+                data-dismiss="modal"
+                aria-hidden="true">Close
         </button>
         <button class="btn btn-primary">Save changes</button>
     </div>

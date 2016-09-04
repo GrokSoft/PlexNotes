@@ -2,9 +2,12 @@
   ~ Copyright (c) 2016. GrokSoft LLC - All Rights Reserved
   -->
 
-<select class="combobox" ng-model="newNote.priority" required>
+<select class="combobox"
+        ng-model="newNote.priority"
+        required>
     <option value="">Choose a Priority</option>
     <option ng-repeat="priority in priorities() track by $index"
-            value="{{$index}}" ng-show="$index!=0">{{priority}}
+            value="{{$index}}"
+            ng-show="$index!=0">{{priority}}
     </option>
 </select>

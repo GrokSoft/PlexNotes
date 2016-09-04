@@ -1,10 +1,13 @@
 <!--
   ~ Copyright (c) 2016. GrokSoft LLC - All Rights Reserved
-  -->
-<select class="combobox" ng-model="newNote.status" required>
+  --><select class="combobox"
+        ng-model="newNote.status"
+        required>
     <option value="">Choose a Status</option>
-    <option type="number" ng-repeat="status in statuses() track by $index"
-            value="{{$index}}" ng-show="$index!=0">{{status}}
+    <option type="number"
+            ng-repeat="status in statuses() track by $index"
+            value="{{$index}}"
+            ng-show="$index!=0">{{status}}
     </option>
 </select>
 

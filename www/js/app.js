@@ -26,7 +26,7 @@
     app.controller('PlexNotesController', ['$scope', '$http', '$location', '$anchorScroll', '$element', function ($scope, $http, $location, $anchorScroll, $element) {
         var plexNotes = this;
         var ctrl = this;
-        var showing  = true;    // State for toggle all
+        var showing = true;    // State for toggle all
 
         // ToDo Either change the port in the run configuration to run on to be the same as the servers or add logic to decide which to use, or Have the server configurable at the
         // GUI?????????
@@ -52,10 +52,10 @@
             console.log("Data Read NotesController " + data.length + " items.");
         }).error(function (data, status, headers, config) {
             /*console.log(JSON.stringify(data));
-            console.log(status);
-            console.log(headers);
-            console.log(JSON.stringify(config));
-            alert("error: "+data);*/
+             console.log(status);
+             console.log(headers);
+             console.log(JSON.stringify(config));
+             alert("error: "+data);*/
             alert("Could not retrieve data from server, please verify the server is running and accessible!")
         });
 
@@ -79,7 +79,7 @@
          *
          * Scroll to an anchor on a page
          */
-        $scope.scrollTo = function(id) {
+        $scope.scrollTo = function (id) {
             $location.hash(id);
             $anchorScroll();
         };
@@ -111,8 +111,8 @@
          *  ng-class="[{'glyphicon-chevron-down':isCollapsedList}, {'glyphicon-chevron-up':!isCollapsedList}]"
          */
         this.toggleCollapse = function (id) {
-            var domElement = document.querySelector('#'+id);
-            var chevron      = angular.element(domElement);
+            var domElement = document.querySelector('#' + id);
+            var chevron = angular.element(domElement);
 
             if (chevron.hasClass('glyphicon-chevron-up')) {
                 chevron.removeClass('glyphicon-chevron-up');
@@ -133,7 +133,7 @@
          *  Toggle all the collapse elements
          */
         this.toggleAllCollapse = function () {
-            var chevron      = $element.find('#chevron');
+            var chevron = $element.find('#chevron');
             //var allCollapsed = $('[data-toggle="collapse"]');
             var allCollapsed = $element.find('collapse');
             if (showing) {
@@ -203,7 +203,7 @@
                         expandDone();
                     } else {
                         element.removeClass('collapse').addClass('collapsing-width-height');
-                        doTransition({ width: element[0].scrollWidth + 'px',height: element[0].scrollHeight + 'px' }).then(expandDone);
+                        doTransition({width: element[0].scrollWidth + 'px', height: element[0].scrollHeight + 'px'}).then(expandDone);
                     }
                 }
 
@@ -221,13 +221,13 @@
                         element.css({width: 0});
                     } else {
                         // CSS transitions don't work with height: auto, so we have to manually change the height to a specific value
-                        element.css({ width: element[0].scrollWidth + 'px', height: element[0].scrollHeight + 'px' });
+                        element.css({width: element[0].scrollWidth + 'px', height: element[0].scrollHeight + 'px'});
                         //trigger reflow so a browser realizes that height was updated from auto to a specific value
                         var x = element[0].offsetHeight;
 
                         element.removeClass('collapse in').addClass('collapsing-width-height');
 
-                        doTransition({ width: 0, height: 0 }).then(collapseDone);
+                        doTransition({width: 0, height: 0}).then(collapseDone);
                     }
                 }
 
@@ -250,7 +250,7 @@
     /**
      * Horizontal collapse
      */
-    app.directive('collapseWidth', ['$transition', '$timeout', function ($transition, $timeout) {
+    app.directive('collapseWidth', ['$animate', '$timeout', function ($animate, $timeout) {
 
         return {
             link: function (scope, element, attrs) {
@@ -259,7 +259,7 @@
                 var currentTransition;
 
                 function doTransition(change) {
-                    var newTransition = $transition(element, change);
+                    var newTransition = $animate(element, change);
                     if (currentTransition) {
                         currentTransition.cancel();
                     }
@@ -281,7 +281,7 @@
                         expandDone();
                     } else {
                         element.removeClass('collapse').addClass('collapsing-width');
-                        doTransition({ width: element[0].scrollWidth + 'px' }).then(expandDone);
+                        doTransition({width: element[0].scrollWidth + 'px'}).then(expandDone);
                     }
                 }
 
@@ -298,13 +298,13 @@
                         element.css({width: 0});
                     } else {
                         // CSS transitions don't work with height: auto, so we have to manually change the height to a specific value
-                        element.css({ width: element[0].scrollWidth + 'px' });
+                        element.css({width: element[0].scrollWidth + 'px'});
                         //trigger reflow so a browser realizes that height was updated from auto to a specific value
                         var x = element[0].offsetHeight;
 
                         element.removeClass('collapse in').addClass('collapsing-width');
 
-                        doTransition({ width: 0 }).then(collapseDone);
+                        doTransition({width: 0}).then(collapseDone);
                     }
                 }
 
@@ -325,7 +325,6 @@
     }]);
 
 
-
     /**
      * The restrict option is typically set to:
      *
@@ -336,15 +335,15 @@
      */
 
     app.directive('ngConfirmClick', [
-        function(){
+        function () {
             return {
                 priority: -1,
                 restrict: 'A',
-                link: function(scope, element, attrs){
-                    element.bind('click', function(e){
+                link    : function (scope, element, attrs) {
+                    element.bind('click', function (e) {
                         var message = attrs.ngConfirmClick;
                         // confirm() requires jQuery
-                        if(message && !confirm(message)){
+                        if (message && !confirm(message)) {
                             e.stopImmediatePropagation();
                             e.preventDefault();
                         }
@@ -416,10 +415,10 @@
          * @param id - the id of the note
          */
         $scope.zoom = function (id, evt) {
-            var domElement = document.querySelector('#'+id);
-            var element      = angular.element(domElement);
+            var domElement = document.querySelector('#' + id);
+            var element = angular.element(domElement);
             var zoomIcon = angular.element(evt.target);
-            if( element.hasClass('grow-md') ) {
+            if (element.hasClass('grow-md')) {
                 //zoomIcon = element.find('.glyphicon-zoom-out:first');
                 zoomIcon.removeClass('glyphicon-zoom-out');
                 zoomIcon.addClass('glyphicon-zoom-in');
@@ -443,7 +442,7 @@
         $scope.deleteNote = function (id) {
             $http({
                 method : 'DELETE',
-                url    : "http://localhost:8080/api/notes/"+id,
+                url    : "http://localhost:8080/api/notes/" + id,
                 data   : $scope.newNote,
                 headers: {'content-Type': 'application/json'}
             }).success(function (data, status, headers, config) {
@@ -468,15 +467,15 @@
         $scope.isCollapsedList = false;
 
         /*$scope.getWidth = function (elem) {
-            var domElement = elem;
-            var theDiv      = angular.element(domElement);
-            var w = domElement.clientWidth;
-            var w1 = theDiv.clientWidth;
-            var w3 = elem.clientWidth;
-            var element = document.getElementById(elem);
-            var divsize = angular.element(domElement).prop('offsetWidth');
-            return divsize;
-        }*/
+         var domElement = elem;
+         var theDiv      = angular.element(domElement);
+         var w = domElement.clientWidth;
+         var w1 = theDiv.clientWidth;
+         var w3 = elem.clientWidth;
+         var element = document.getElementById(elem);
+         var divsize = angular.element(domElement).prop('offsetWidth');
+         return divsize;
+         }*/
 
     }]);
 
@@ -493,13 +492,13 @@
      * offsetWidth offsetHeight
      * scrollWidth scrollHeight
      */
-    app.directive('getSize', function() {
+    app.directive('getSize', function () {
         return {
-            restrict : 'A',
-            link : function(scope, element, attributes) {
+            restrict: 'A',
+            link    : function (scope, element, attributes) {
                 var width = element[0].clientWidth;
                 var height = element[0].clientHeight;
-                console.log(width+ ' ' +height);
+                console.log(width + ' ' + height);
                 //element[0].css('width',element[0].clientWidth+"px");
 
                 /**
@@ -511,11 +510,34 @@
                  * @returns {string}
                  */
                 scope.getSizeWidth = function () {
-                    return width+"px";
+                    return width + "px";
                 };
                 scope.getSizeHeight = function () {
-                    return height+"px";
+                    return height + "px";
                 };
+            }
+        };
+    });
+
+    /**
+     * @name hover-spin
+     *
+     * @description
+     * Spin the element that has the hover-spin attribute
+     *
+     */
+    app.directive('hoverSpin', function () {
+        return {
+            restrict: 'A',
+
+            link: function (scope, element) {
+                var hoverClass = 'gly-spin-slow';
+                element.on('mouseenter', function () {
+                    element.addClass(hoverClass);
+                });
+                element.on('mouseleave', function () {
+                    element.removeClass(hoverClass);
+                });
             }
         };
     });
@@ -565,11 +587,10 @@
         }
     });
 
-    app.controller('NotesCarouselController', ['$scope', '$document',function ($scope, $document) {
+    app.controller('NotesCarouselController', ['$scope', '$document', function ($scope, $document) {
         var ctrl = this;
 
-        $scope.init = function(id)
-        {
+        $scope.init = function (id) {
             //This function is sort of private constructor for controller
             $scope.id = id;
             //Based on passed argument you can make a call to resource
@@ -647,7 +668,6 @@
     });
 
 
-
     app.directive("newNote", function () {
         return {
             restrict    : "E",
@@ -658,7 +678,7 @@
                 $http.defaults.headers.post['Content-Type'] = 'application/json;charset=utf-8';
 
                 $scope.newNoteTemplate = {
-                    "id": 0, "title": "", "user": "","emailme": true,  "priority": "", "status": "", "details": "", "issues": []
+                    "id": 0, "title": "", "user": "", "emailme": true, "priority": "", "status": "", "details": "", "issues": []
                 };
 
                 // Do a deep copy of the template
@@ -672,14 +692,14 @@
                         $scope.newNote.priority == "" ||
                         $scope.newNote.issues.length == 0 ||
                         $scope.newNote.user == "" ||
-                        $scope.newNote.user == "" ) {
+                        $scope.newNote.user == "") {
                         // Return an error!!!
                         alert("You must fill in all the data to save an note!");
                         return;
                     }
 
                     // Reset the form's submitted flag, so it does show errors
-                    $scope.submitted=false;
+                    $scope.submitted = false;
                     // Clear the form
                     /*$scope.newNoteForm.$setPristine();
                      $scope.newNoteForm.$setUntouched();*/
@@ -734,9 +754,9 @@
             controller  : function () {
                 var ctrl = this;
                 /*this.statuses = function () {
-                    console.log("Getting statuses from statuses");
-                    return _statuses;
-                };*/
+                 console.log("Getting statuses from statuses");
+                 return _statuses;
+                 };*/
                 this.statuses = [];
 
                 // Load the status array for the combobox
@@ -792,7 +812,7 @@
         var theId = aId;
         Object.defineProperties(this, {
             carId: {
-                value: angular.element( document.querySelector( aId ))
+                value: angular.element(document.querySelector(aId))
             },
 
             inc: {
@@ -828,12 +848,12 @@
              ng-mouseleave="offScreen($event)"
              */
             /*angular.document.on('mouseleave', '.carousel', function () {
-                if (Carousel.running == true)
+             if (Carousel.running == true)
              aangular.element( document.querySelector(this)).carousel('cycle');
-            });
-            angular.document.on('mouseenter', '.carousel', function () {
+             });
+             angular.document.on('mouseenter', '.carousel', function () {
              angular.element( document.querySelector(this)).carousel('pause');
-            });*/
+             });*/
         }
 
         // Setup the Carousel's initial state and create the timeout function to start it cycling
@@ -842,7 +862,7 @@
          *
          */
         /*this.carId.carousel({interval: this.carInterval});
-        this.carId.carousel("pause");*/
+         this.carId.carousel("pause");*/
         Carousel.carDelay += this.inc;
 
         // After timeout, start the carousel cycling
@@ -852,7 +872,10 @@
     };
 
     function offset(elm) {
-        try {return elm.offset();} catch(e) {}
+        try {
+            return elm.offset();
+        } catch (e) {
+        }
         var rawDom = elm[0];
         var _x = 0;
         var _y = 0;
@@ -861,7 +884,7 @@
         var scrollY = window.pageYOffset || body.scrollTop;
         _x = rawDom.getBoundingClientRect().left + scrollX;
         _y = rawDom.getBoundingClientRect().top + scrollY;
-        return { left: _x, top: _y };
+        return {left: _x, top: _y};
     }
 
 
@@ -876,13 +899,13 @@
         var MINWIDTH = 465;
         var MAXSCROLLTOP = 593;//260;
         var width = window.innerWidth;
-        if( width < MINWIDTH )
+        if (width < MINWIDTH)
             return;
 
         var body = document.documentElement || document.body;
         var scrollY = window.pageYOffset || body.scrollTop;
 
-        var menu = angular.element(document.querySelector( '.navbar'));
+        var menu = angular.element(document.querySelector('.navbar'));
 
         var menuPos = menu.prop('offsetTop');//menu.position().top;
         var menuOffset = offset(menu);//menu.offset().top;
@@ -890,17 +913,18 @@
         //console.log("width" + width + " | " +"MenuPos"+menuPos + " | " + "menuOffset"+ menuOffset + " | " + "scrollTop"+scrollTop);
 
         //if ($element.find(window).scrollTop() >= origOffsetY)
-        if ((menuPos != 0) && scrollTop > (menuOffset+20) ){
+        if ((menuPos != 0) && scrollTop > (menuOffset + 20)) {
             menu.addClass('navbar-fixed-top');
             menu.addClass('fixed-menu');
             angular.element.find('#page').addClass('fixed-menu-content-padding');
-        } else if((width > MINWIDTH) && (menuPos == 0) && (scrollTop <= MAXSCROLLTOP)) {
+        } else if ((width > MINWIDTH) && (menuPos == 0) && (scrollTop <= MAXSCROLLTOP)) {
             menu.removeClass('navbar-fixed-top');
             menu.removeClass('fixed-menu');
             angular.element.find('#page').removeClass('fixed-menu-content-padding');
         }
     }
+
     // If the on scroll is not set - set it
-    if( document.onscroll == null)
+    if (document.onscroll == null)
         document.onscroll = scrollScreen;
 })();

@@ -37,7 +37,7 @@
  * @returns {string}
  */
 var loremIpsum = function (start, len) {
-    var MIN           = 10;
+    var MIN = 10;
     /** The minimum number of characters to return. */
     var loremIpsumTxt = "Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur? Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur, vel illum qui dolorem eum fugiat quo voluptas nulla pariatur?";
 
@@ -54,10 +54,10 @@ var loremIpsum = function (start, len) {
  */
 (function () {
 
-    var PORT     = 8080;
+    var PORT = 8080;
     var dataFile = "plexData.json"; // The file to save the plex data in
-    var fs       = require('fs'); // The file system
-    var restify  = require('restify'); // REST Server
+    var fs = require('fs'); // The file system
+    var restify = require('restify'); // REST Server
 
     // The following data contains all of the data used in the UI
     var plexData = [
@@ -106,7 +106,7 @@ var loremIpsum = function (start, len) {
         }
 
     ];
-    var idLast   = parseInt(plexData[plexData.length - 1].id);
+    var idLast = parseInt(plexData[plexData.length - 1].id);
     /** id to used when creating the next note */
 
     /**
@@ -149,10 +149,10 @@ var loremIpsum = function (start, len) {
     ];
 
     var routes = {
-        "GET" : [],
-        "PUT" : [],
-        "POST" : [],
-        "DELETE" : []
+        "GET"   : [],
+        "PUT"   : [],
+        "POST"  : [],
+        "DELETE": []
 
     };
 
@@ -168,7 +168,7 @@ var loremIpsum = function (start, len) {
                     ret = cb(null, JSON.stringify(body, null, '\t'));
                 } catch (e) {
                     res.statusCode = 400;
-                    ret            = badRequest(body);
+                    ret = badRequest(body);
                     console.log("Error = " + body);
                 }
                 //console.log(ret);
@@ -343,7 +343,7 @@ var loremIpsum = function (start, len) {
      * @returns  The requested note or 404
      */
     server.get('api/notes', function (req, res, next) {
-        var ret   = [];
+        var ret = [];
         var query = req.query.query;
 
         console.log("Processing GET api/notes");
@@ -383,7 +383,7 @@ var loremIpsum = function (start, len) {
         if (ret === undefined) {
             ret = notFound(res);
         }
-        console.log("Processing GET api/notes/"+req.params.id);
+        console.log("Processing GET api/notes/" + req.params.id);
 
         setResponseHeader(res);
         res.json(ret);
@@ -437,7 +437,7 @@ var loremIpsum = function (start, len) {
             note = req.body;
             idLast++;
             note.id = idLast;
-            ret      = note;
+            ret = note;
             plexData.push(ret);
             saveNotes();
             res.statusCode = 201;
@@ -468,7 +468,7 @@ var loremIpsum = function (start, len) {
      */
     server.post('api/data/add/:count', function (req, res, next) {
         var note;
-        var count   = req.params.count;
+        var count = req.params.count;
         var retJson = {
             "jse_shortmsg": count + " Notes added",
             "jse_info"    : {},
@@ -481,7 +481,7 @@ var loremIpsum = function (start, len) {
             "restCode"    : "Created"
         };
 
-        console.log("Processing POST api/data/add/"+count);
+        console.log("Processing POST api/data/add/" + count);
 
         for (var i = 0; i < count; i++) {
             note = createRandomNote();
@@ -519,12 +519,12 @@ var loremIpsum = function (start, len) {
         })[0];
         if (ret === undefined) {
             ret = notFound(res);
-        }else {
+        } else {
             var index = plexData.indexOf(ret);
             plexData.splice(index, 1);
             saveNotes();
         }
-        console.log("Processing DELETE api/notes/"+req.params.id);
+        console.log("Processing DELETE api/notes/" + req.params.id);
 
         setResponseHeader(res);
         res.json(ret);
@@ -591,7 +591,7 @@ var loremIpsum = function (start, len) {
      */
     var notFound = function (res) {
         res.statusCode = 404;
-        var retJson    = {
+        var retJson = {
             "jse_shortmsg": "Note not found",
             "jse_info"    : {},
             "message"     : "Requested note was not found",
@@ -663,7 +663,7 @@ var loremIpsum = function (start, len) {
      * @description
      * Create a note with random data and noteTypes.
      */
-    var createRandomNote= function () {
+    var createRandomNote = function () {
         var noteCnt;
         var noteNum;
         var users = ["Bill", "Todd", "Sarah", "Reid", "Erin", "Ellissa"];
@@ -679,21 +679,21 @@ var loremIpsum = function (start, len) {
         };
 
         //console.log("idLast " + idLast);
-        note.id       = ++idLast;
-        note.title    = "Title for #"+note.id+" (Random generated)";
-        note.user     = users[parseInt(Math.random() * users.length)];
-        note.emailme  = Math.random()<.5;
+        note.id = ++idLast;
+        note.title = "Title for #" + note.id + " (Random generated)";
+        note.user = users[parseInt(Math.random() * users.length)];
+        note.emailme = Math.random() < .5;
         note.priority = parseInt(Math.random() * plexPriorites.length);
         //console.log("note.priority " + note.priority);
-        note.status   = parseInt(Math.random() * plexStatuses.length);
-        note.details  = loremIpsum();
+        note.status = parseInt(Math.random() * plexStatuses.length);
+        note.details = loremIpsum();
 
         // Ensure we have at least 1 issueType.
         noteCnt = Math.max(1, parseInt(Math.random() * plexIssues.length));
         //console.log("noteCnt " + noteCnt);
         for (var j = 0; j < noteCnt; j++) {
             for (var k = 0; k < noteCnt; k++) {
-                noteNum   = parseInt(Math.random() * plexNotes.length);
+                noteNum = parseInt(Math.random() * plexNotes.length);
                 var isUsed = note.issues.find(function (node) {
                     //console.log("node " + node);
                     return node == noteNum;
@@ -718,27 +718,35 @@ var loremIpsum = function (start, len) {
      *
      * @param server
      */
-    var listAllRoutes = function (server){
+    var listAllRoutes = function (server) {
 
         routes.GET = [];
         server.router.routes.GET.forEach(
-            function(value){routes.GET.push(value.spec.path.toString());}
+            function (value) {
+                routes.GET.push(value.spec.path.toString());
+            }
         );
         routes.PUT = [];
         server.router.routes.PUT.forEach(
-            function(value){routes.PUT.push(value.spec.path.toString());}
+            function (value) {
+                routes.PUT.push(value.spec.path.toString());
+            }
         );
         routes.POST = [];
         server.router.routes.POST.forEach(
-            function(value){routes.POST.push(value.spec.path.toString());}
+            function (value) {
+                routes.POST.push(value.spec.path.toString());
+            }
         );
         routes.DELETE = [];
         server.router.routes.DELETE.forEach(
-            function(value){routes.DELETE.push(value.spec.path.toString());}
+            function (value) {
+                routes.DELETE.push(value.spec.path.toString());
+            }
         );
 
         //console.log(JSON.stringify(routes, null, 4));
-        return(routes);
+        return (routes);
     };
 
     //
@@ -749,7 +757,7 @@ var loremIpsum = function (start, len) {
     getNotes();
 
     // List all the routes
-    console.log("Available Route Paths: " + JSON.stringify(listAllRoutes(server),null,4));
+    console.log("Available Route Paths: " + JSON.stringify(listAllRoutes(server), null, 4));
 
 
     // Have restify listen on the configured port

@@ -3,13 +3,14 @@
   -->
 
 <div class="form-group">
-   <!-- <label class="col-xs-3 control-label"></label>
-    <div class="col-xs-5 selectContainer">-->
-        <select class="combobox">
-            <option value="">Select an Note</option>
-            <option type="number" ng-repeat="note in notes() track by $index"
-                    value="{{$index+1}}">{{note.title}}
-            </option>
-        </select>
-   <!-- </div>-->
+    <!-- <label class="col-xs-3 control-label"></label>
+     <div class="col-xs-5 selectContainer">-->
+    <select class="combobox">
+        <option value="">Select an Note</option>
+        <option type="number"
+                ng-repeat="note in notes() track by $index"
+                value="{{$index+1}}">{{note.title}}
+        </option>
+    </select>
+    <!-- </div>-->
 </div>

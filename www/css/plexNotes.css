@@ -51,14 +51,13 @@ input[type="checkbox"].checked ~ .cb-label:before {
     background-position: 0 -40px;
 }*/
 
-
 .ease-all {
     transition: all 1.11s ease-in-out;
 }
+
 .slow-ease-all {
     transition: all 2.22s ease-in-out;
 }
-
 
 .glyphicon, .glyphicon:hover {
     text-decoration: none;
@@ -86,6 +85,7 @@ input[type="checkbox"].checked ~ .cb-label:before {
         -moz-transform: rotate(359deg);
     }
 }
+
 @-webkit-keyframes spin {
     0% {
         -webkit-transform: rotate(0deg);
@@ -94,6 +94,7 @@ input[type="checkbox"].checked ~ .cb-label:before {
         -webkit-transform: rotate(359deg);
     }
 }
+
 @-o-keyframes spin {
     0% {
         -o-transform: rotate(0deg);
@@ -102,6 +103,7 @@ input[type="checkbox"].checked ~ .cb-label:before {
         -o-transform: rotate(359deg);
     }
 }
+
 @keyframes spin {
     0% {
         -webkit-transform: rotate(0deg);
@@ -112,6 +114,7 @@ input[type="checkbox"].checked ~ .cb-label:before {
         transform: rotate(359deg);
     }
 }
+
 .gly-rotate-90 {
     filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=1);
     -webkit-transform: rotate(90deg);
@@ -120,6 +123,7 @@ input[type="checkbox"].checked ~ .cb-label:before {
     -o-transform: rotate(90deg);
     transform: rotate(90deg);
 }
+
 .gly-rotate-180 {
     filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=2);
     -webkit-transform: rotate(180deg);
@@ -128,6 +132,7 @@ input[type="checkbox"].checked ~ .cb-label:before {
     -o-transform: rotate(180deg);
     transform: rotate(180deg);
 }
+
 .gly-rotate-270 {
     filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=3);
     -webkit-transform: rotate(270deg);
@@ -136,6 +141,7 @@ input[type="checkbox"].checked ~ .cb-label:before {
     -o-transform: rotate(270deg);
     transform: rotate(270deg);
 }
+
 .gly-flip-horizontal {
     filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=0, mirror=1);
     -webkit-transform: scale(-1, 1);
@@ -144,6 +150,7 @@ input[type="checkbox"].checked ~ .cb-label:before {
     -o-transform: scale(-1, 1);
     transform: scale(-1, 1);
 }
+
 .gly-flip-vertical {
     filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=2, mirror=1);
     -webkit-transform: scale(1, -1);
@@ -168,10 +175,10 @@ input[type="checkbox"].checked ~ .cb-label:before {
 }
 
 .blurred-background {
-    background: url("../images/bg2.png") ;
-    position:static;
-    top:0;
-    left:0;
+    background: url("../images/bg2.png");
+    position: static;
+    top: 0;
+    left: 0;
 
     overflow: hidden;
     filter: blur(12px);
@@ -179,7 +186,6 @@ input[type="checkbox"].checked ~ .cb-label:before {
     -ms-filter: blur(12px);
     opacity: .81;
 }
-
 
 .collapsing-width {
     position: relative;
@@ -190,7 +196,6 @@ input[type="checkbox"].checked ~ .cb-label:before {
     transition: width 0.35s ease;
 }
 
-
 .collapsing-width-height {
     position: relative;
     overflow: hidden;
@@ -200,12 +205,12 @@ input[type="checkbox"].checked ~ .cb-label:before {
     transition: width 0.35s ease, height 0.35s ease;
 }
 
-
 .new-user-bg {
     position: absolute;
     top: 0;
     bottom: 0;
 }
+
 .big-checkbox {
     width: 22px;
     height: 22px;
@@ -479,6 +484,7 @@ nav a:hover {
 .navbar-toggle-wrapper {
     padding-top: 0px;
 }
+
 /*
 .navbar-img {
     margin-top: 15px;

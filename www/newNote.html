@@ -3,16 +3,20 @@
   -->
 
 
-<div class="fluid " style="max-height: 540px">
-    <div class="blurred-background" style="overflow: hidden">
+<div class="fluid "
+        style="max-height: 540px">
+    <div class="blurred-background"
+            style="overflow: hidden">
         <!-- NOTE: This img only sets the size of the bacground. The image is
          the
          one in blurred-background -->
         <img src="images/bg2.png">
     </div>
 
-    <form name="newNoteForm" class="form-horizontal "
-            ng-class="{'submitted': submitted}" ng-submit="createNote()"
+    <form name="newNoteForm"
+            class="form-horizontal "
+            ng-class="{'submitted': submitted}"
+            ng-submit="createNote()"
             style="position: relative; top: -580px; left: 0;">
 
         <div class="form-group text-center shadowed-dropped"
@@ -23,8 +27,11 @@
         <div class="form-group">
             <label class="col-xs-3 control-label">Title:</label>
             <div class="col-xs-5">
-                <input type="text" class="form-control" name="title"
-                        placeholder="Note Title" ng-model="newNote.title"
+                <input type="text"
+                        class="form-control"
+                        name="title"
+                        placeholder="Note Title"
+                        ng-model="newNote.title"
                         required/>
             </div>
         </div>
@@ -32,8 +39,11 @@
         <div class="form-group ">
             <label class="col-xs-3 control-label">User:</label>
             <div class="col-xs-5">
-                <input type="text" class="form-control" name="user"
-                        placeholder="User Name" ng-model="newNote.user"
+                <input type="text"
+                        class="form-control"
+                        name="user"
+                        placeholder="User Name"
+                        ng-model="newNote.user"
                         required/>
                 <!-- <label>  <input id="cb1" type=checkbox
                      class="big-checkbox shadowed-dropped">
@@ -46,12 +56,16 @@
 
 
         <div class="form-group">
-            <label class="col-xs-3 control-label" for="email">E-mail:</label>
-            <div id="email" class="col-xs-5 selectContainer">
-                <input id="cb1" type=checkbox
-                        class="big-checkbox shadowed-dropped"> <label
-                    class="text-smaller" style="color: #b0b8e0; font-style:
-                italic;"  for="cb1">Email when note is resolved</label>
+            <label class="col-xs-3 control-label"
+                    for="email">E-mail:</label>
+            <div id="email"
+                    class="col-xs-5 selectContainer">
+                <input id="cb1"
+                        type=checkbox
+                        class="big-checkbox shadowed-dropped"> <label class="text-smaller"
+                    style="color: #b0b8e0; font-style:
+                italic;"
+                    for="cb1">Email when note is resolved</label>
             </div>
         </div>
 
@@ -72,7 +86,9 @@
         <div class="form-group">
             <label class="col-xs-3 control-label">Details:</label>
             <div class="col-xs-8">
-                <textarea name="notes" class="form-control" rows="2"
+                <textarea name="notes"
+                        class="form-control"
+                        rows="2"
                         placeholder="Any optional notes about the note"
                         ng-model="newNote.details"></textarea>
             </div>
@@ -88,7 +104,10 @@
         <div class="form-group">
             <label class="col-xs-3 control-label"></label>
             <div class="col-xs-8">
-                <button id="submitBtn" class="box-shadow" type="submit" style="color: black;"
+                <button id="submitBtn"
+                        class="box-shadow"
+                        type="submit"
+                        style="color: black;"
                         ng-click="submitted=true;">Add Note
                 </button>
             </div>
