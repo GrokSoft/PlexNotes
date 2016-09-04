@@ -30,7 +30,8 @@
  * Get Lorem Ipsum text.
  * If start and/or end are not passed they will be randomly generated.
  *
- * NOTE: This function must come before the plexData object that is instantiated below
+ * NOTE: This function must come before the plexData object that is instantiated
+ * below since it's being used to initialize the data
  *
  * @param start
  * @param len
@@ -51,6 +52,9 @@ var loremIpsum = function (start, len) {
 
 /**
  * PlexNotes REST Server
+ *
+ * @description
+ * You can get a list of the valid REST routes using the uri: `/api/routes`
  */
 (function () {
 

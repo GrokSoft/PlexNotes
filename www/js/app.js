@@ -23,6 +23,12 @@
      $locationProvider.html5Mode(true);
      }*/);
 
+    /**
+     * Controller PlexNotesController
+     *
+     * @description
+     * Main Controller for the application
+     */
     app.controller('PlexNotesController', ['$scope', '$http', '$location', '$anchorScroll', '$element', function ($scope, $http, $location, $anchorScroll, $element) {
         var plexNotes = this;
         var ctrl = this;
@@ -47,6 +53,9 @@
 
         $scope.movies = [];
 
+        //
+        // Get the notes from the rest server
+        //
         $http.get(urlBase + '/api/notes').success(function (data) {
             _notes = data;
             console.log("Data Read NotesController " + data.length + " items.");
@@ -56,27 +65,37 @@
              console.log(headers);
              console.log(JSON.stringify(config));
              alert("error: "+data);*/
-            alert("Could not retrieve data from server, please verify the server is running and accessible!")
+            alert("Could not retrieve data from server, please verify the server is running and accessible!\n" + JSON.stringify(config, null, 4))
         });
 
+        //
+        // Get the statuses
+        //
         $http.get(urlBase + '/api/data/statuses').success(function (statuses) {
             _statuses = statuses;
             console.log("Data Read  statuses " + statuses.length);
         });
 
+        //
+        // Get the priorities
+        //
         $http.get(urlBase + '/api/data/priorities').success(function (priorities) {
             _priorities = priorities;
             console.log("Data Read " + priorities.length + " priorities");
         });
 
+        //
+        // Get the categories
+        //
         $http.get(urlBase + '/api/data/categories').success(function (categories) {
             _categories = categories;
             console.log("Data Read categories" + categories.length);
         });
 
         /**
-         * ScrollTo
+         * @name ScrollTo
          *
+         * @description
          * Scroll to an anchor on a page
          */
         $scope.scrollTo = function (id) {
@@ -85,6 +104,9 @@
         };
 
         /**
+         * @name refreshNotes
+         *
+         * @description
          * Refresh the Notes data
          */
         $scope.refreshNotes = function () {
@@ -95,7 +117,11 @@
         };
 
         /**
+         * @name getVersion
+         *
+         * @description
          * Get the version of Plex Notes
+         *
          * @returns {string}
          */
         this.getVersion = function () {
@@ -103,6 +129,9 @@
         };
 
         /**
+         *  @name toggleCollapse
+         *
+         *  @description
          *  Toggle all the collapse elements Chevron
          *
          *  Note: This function is not needed.
@@ -130,6 +159,9 @@
         };
 
         /**
+         *  @name toggleAllCollapse
+         *
+         *  @description
          *  Toggle all the collapse elements
          */
         this.toggleAllCollapse = function () {
@@ -170,6 +202,9 @@
     }]);
 
     /**
+     * Directive collapseWidthHeight
+     *
+     * @description
      * Horizontal & Vertical collapse
      */
     app.directive('collapseWidthHeight', ['$transition', '$timeout', function ($animation, $timeout) {
@@ -248,6 +283,9 @@
     }]);
 
     /**
+     * Directive collapseWidth
+     *
+     * @description
      * Horizontal collapse
      */
     app.directive('collapseWidth', ['$animate', '$timeout', function ($animate, $timeout) {
@@ -334,6 +372,12 @@
      * 'M' - only matches comment           ??????
      */
 
+    /**
+     * Directive ngConfirmClick
+     *
+     * @description
+     * Show the confirm popup
+     */
     app.directive('ngConfirmClick', [
         function () {
             return {
@@ -353,6 +397,12 @@
         }
     ]);
 
+    /**
+     * Directive menu
+     *
+     * @description
+     * The main Menu
+     */
     app.directive("menu", function () {
         return {
             restrict    : "E",   // By Attribute <div project-specs>
@@ -364,6 +414,12 @@
         };
     });
 
+    /**
+     * Directive plexJumbo
+     *
+     * @description
+     * Shows plexJumbo Carousel
+     */
     app.directive("plexJumbo", function () {
         return {
             restrict    : "E",
@@ -376,6 +432,12 @@
         };
     });
 
+    /**
+     * Controller NotesController
+     *
+     * @description
+     * Main Controller for all note directives
+     */
     app.controller('NotesController', ['$scope', '$http', '$element', function ($scope, $http, $element) {
         var ctrl = this;
         /* var statuses = $scope.statuses;
@@ -383,25 +445,65 @@
          var categories = $scope.categories;
          var notes = $scope.notes;*/
 
+        /**
+         * @name statuses
+         *
+         * @description
+         * Get the list of statuses
+         *
+         * @returns {Array} of statuses
+         */
         $scope.statuses = function () {
             console.log("Getting statuses from NotesController");
             return _statuses;
         };
+
+        /**
+         * @name priorities
+         *
+         * @description
+         * Get the list of priorities
+         *
+         * @returns {Array} of priorities
+         */
         $scope.priorities = function () {
             console.log("Getting priorities from NotesController");
             return _priorities;
         };
+
+        /**
+         * @name categories
+         *
+         * @description
+         * Get the list of categories
+         *
+         * @returns {Array} of categories
+         */
         $scope.categories = function () {
             console.log("Getting categories from NotesController");
             return _categories;
         };
+
+        /**
+         * @name notes
+         *
+         * @description
+         * Get the list of notes
+         *
+         * @returns {Array} of notes
+         */
         $scope.notes = function () {
             console.log("Getting notes from NotesController");
             return _notes;
         };
 
         /**
+         * @name inToString
+         * Todo: Rename this?????
+         *
+         * @description
          * Make sure the key is an int
+         *
          * @param key
          * @returns {Number}
          */
@@ -410,6 +512,9 @@
         };
 
         /**
+         * @name zoom
+         *
+         * @description
          * Toggle the hover zoom of the passed note
          *
          * @param id - the id of the note
@@ -480,7 +585,7 @@
     }]);
 
     /**
-     * @name get-size
+     * Directive get-size
      *
      * @description
      * Return the width and/or height of the element that has the attribute get-size
@@ -520,10 +625,10 @@
     });
 
     /**
-     * @name hover-spin
+     * Directive hover-spin
      *
      * @description
-     * Spin the element that has the hover-spin attribute
+     * Spin the element that has the hover-spin attribute when the mouse is hovering
      *
      */
     app.directive('hoverSpin', function () {
@@ -587,9 +692,25 @@
         }
     });
 
+    /**
+     * Controller NotesCarouselController
+     *
+     * @description
+     * Controller for the Note carousel directives
+     *
+     * Todo Make a notes module and put these directives under it.
+     */
     app.controller('NotesCarouselController', ['$scope', '$document', function ($scope, $document) {
         var ctrl = this;
 
+        /**
+         * @name init
+         *
+         * @description
+         * Set the id
+         *
+         * @param id
+         */
         $scope.init = function (id) {
             //This function is sort of private constructor for controller
             $scope.id = id;
@@ -598,11 +719,22 @@
             //$resource.getMeBond(007)
         };
 
+        /**
+         * @name getID
+         *
+         * @description
+         * retrurn id set with the init function
+         *
+         * @returns id
+         */
         $scope.getId = function () {
             return $scope.id;
         };
 
         /**
+         * @name setCarousel
+         *
+         * @description
          * Initialize the carousel
          */
         this.setCarousel = function () {
@@ -611,8 +743,12 @@
         };
 
         /**
+         * @name notes
+         *
+         * @description
          * Get the notes
-         * @returns {Array}
+         *
+         * @returns {Array} of notes
          */
         $scope.notes = function () {
             console.log("Getting notes from NotesCarouselController");
@@ -624,7 +760,7 @@
      * Directive notes-carousel
      *
      * @description
-     * Shows all the note titles in a carousel
+     * Shows all the note in a carousel
      */
     app.directive("notesCarousel", function () {
         var carNum = 0;
@@ -636,7 +772,12 @@
         }
     });
 
-
+    /**
+     * Directive note
+     *
+     * @description
+     * Shows all the note
+     */
     app.directive("note", function () {
         return {
             restrict    : "E",   // By Attribute <div project-specs>
@@ -667,7 +808,12 @@
         }
     });
 
-
+    /**
+     * Directive new-note
+     *
+     * @description
+     * Shows a dialog where the user can enter and save a new note
+     */
     app.directive("newNote", function () {
         return {
             restrict    : "E",
@@ -747,6 +893,12 @@
     // Directives for controls
     //
 
+    /**
+     * Directive statuses
+     *
+     * @description
+     * Shows all the statuses in a selection dropdown
+     */
     app.directive("statuses", function () {
         return {
             restrict    : "E",
@@ -769,6 +921,12 @@
         };
     });
 
+    /**
+     * Directive priorities
+     *
+     * @description
+     * Shows all the priorities in a selection dropdown
+     */
     app.directive("priorities", function () {
         return {
             restrict    : "E",
@@ -784,6 +942,12 @@
         };
     });
 
+    /**
+     * Directive categories
+     *
+     * @description
+     * Shows all the categories in a selection dropdown
+     */
     app.directive("categories", function () {
         return {
             restrict    : "E",
@@ -801,6 +965,9 @@
     // Misc helper functions
 
     /**
+     * @name Carousel
+     *
+     * @description
      * Create a bootstrap carousel slightly delayed from the last one created.
      *
      * @param aId
@@ -871,6 +1038,12 @@
         }, Carousel.carDelay);
     };
 
+    /**
+     * @name offset
+     *
+     * @param elm
+     * @returns {*}
+     */
     function offset(elm) {
         try {
             return elm.offset();
@@ -890,10 +1063,12 @@
 
     // Todo put this in the nac controller.
     /**
+     * @name scrollScreen
+     *
+     * @description
      * Handle locking the menu to the top of page when scrolled there.
      */
     function scrollScreen() {
-        //
         // Don't bother with the menu when in phone mode.
         // Instead of messing with making the mobile menu stick to top, just let it scroll with the page.
         var MINWIDTH = 465;
