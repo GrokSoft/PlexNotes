@@ -674,7 +674,7 @@ var loremIpsum = function (start, len) {
         //console.log("noteCnt " + noteCnt);
         for (var j = 0; j < noteCnt; j++) {
             for (var k = 0; k < noteCnt; k++) {
-                noteNum = parseInt(Math.random() * plexNotes.length);
+                noteNum = parseInt(Math.random() * plexData.length);
                 var isUsed = note.categories.find(function (node) {
                     //console.log("node " + node);
                     return node == noteNum;
