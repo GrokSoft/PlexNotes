@@ -10,7 +10,7 @@
     var _notes = [];
     var _priorities = [];
     var _statuses = [];
-    var _issueTypes = [];
+    var _categories = [];
 
     /**
      * Main plexNotes module
@@ -69,9 +69,9 @@
             console.log("Data Read " + priorities.length + " priorities");
         });
 
-        $http.get(urlBase + '/api/data/issuetypes').success(function (issueTypes) {
-            _issueTypes = issueTypes;
-            console.log("Data Read issueTypes" + issueTypes.length);
+        $http.get(urlBase + '/api/data/categories').success(function (categories) {
+            _categories = categories;
+            console.log("Data Read categories" + categories.length);
         });
 
         /**
@@ -172,7 +172,7 @@
     /**
      * Horizontal & Vertical collapse
      */
-    app.directive('collapseWidthHeight', ['$transition', '$timeout', function ($transition, $timeout) {
+    app.directive('collapseWidthHeight', ['$transition', '$timeout', function ($animation, $timeout) {
 
         return {
             link: function (scope, element, attrs) {
@@ -181,7 +181,7 @@
                 var currentTransition;
 
                 function doTransition(change) {
-                    var newTransition = $transition(element, change);
+                    var newTransition = $animation(element, change);
                     if (currentTransition) {
                         currentTransition.cancel();
                     }
@@ -380,7 +380,7 @@
         var ctrl = this;
         /* var statuses = $scope.statuses;
          var priorities = $scope.priorities;
-         var issueTypes = $scope.issueTypes;
+         var categories = $scope.categories;
          var notes = $scope.notes;*/
 
         $scope.statuses = function () {
@@ -391,9 +391,9 @@
             console.log("Getting priorities from NotesController");
             return _priorities;
         };
-        $scope.issueTypes = function () {
-            console.log("Getting issueTypes from NotesController");
-            return _issueTypes;
+        $scope.categories = function () {
+            console.log("Getting categories from NotesController");
+            return _categories;
         };
         $scope.notes = function () {
             console.log("Getting notes from NotesController");
@@ -650,9 +650,9 @@
                     console.log("Getting priorities from Note-Controller");
                     return _priorities;
                 };
-                $scope.noteTypes = function () {
-                    console.log("Getting issueTypes from Note-Controller");
-                    return _issueTypes;
+                $scope.categories = function () {
+                    console.log("Getting categories from Note-Controller");
+                    return _categories;
                 };
                 $scope.notes = function () {
                     console.log("Getting notes from Note-Controller");
@@ -678,7 +678,7 @@
                 $http.defaults.headers.post['Content-Type'] = 'application/json;charset=utf-8';
 
                 $scope.newNoteTemplate = {
-                    "id": 0, "title": "", "user": "", "emailme": true, "priority": "", "status": "", "details": "", "issues": []
+                    "id": 0, "title": "", "user": "", "emailme": true, "priority": "", "status": "", "details": "", "categories": []
                 };
 
                 // Do a deep copy of the template
@@ -690,9 +690,9 @@
                     // Verify the data has been filled out
                     if ($scope.newNote.status == "" ||
                         $scope.newNote.priority == "" ||
-                        $scope.newNote.issues.length == 0 ||
+                        $scope.newNote.categories.length == 0 ||
                         $scope.newNote.user == "" ||
-                        $scope.newNote.user == "") {
+                        $scope.newNote.title == "") {
                         // Return an error!!!
                         alert("You must fill in all the data to save an note!");
                         return;
@@ -708,8 +708,8 @@
                     // Todo There should be a better way of doing this with an angular filter, directive or something!
                     $scope.newNote.status = parseInt($scope.newNote.status);
                     $scope.newNote.priority = parseInt($scope.newNote.priority);
-                    for (var i = 0; i < $scope.newNote.issues.length; i++)
-                        $scope.newNote.issues[i] = parseInt($scope.newNote.issues[i]);
+                    for (var i = 0; i < $scope.newNote.categories.length; i++)
+                        $scope.newNote.categories[i] = parseInt($scope.newNote.categories[i]);
 
                     $http({
                         method : 'POST',
@@ -784,17 +784,17 @@
         };
     });
 
-    app.directive("issueTypes", function () {
+    app.directive("categories", function () {
         return {
             restrict    : "E",
-            templateUrl : "issueTypes.html",
+            templateUrl : "categories.html",
             controller  : function () {
-                this.issueTypes = function () {
-                    console.log("Getting issueTypes from issueTypes");
-                    return _issueTypes;
+                this.categories = function () {
+                    console.log("Getting categories from categories");
+                    return _categories;
                 };
             },
-            controllerAs: "issueTypeCtrl"
+            controllerAs: "categoriesCtrl"
         };
     });
 

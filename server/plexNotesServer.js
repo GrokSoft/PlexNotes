@@ -5,14 +5,14 @@
 /**
  * Test with:
  *
- *      curl -is http://localhost:8080/api/issues/:id
- *      curl -is http://localhost:8080/api/issues?query=whatever
- *      curl -is http://localhost:8080/api/issues
+ *      curl -is http://localhost:8080/api/notes/:id
+ *      curl -is http://localhost:8080/api/notes?query=whatever
+ *      curl -is http://localhost:8080/api/notes
  *
  *      curl -is http://localhost:8080/api/data/add/:count
  *      curl -is http://localhost:8080/api/data/priorities
  *      curl -is http://localhost:8080/api/data/statuses
- *      curl -is http://localhost:8080/api/data/issuetypes
+ *      curl -is http://localhost:8080/api/data/categories
  *
  *      Get the Plex User's Data
  *      https://plex.tv/api/resources
@@ -62,41 +62,41 @@ var loremIpsum = function (start, len) {
     // The following data contains all of the data used in the UI
     var plexData = [
         {
-            "id"      : 1,
-            "title"   : "Title for default note 1",
-            "user"    : "Bill",
-            "emailme" : false,
-            "priority": 1,
-            "status"  : 1,
-            "details" : loremIpsum(),
-            "issues"  : [
+            "id"        : 1,
+            "title"     : "Title for default note 1",
+            "user"      : "Bill",
+            "emailme"   : false,
+            "priority"  : 1,
+            "status"    : 1,
+            "details"   : loremIpsum(),
+            "categories": [
                 1,
                 2
             ]
         },
         {
-            "id"      : 2,
-            "title"   : "Title for default note 2",
-            "user"    : "Todd",
-            "emailme" : true,
-            "priority": 2,
-            "status"  : 2,
-            "details" : loremIpsum(),
-            "issues"  : [
+            "id"        : 2,
+            "title"     : "Title for default note 2",
+            "user"      : "Todd",
+            "emailme"   : true,
+            "priority"  : 2,
+            "status"    : 2,
+            "details"   : loremIpsum(),
+            "categories": [
                 3,
                 4,
                 5
             ]
         },
         {
-            "id"      : 3,
-            "title"   : "Title for default note 3",
-            "user"    : "Sarah",
-            "emailme" : false,
-            "priority": 3,
-            "status"  : 3,
-            "details" : loremIpsum(),
-            "issues"  : [
+            "id"        : 3,
+            "title"     : "Title for default note 3",
+            "user"      : "Sarah",
+            "emailme"   : false,
+            "priority"  : 3,
+            "status"    : 3,
+            "details"   : loremIpsum(),
+            "categories": [
                 6,
                 7,
                 8,
@@ -132,9 +132,9 @@ var loremIpsum = function (start, len) {
     ];
 
     /**
-     * Plex Issues
+     * Plex categories
      */
-    var plexIssues = [
+    var plexCategories = [
         "None",
         "See Details",
         "Needs Subtitles",
@@ -212,25 +212,6 @@ var loremIpsum = function (start, len) {
     }));
 
     //
-    // Common REST routes
-    //
-
-    /**
-     * Respond with name passed and parameter
-     *
-     * @param req
-     * @param res
-     * @param next
-     */
-    function respond(req, res, next) {
-        var param = req.query.whatever;
-        console.log("Received %s", req.params.name);
-        setResponseHeader(res);
-        res.send('hello ' + req.params.name + ' it works! (' + param + ')\n\n');
-        next();
-    }
-
-    //
     // Routes to get data for GUI components
     //
 
@@ -279,22 +260,22 @@ var loremIpsum = function (start, len) {
     });
 
     /**
-     * @name get api/data/issuetypes
+     * @name get api/data/categories
      *
      * @description
-     * Get the Plex note issues
+     * Get the Plex note categories
      *
      * @param req   The Request
      * @param res   The Response
      * @param next  The Next rout in the chain
      *
-     * @returns  Plex note issues
+     * @returns  Plex note categories
      */
     // Todo - Is there a better names for these, since the whole thing is already an issue
-    server.get('api/data/issuetypes', function (req, res, next) {
-        var ret = plexIssues;
+    server.get('api/data/categories', function (req, res, next) {
+        var ret = plexCategories;
 
-        console.log("Processing GET api/data/notes");
+        console.log("Processing GET api/data/categories");
 
         setResponseHeader(res);
         res.json(ret);
@@ -407,7 +388,7 @@ var loremIpsum = function (start, len) {
      *  "priority" : 3,
      *  "status" : 3,
      *  "details" : "",
-     *  "issues" : [
+     *  "categories" : [
      *  "3",
      *  "6"
      *  }])
@@ -668,14 +649,14 @@ var loremIpsum = function (start, len) {
         var noteNum;
         var users = ["Bill", "Todd", "Sarah", "Reid", "Erin", "Ellissa"];
         var note = {
-            "id"      : 0,
-            "title"   : "",
-            "user"    : "",
-            "emailme" : false,
-            "priority": 0,
-            "status"  : 0,
-            "details" : loremIpsum(),
-            "issues"  : []
+            "id"        : 0,
+            "title"     : "",
+            "user"      : "",
+            "emailme"   : false,
+            "priority"  : 0,
+            "status"    : 0,
+            "details"   : loremIpsum(),
+            "categories": []
         };
 
         //console.log("idLast " + idLast);
@@ -689,19 +670,19 @@ var loremIpsum = function (start, len) {
         note.details = loremIpsum();
 
         // Ensure we have at least 1 issueType.
-        noteCnt = Math.max(1, parseInt(Math.random() * plexIssues.length));
+        noteCnt = Math.max(1, parseInt(Math.random() * plexCategories.length));
         //console.log("noteCnt " + noteCnt);
         for (var j = 0; j < noteCnt; j++) {
             for (var k = 0; k < noteCnt; k++) {
                 noteNum = parseInt(Math.random() * plexNotes.length);
-                var isUsed = note.issues.find(function (node) {
+                var isUsed = note.categories.find(function (node) {
                     //console.log("node " + node);
                     return node == noteNum;
                 });
                 //console.log("isUsed " + isUsed);
                 if (isUsed == undefined) {
                     //console.log("noteNum" + noteNum);
-                    note.issues.push(noteNum);
+                    note.categories.push(noteNum);
                     break;
                 }
             }

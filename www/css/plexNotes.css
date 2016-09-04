@@ -268,7 +268,7 @@ select > option {
     color: #949494;
 }
 
-.note-header, .note-sub-header, .note-notes, .issue-types {
+.note-header, .note-sub-header, .note-notes, .categories {
     padding: 4px 10px 4px 10px;
 }
 
@@ -291,13 +291,13 @@ select > option {
     overflow: auto
 }
 
-.issue-types {
+.categories {
     background-color: rgba(71, 71, 71, 1);
     height: 106px;
     overflow: auto
 }
 
-.issue-type-issue {
+.category {
     padding-left: 20px;
 }
 

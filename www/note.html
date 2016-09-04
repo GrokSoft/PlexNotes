@@ -71,11 +71,11 @@
                     <b>Details:</b> "{{note.details}}"
                 </div>
             </div>
-            <div class="issue-types slow-ease-all">
+            <div class="categories slow-ease-all">
                 <b>Issues:</b> <br>
-                <div class="issue-type-issue"
-                        ng-repeat="issuetype in note.issues">
-                    {{issueTypes()[issuetype]}}
+                <div class="category"
+                        ng-repeat="category in note.categories">
+                    {{categories()[category]}}
                 </div>
             </div>
         </div>

@@ -1,0 +1,14 @@
+<!--
+  ~ Copyright (c) 2016. GrokSoft LLC - All Rights Reserved
+  -->
+
+<select multiple
+        class="combobox"
+        ng-model="newNote.categories"
+        required>
+    <option value="">Choose multiple categories</option>
+    <option ng-repeat="category in categoriesCtrl.categories() track by $index"
+            value="{{$index}}"
+            ng-show="$index!=0">{{category}}
+    </option>
+</select>
