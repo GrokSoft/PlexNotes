@@ -15,7 +15,7 @@
     /**
      * Main plexNotes module
      *
-     * Note: ui-bootstrap requires nganimate
+     * Note: ui-bootstrap requires ngAnimate
      *
      * @type {angular.Module}
      */
@@ -565,11 +565,12 @@
         };
 
         //
-        // Handle collapse
+        // Initialize collapse defaults
         //
         $scope.isCollapsedNotes = false;
         $scope.isCollapsedHorizontal = false;
         $scope.isCollapsedList = false;
+        $scope.isCollapsedCat = false;
 
         /*$scope.getWidth = function (elem) {
          var domElement = elem;

@@ -41,7 +41,7 @@
                     </span>
                 </h4>
                 <h4 class="bordered text-left"
-                        style="height: 18px">
+                        style="height: 18px; margin-left: -8px">
 
                     <span class="grow badge"
                             ng-click="isCollapsedNote = !isCollapsedNote"
@@ -71,11 +71,23 @@
                     <b>Details:</b> "{{note.details}}"
                 </div>
             </div>
-            <div class="categories slow-ease-all">
-                <b>Issues:</b> <br>
-                <div class="category"
-                        ng-repeat="category in note.categories">
-                    {{categories()[category]}}
+            <div style="background-color: rgba(71, 71, 71, 1);">
+                <span class="grow"
+                        ng-click="isCollapsedCat = !isCollapsedCat"
+                        title="Click to Toggle Collapse state of note categories">
+                    <span id="chevron-categories"
+                            class="glyphicon glyphicon-chevron-up ease-all"
+                            ng-class="[{'gly-flip-vertical':isCollapsedCat}]"></span>
+                </span>
+                <b>Categories:</b> <br>
+                <div collapse="isCollapsedCat"
+                        get-size>
+                    <div class="categories">
+                        <div class="category"
+                                ng-repeat="category in note.categories">
+                            {{categories()[category]}}
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
