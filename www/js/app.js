@@ -458,7 +458,7 @@
 
                 $scope.refreshNotes();
             });
-        }
+        };
 
         //
         // Handle collapse
@@ -467,7 +467,7 @@
         $scope.isCollapsedHorizontal = false;
         $scope.isCollapsedList = false;
 
-        $scope.getWidth = function (elem) {
+        /*$scope.getWidth = function (elem) {
             var domElement = elem;
             var theDiv      = angular.element(domElement);
             var w = domElement.clientWidth;
@@ -476,10 +476,49 @@
             var element = document.getElementById(elem);
             var divsize = angular.element(domElement).prop('offsetWidth');
             return divsize;
-        }
+        }*/
 
     }]);
 
+    /**
+     * @name get-size
+     *
+     * @description
+     * Return the width and/or height of the element that has the attribute get-size
+     * This is normally the parent div of a collapse element. If you set the width
+     * of a collapsible element when you do a horizontal collapse it is smooth.
+     *
+     * There are 3 different widths & heights you can get depending on what you're after:
+     * clientWidth clientHeight
+     * offsetWidth offsetHeight
+     * scrollWidth scrollHeight
+     */
+    app.directive('getSize', function() {
+        return {
+            restrict : 'A',
+            link : function(scope, element, attributes) {
+                var width = element[0].clientWidth;
+                var height = element[0].clientHeight;
+                console.log(width+ ' ' +height);
+                //element[0].css('width',element[0].clientWidth+"px");
+
+                /**
+                 * @name getSizeWidth
+                 *
+                 * @description
+                 * Return the width of the element that has the attribute get-width
+                 *
+                 * @returns {string}
+                 */
+                scope.getSizeWidth = function () {
+                    return width+"px";
+                };
+                scope.getSizeHeight = function () {
+                    return height+"px";
+                };
+            }
+        };
+    });
 
     /**
      * Directive notes

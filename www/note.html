@@ -63,9 +63,9 @@
             </div>
 
             <div class="slow-ease-all"
-                     collapse-width-height="isCollapsedNote" >
-                <div id="details+{{note.id}}" class="note-notes bordered text-left"
-                        ng-style="{'width':getWidth(this)}">
+                     collapse-width-height="isCollapsedNote" get-size >
+                <div id="details+{{note.id}}" class="note-notes bordered text-left" ng-style="{'width':getSizeWidth()}">
+                        <!--ng-style="{'width':getWidth(this)}"-->
                     <b>Details:</b> "{{note.details}}"
                 </div>
             </div>
