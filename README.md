@@ -10,24 +10,26 @@ This project consists of a REST server developed with JavaScript, node and resti
 
 The goal of the project is to have a way for family and friends that use my ![alt text][plexVs] media server to report any issues with the content. Request new content, etc...
 
-* A list of available route paths can be found using the url: `api/routes`
+* A list of available route paths can be found using the uri: `api/routes`
     ~~~~
     {
         "GET": [
             "/www\\/?.*/",
             "api/data/priorities",
             "api/data/statuses",
-            "api/data/issuetypes",
+            "api/data/categories",
             "api/routes",
-            "api/issues",
-            "api/issues/:id"
+            "api/notes",
+            "api/notes/:id"
         ],
         "PUT": [],
         "POST": [
-            "api/issues",
+            "api/notes",
             "api/data/add/:count"
         ],
-        "DELETE": []
+        "DELETE": [
+            "api/notes/:id"
+        ]
     }`
     ~~~~
 
@@ -46,12 +48,12 @@ This may change in the future to have a configurable url.
 <br/>
 
 ----
-Although PlexNotes is designed specifically for Plex Media Server(s) the
-PlexNotes project is not affiliated with Plex Inc. 
+Although ![alt text][plexVs]Notes is designed specifically for ![alt text][plexVs] Media Server(s) the
+![alt text][plexVs]Notes project is not affiliated with ![alt text][plexVs] Inc. 
 
 All trademarks and copyrights are the property of their respective owners.
 
-For more information on Plex go to the [offical Plex web site](https://www.plex.tv/).
+For more information on ![alt text][plexVs] go to the [offical Plex web site](https://www.plex.tv/).
 
 [plexLg]: http://groksoft.net/plex/_images/Plex-h2.png
 [plexSm]: http://groksoft.net/plex/_images/PLEX-vsmall.png
