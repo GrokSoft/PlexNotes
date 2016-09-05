@@ -8,7 +8,7 @@ This project consists of a REST server developed in JavaScript with:
 
 * Client-side:
     - AngularJS
-    - Bootstrap
+    - UI-Bootstrap
 
 * Server-side:
     - node.js
@@ -44,7 +44,10 @@ The goal of the project is to have a way for family and friends that use my ![al
     ~~~~
 
 * The server can be found under the `/server` directory.
+  * To run the server use: `node plexNotesServer.js` while in the server folder
+  
 * The client can be found under the `/www` directory.
+  * To run the client load the following page `index.html` while in the www folder
 
 ## Development notes
 
