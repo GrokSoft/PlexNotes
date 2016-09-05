@@ -4,7 +4,17 @@
 
 Created August 14, 2016
 
-This project consists of a REST server developed with JavaScript, node and restify. And a REST client developed with AngularJS & Bootstrap.
+This project consists of a REST server developed in JavaScript with:
+
+* Client-side:
+    - AngularJS
+    - Bootstrap
+
+* Server-side:
+    - node.js
+    - restify
+    - sequelize
+    - winston
 
 *Please note the UI is not designed yet. It consists of several components that are being developed and tested.*
 

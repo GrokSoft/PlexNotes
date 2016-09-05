@@ -14,7 +14,11 @@
 var DatastoreJson = (function () {
     var fs       = require('fs'); // The file system
 
-    var dataFile = "plexData.json"; // The file to save the plex data in
+    var dataFile = "notes-db.json"; // The file to save the plex data in
+
+    var setDataFile = function(filename) {
+        dataFile = filename;
+    };
 
     /**
      * @name saveNotes
@@ -70,10 +74,12 @@ var DatastoreJson = (function () {
     // ----------------------------------------------------------------------------------------------------------------
     // exports
     return {
+        setDataFile : setDataFile,
         saveNotes : saveNotes,
         getNotes : getNotes
     }
 })();
 
+exports.setDataFile = DatastoreJson.setDataFile();
 exports.saveNotes = DatastoreJson.saveNotes();
 exports.getNotes = DatastoreJson.getNotes();

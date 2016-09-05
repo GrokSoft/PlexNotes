@@ -85,63 +85,63 @@ var DatastoreStatic = (function () {
         var plexCategories = [
             {
                 'uuid': 'be697ff3-2b1e-4189-b42c-f3ac51bf8b07',
-                'value': "None",
-                'last_utc': 1472522510
+                'last_utc': 1472522510,
+                'value': "None"
             },
             {
                 'uuid': 'de85a7a4-395f-41ad-ab45-31a47fa37c14',
-                'value': "See details",
-                'last_utc': 1472520233
+                'last_utc': 1472520233,
+                'value': "See details"
             },
             {
                 'uuid': 'ea37de6a-5d7e-4418-bb0a-2eba5e352840',
-                'value': "Missing Episode/Sequel",
-                'last_utc': 1472522778
+                'last_utc': 1472522778,
+                'value': "Missing Episode/Sequel"
             },
             {
                 'uuid': 'd7e7bfdf-9651-47d6-b81f-6fa0210b79d8',
-                'value': "Needs Subtitles",
-                'last_utc': 1472522799
+                'last_utc': 1472522799,
+                'value': "Needs Subtitles"
             },
             {
                 'uuid': '7c0fc735-1e7e-4f3f-b57b-3a8d2e47a14b',
-                'value': "Needs Forced Subtitles",
-                'last_utc': 1472522815
+                'last_utc': 1472522815,
+                'value': "Needs Forced Subtitles"
             },
             {
                 'uuid': 'e068e721-3474-49e6-8e9a-036485ff238d',
-                'value': "Error Streaming",
-                'last_utc': 1472522830
+                'last_utc': 1472522830,
+                'value': "Error Streaming"
             },
             {
                 'uuid': '653c459f-97c7-4d50-9409-5eda117ba18b',
-                'value': "Choppy Streaming",
-                'last_utc': 1472522846
+                'last_utc': 1472522846,
+                'value': "Choppy Streaming"
             },
             {
                 'uuid': '7d96aa61-af22-4b93-baf9-cc2d28f1f8d3',
-                'value': "Low Resolution",
-                'last_utc': 1472522862
+                'last_utc': 1472522862,
+                'value': "Low Resolution"
             },
             {
                 'uuid': 'fbd99efe-b7f8-476f-97f7-41936fc0b636',
-                'value': "Bad Audio",
-                'last_utc': 1472522893
+                'last_utc': 1472522893,
+                'value': "Bad Audio"
             },
             {
                 'uuid': '13ae190e-4886-446b-b5c0-880b6af340a1',
-                'value': "Low Audio",
-                'last_utc': 1472522934
+                'last_utc': 1472522934,
+                'value': "Low Audio"
             },
             {
                 'uuid': 'c9d9b026-64b8-469b-a362-d82a281d16a0',
-                'value': "High Audio",
-                'last_utc': 1472522952
+                'last_utc': 1472522952,
+                'value': "High Audio"
             },
             {
                 'uuid': 'c782b3dc-a8b9-4b1a-bbca-aae1ab0b7723',
-                'value': "Add Artwork",
-                'last_utc': 1472522973
+                'last_utc': 1472522973,
+                'value': "Add Artwork"
             }
         ];
         return plexCategories;
@@ -159,23 +159,23 @@ var DatastoreStatic = (function () {
         var plexPriorities = [
             {
                 'uuid': '4928cde2-c372-42dd-b56c-b5152a814bb4',
-                'value': "Low",
-                'last_utc': 1472525608
+                'last_utc': 1472525608,
+                'value': "Low"
             },
             {
                 'uuid': 'd6b096bf-5b0e-4eaf-b25b-e42e10e75d84',
-                'value': "Normal",
-                'last_utc': 1472525645
+                'last_utc': 1472525645,
+                'value': "Normal"
             },
             {
                 'uuid': '16e106f1-0766-47df-b08e-d6c0fc5d91c3',
-                'value': "High",
-                'last_utc': 1472525683
+                'last_utc': 1472525683,
+                'value': "High"
             },
             {
                 'uuid': 'fae24113-356c-4954-947d-83716946292b',
-                'value': "Critical",
-                'last_utc': 1472525722
+                'last_utc': 1472525722,
+                'value': "Critical"
             }
         ];
         return plexPriorities;
@@ -205,6 +205,11 @@ var DatastoreStatic = (function () {
                 'uuid': '93a30a13-140d-418a-8c71-f8c9a5c59628',
                 'value': "Active",
                 'last_utc': 1472521795
+            },
+            {
+                'uuid': '82ae28a1-f981-43ac-b3bd-74b4d24789d3',
+                'value': "On hold",
+                'last_utc': 1472521835
             },
             {
                 'uuid': 'd9814799-1471-4392-bead-92117c464835',
@@ -342,12 +347,12 @@ var DatastoreStatic = (function () {
      * Save the notes to a file
      */
     var saveNotes = function () {
-        fs.writeFile(dataFile, JSON.stringify(plexData, null, 4), function (err) {
-            if (err) {
-                return console.log(err);
-            }
-            console.log("The file was saved with %d notes.", plexData.length);
-        });
+        // fs.writeFile(dataFile, JSON.stringify(plexData, null, 4), function (err) {
+        //     if (err) {
+        //         return console.log(err);
+        //     }
+        //     console.log("The file was saved with %d notes.", plexData.length);
+        // });
     };
 
     // ----------------------------------------------------------------------------------------------------------------
@@ -357,34 +362,16 @@ var DatastoreStatic = (function () {
      * @description
      * Get the notes from the file.
      */
-    var getNotes = function () {
-        fs.exists(dataFile, function (exists) {
-            if (exists) {
-                fs.readFile(dataFile, function (err, data) {
-                    if (err) {
-                        return console.log(err);
-                    }
-                    // ?????????????????????????????????????????????????????? plexData = JSON.parse(data);
-
-                    /**
-                     * Find the last id used so it can be incremented for a new note.
-                     */
-                    // If the file can not be manually edited we can get the largest id with the following
-                    // idLast = notes[notes.length-1].id;
-                    //console.log("idLast = " + idLast);
-                    // Iterate through the notes to find the largest ID number in case it was manually edited.
-                    //                   plexData.forEach(function (node) {
-                    //                       //console.log("idLast = %s note.id = %s", idLast, node.id);
-                    //                       var idLast = 0;   // ???????????????????              parseInt(Math.max(idLast, parseInt(node.id)));
-                    //                   });
-                    //console.log("idLast = " + idLast);
-                    console.log("There are %d notes available.", plexData.length);
-                });
-            }
-            else {
-                console.log("No Data file - using the default data");
-            }
-        });
+    var getNotes = function (query) {
+        var ret = [];
+        // notes.forEach(function (node) {
+        //     // Test for a query string
+        //     if (query === undefined || node.search(query) != -1)
+        //         ret.push(node);
+        // });
+        if (ret.length == 0) {
+            ret = null;
+        }
     };
 
 

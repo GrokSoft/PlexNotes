@@ -2,36 +2,29 @@
  * Copyright (c) 2016. GrokSoft LLC - All Rights Reserved
  */
 
-/**
- * Test with:
- *
- *      curl -is http://localhost:8080/api/issues/:id
- *      curl -is http://localhost:8080/api/issues?query=whatever
- *      curl -is http://localhost:8080/api/issues
- *
- *      curl -is http://localhost:8080/api/data/add/:count
- *      curl -is http://localhost:8080/api/data/priorities
- *      curl -is http://localhost:8080/api/data/statuses
- *      curl -is http://localhost:8080/api/data/issuetypes
- */
 'use strict';
 
 /**
  * PlexNotes REST Server
  */
 (function () {
-    var dsStatic = require('./datastore-static.js');
-    var fs = require('fs'); // The file system
-    var restify = require('restify'); // REST Server
-    var utils = require('./utils.js');
+    const LOGFILE = '../logs/plex-notes.log';                    // relative to www directory
+    const VERSION = '0.01.00';
 
-    var PORT = 8080;
-    var datastoreType = 0;   // 0=static  1=JSON  2=SQLite
+    // configuration parameters
+    // todo: move these to a configuration file
+    var serverPort = 8080;
+    var dbType = 2;                                             // 0=static  1=JSON  2=SQLite  3=MySQL/MariaDB  4=MSSQL  5=Postgres
+    var dbName = 'plex-notes.sqlite';                           // must make sense with dbType
+    var loglevel = 'info';                                      // logging level
 
-    var LOGFILE = 'logs/plexNotes.log';
-    var LLVL = 'info';  // logging level
-    const logger = require('winston');
-    logger.add(logger.transports.File, { filename: LOGFILE });
+    // modules
+    var dStore = require('./datastore.js').Datastore;           // PlexNotes datastore API
+    var dsStatic = require('./datastore-static.js');            // always load for priming
+    var fs = require('fs');                                     // file system
+    var logger = require('winston');                            // logger
+    var restify = require('restify');                           // REST Server
+    var utils = require('./utils.js');                          // server utilities
 
     var routes = {
         "GET": [],
@@ -40,35 +33,36 @@
         "DELETE": []
     };
 
-    // Load the configured datastore interface
-    var dStore = undefined;
-    if (datastoreType == 0) {
-        dStore = dsStatic;
-        logger.log(LLVL, 'datastoreType set: static');
-    } else if (datastoreType == 1) {
-        dStore = require('./datastore-json.js');
-        logger.log(LLVL, 'datastoreType set: JSON');
-    } else if (datastoreType == 2) {
-        dStore = require('./datastore-sqlite.js');
-        logger.log(LLVL, 'datastoreType set: SQLite');
+    // todo: read a configuration file here
+
+    // setup logging where level == error: 0, warn: 1, info: 2, verbose: 3, debug: 4, silly: 5
+    logger.add(logger.transports.File, {filename: LOGFILE, level: loglevel});
+    logger.log('info', '==== PlexNotes Server StartUp =============================================');
+    logger.log('info', 'Version: ' + VERSION);
+
+    // Initialize the datastore interface
+    if (dStore.init(dbType, dbName, logger) == false) {
+        logger.log('error', 'Could not connect to datastore');
+        return 1;
     }
 
     // Create the restify server
     // Add a filter to beautify json output so it's on multiple lines.
+    logger.log('info', 'Creating PlexNotes server');
     var server = restify.createServer({
         name: 'PlexNotes Server',
         formatters: {
             'application/json': function (req, res, body, cb) {
                 var ret;
-                //console.log("body = "+ JSON.stringify(body));
+                logger.log('debug', "body = "+ JSON.stringify(body));
                 try {
                     ret = cb(null, JSON.stringify(body, null, '\t'));
                 } catch (e) {
                     res.statusCode = 400;
                     ret = badRequest(body);
-                    console.log("Error = " + body);
+                    logger.log('error', body);
                 }
-                //console.log(ret);
+                logger.log('verbose', 'return = ' + ret);
                 return ret;
             }
         }
@@ -97,9 +91,9 @@
     server.use(restify.jsonp());
     //server.use(restify.CORS());
 
-    console.log("__dirname " + __dirname);
+    logger.log('info', "__dirname " + __dirname);
 
-    // Set up static HTTP server on www/
+    // Set up  HTTP server on www/
     // This serves up the static webapp
     server.get(/www\/?.*/, restify.serveStatic({
         directory: __dirname + '/../'
@@ -118,19 +112,40 @@
 
     //-----------------------------------------------------------------------------------------------------------------
     /**
-     * @name get api/data/priorities
+     * @name get api/data/categories
      *
      * @description
-     * Get the Plex note priorities
+     * Get the PlexNotes categories
      *
      * @param req   The Request
      * @param res   The Response
-     * @param next  The Next rout in the chain
+     * @param next  The Next route in the chain
      *
-     * @returns  Plex note priorities
+     * @returns  PlexNotes issues
+     */
+    server.get('api/data/categories', function (req, res, next) {
+        logger.log('info', "Processing GET api/data/categories");
+        var ret = dStore.getCategories();
+        setResponseHeader(res);
+        res.json(ret);
+        next();
+    });
+
+    //-----------------------------------------------------------------------------------------------------------------
+    /**
+     * @name get api/data/priorities
+     *
+     * @description
+     * Get the PlexNotes priorities
+     *
+     * @param req   The Request
+     * @param res   The Response
+     * @param next  The Next route in the chain
+     *
+     * @returns  PlexNotes priorities
      */
     server.get('api/data/priorities', function (req, res, next) {
-        logger.log(LLVL, "Processing GET api/data/priorities");
+        logger.log('info', "Processing GET api/data/priorities");
         var ret = dStore.getPriorities();
         setResponseHeader(res);
         res.json(ret);
@@ -142,43 +157,17 @@
      * @name get api/data/statuses
      *
      * @description
-     * Get the Plex note statuses
+     * Get the PlexNotes statuses
      *
      * @param req   The Request
      * @param res   The Response
-     * @param next  The Next rout in the chain
+     * @param next  The Next route in the chain
      *
-     * @returns  Plex note statuses
+     * @returns  PlexNotes statuses
      */
     server.get('api/data/statuses', function (req, res, next) {
-        var ret = dsStatic.plexStatuses;
-
-        console.log("Processing GET api/data/statuses");
-
-        setResponseHeader(res);
-        res.json(ret);
-        next();
-    });
-
-    //-----------------------------------------------------------------------------------------------------------------
-    /**
-     * @name get api/data/issuetypes
-     *
-     * @description
-     * Get the Plex note issues
-     *
-     * @param req   The Request
-     * @param res   The Response
-     * @param next  The Next rout in the chain
-     *
-     * @returns  Plex note issues
-     */
-    // Todo - Is there a better names for these, since the whole thing is already an issue
-    server.get('api/data/issuetypes', function (req, res, next) {
-        var ret = dsStatic.plexIssues;
-
-        console.log("Processing GET api/data/notes");
-
+        logger.log('info', "Processing GET api/data/statuses");
+        var ret = dStore.getStatuses();
         setResponseHeader(res);
         res.json(ret);
         next();
@@ -192,31 +181,6 @@
 
     //-----------------------------------------------------------------------------------------------------------------
     /**
-     * @name get api/routes
-     *
-     * @description
-     * Get the routes from the server
-     *
-     * @param req   The Request
-     * @param res   The Response
-     * @param next  The Next rout in the chain
-     *
-     * @returns  A list of available routes
-     */
-    server.get('api/routes', function (req, res, next) {
-        var ret;
-
-        console.log("Processing GET api/routes");
-
-        ret = listAllRoutes(server);
-
-        setResponseHeader(res);
-        res.json(ret);
-        next();
-    });
-
-    //-----------------------------------------------------------------------------------------------------------------
-    /**
      * @name get api/notes
      * get api/notes?query=movie
      *
@@ -225,25 +189,18 @@
      *
      * @param req   The Request
      * @param res   The Response
-     * @param next  The Next rout in the chain
+     * @param next  The Next route in the chain
      *
      * @returns  The requested note or 404
      */
     server.get('api/notes', function (req, res, next) {
         var ret = [];
         var query = req.query.query;
-
-        console.log("Processing GET api/notes");
-
-        dsStatic.plexData.forEach(function (node) {
-            // Test for a query string
-            if (query === undefined || node.search(query) != -1)
-                ret.push(node);
-        });
+        logger.log('info', "Processing GET api/notes");
+        ret = dStore.getNotes(query);
         if (ret.length == 0) {
             ret = notFound(res);
         }
-
         setResponseHeader(res);
         res.json(ret);
         next();
@@ -259,7 +216,7 @@
      *
      * @param req   The Request
      * @param res   The Response
-     * @param next  The Next rout in the chain
+     * @param next  The Next route in the chain
      *
      * @returns  The requested note or 404
      */
@@ -271,7 +228,32 @@
         if (ret === undefined) {
             ret = notFound(res);
         }
-        console.log("Processing GET api/notes/" + req.params.id);
+        logger.log('info', "Processing GET api/notes/" + req.params.id);
+
+        setResponseHeader(res);
+        res.json(ret);
+        next();
+    });
+
+    //-----------------------------------------------------------------------------------------------------------------
+    /**
+     * @name get api/routes
+     *
+     * @description
+     * Get the routes from the server
+     *
+     * @param req   The Request
+     * @param res   The Response
+     * @param next  The Next route in the chain
+     *
+     * @returns  A list of available routes
+     */
+    server.get('api/routes', function (req, res, next) {
+        var ret;
+
+        logger.log('info', "Processing GET api/routes");
+
+        ret = listAllRoutes(server);
 
         setResponseHeader(res);
         res.json(ret);
@@ -304,14 +286,14 @@
      *
      * @param req   The Request
      * @param res   The Response
-     * @param next  The Next rout in the chain
+     * @param next  The Next route in the chain
      *
      * @returns  The new note, or 400 if the note could not be created.
      */
     server.post('api/notes', function (req, res, next) {
         var ret;
 
-        console.log("Processing POST api/notes");
+        logger.log('info', "Processing POST api/notes");
 
         // Get the notes in case they were change
         DatastoreJson.getNotes();
@@ -333,10 +315,8 @@
             res.statusCode = 201;
         }
         catch (e) {
-            console.log("Error " + note);
+            logger.log('error', e);
             res.statusCode = 400;
-
-
             ret = badRequest(note);
         }
         setResponseHeader(res);
@@ -353,9 +333,9 @@
      *
      * @param req   The Request
      * @param res   The Response
-     * @param next  The Next rout in the chain
+     * @param next  The Next route in the chain
      *
-     * @returns  Plex note priorities
+     * @returns  PlexNotes priorities
      */
     server.post('api/data/add/:count', function (req, res, next) {
         var note;
@@ -372,12 +352,12 @@
             "restCode": "Created"
         };
 
-        console.log("Processing POST api/data/add/" + count);
+        logger.log('info', "Processing POST api/data/add/" + count);
 
         for (var i = 0; i < count; i++) {
             note = dsStatic.createRandomNote();
             plexData.push(note);
-            console.log("note = " + JSON.stringify(note));
+            logger.log('debug', "note = " + JSON.stringify(note));
         }
 
         DatastoreJson.saveNotes();
@@ -401,7 +381,7 @@
      *
      * @param req   The Request
      * @param res   The Response
-     * @param next  The Next rout in the chain
+     * @param next  The Next route in the chain
      *
      * @returns  The requested note or 404
      */
@@ -417,7 +397,7 @@
             plexData.splice(index, 1);
             DatastoreJson.saveNotes();
         }
-        console.log("Processing DELETE api/notes/" + req.params.id);
+        logger.log('info', "Processing DELETE api/notes/" + req.params.id);
 
         setResponseHeader(res);
         res.json(ret);
@@ -440,7 +420,7 @@
      */
     function respond(req, res, next) {
         var param = req.query.whatever;
-        console.log("Received %s", req.params.name);
+        logger.log('info', "Received %s", req.params.name);
         setResponseHeader(res);
         res.send('hello ' + req.params.name + ' it works! (' + param + ')\n\n');
         next();
@@ -556,7 +536,7 @@
             }
         );
 
-        //console.log(JSON.stringify(routes, null, 4));
+        logger.log('debug', JSON.stringify(routes, null, 4));
         return (routes);
     };
 
@@ -565,18 +545,19 @@
     // Initialization & Start-up
     //=================================================================================================================
 
-
-    // Load the notes if the file exists.
-    dsStoreJson.getNotes();
-
     // List all the routes
-    console.log("Available Route Paths: " + JSON.stringify(listAllRoutes(server), null, 4));
+    logger.log('info', "Available Route Paths: " + JSON.stringify(listAllRoutes(server), null, 4));
+
+    // var uid = utils.getUUID();
+    // console.log('uuid = ' + uid);
+
+    var cats = dStore.getCategories();
+
 
     // Have restify listen on the configured port
     // server.use("../www");
-    server.listen(PORT, function () {
-        console.log('%s listening at %s', server.name, server.url);
+    server.listen(serverPort, function () {
+        logger.log('info', '%s listening at %s', server.name, server.url);
     });
 
 })();
-
