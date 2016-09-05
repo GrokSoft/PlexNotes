@@ -16,5 +16,6 @@
     <orderEntry type="library" name="node-DefinitelyTyped" level="application" />
     <orderEntry type="library" name="restify-DefinitelyTyped" level="application" />
     <orderEntry type="library" name="angularjs-DefinitelyTyped" level="application" />
+    <orderEntry type="library" name="angular-ui-bootstrap-DefinitelyTyped" level="application" />
   </component>
 </module>
