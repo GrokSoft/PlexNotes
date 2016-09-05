@@ -5,7 +5,9 @@
 /**
  * Generate a new UUID.
  *
- * Usage:  Just run it, no arguments.
+ * Usage:        node generate-uuid.js
+ * Arguments:    none
+ *
  */
 
 'use strict';

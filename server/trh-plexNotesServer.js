@@ -6,10 +6,12 @@
 
 /**
  * PlexNotes REST Server
+ *
+ * This is the main module and start-up point for the PlexNotes REST Server.
  */
 (function () {
-    const LOGFILE = '../logs/plex-notes.log';                    // relative to www directory
-    const VERSION = '0.01.00';
+    var LOGFILE = '../logs/plex-notes.log';                    // relative to www directory
+    var VERSION = '0.01.00';
 
     // configuration parameters
     // todo: move these to a configuration file

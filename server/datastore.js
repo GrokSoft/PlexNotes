@@ -7,7 +7,7 @@
 /**
  * PlexNotes datastore interface - singleton
  */
-var Datastore = function () {
+function Datastore () {
     var Sequelize = require('sequelize');                       // datastore ORM
 
     var dbHost = 'localhost';
@@ -65,7 +65,7 @@ var Datastore = function () {
                 min: 0,
                 idle: dbPoolIdle
             },
-            storage: '../database/' + dbName
+            storage: '../database/' + dbName                // unique to SQLite
         });
         // logger.log('info', 'dbType set: SQLite');
         // } else {
@@ -76,7 +76,7 @@ var Datastore = function () {
 
 
         //-----------------------------------------------------------------------------------------------------------------
-        // data models - see http://docs.sequelizejs.com/en/latest/docs/models-definition/
+        // data models - http://docs.sequelizejs.com/en/latest/docs/models-definition/
         //
 
         //-------------------------------------------------------------------------------------------- Categories ---------
@@ -103,7 +103,7 @@ var Datastore = function () {
             ]
         });
         Categories.removeAttribute('id');
-        Categories.sync({}).then(function () {
+        Categories.sync().then(function () {
             Categories.count().then(function (c) {
                 if (c < 1) {
                     Categories.create({
@@ -195,7 +195,7 @@ var Datastore = function () {
             ]
         });
         Priorities.removeAttribute('id');
-        Priorities.sync({}).then(function () {
+        Priorities.sync().then(function () {
             Priorities.count().then(function (c) {
                 if (c < 1) {
                     Priorities.create({
@@ -247,7 +247,7 @@ var Datastore = function () {
             ]
         });
         Statuses.removeAttribute('id');
-        Statuses.sync({}).then(function () {
+        Statuses.sync().then(function () {
             Statuses.count().then(function (c) {
                 if (c < 1) {
                     Statuses.create({
@@ -323,7 +323,7 @@ var Datastore = function () {
             ]
         });
         Users.removeAttribute('id');
-        Users.sync({});
+        Users.sync();
 
         //-------------------------------------------------------------------------------------------- Notes --------------
         Notes = dStore.define('notes', {
@@ -395,7 +395,7 @@ var Datastore = function () {
             ]
         });
         Notes.removeAttribute('id');
-        Notes.sync({});
+        Notes.sync();
 
     }; // init
 
