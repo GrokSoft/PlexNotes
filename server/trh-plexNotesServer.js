@@ -56,7 +56,7 @@
         formatters: {
             'application/json': function (req, res, body, cb) {
                 var ret;
-                logger.log('debug', "body = "+ JSON.stringify(body));
+                logger.log('debug', "body = " + JSON.stringify(body));
                 try {
                     ret = cb(null, JSON.stringify(body, null, '\t'));
                 } catch (e) {
@@ -123,11 +123,12 @@
      * @param res   The Response
      * @param next  The Next route in the chain
      *
-     * @returns  PlexNotes issues
+     * @returns  PlexNotes categories
      */
     server.get('api/data/categories', function (req, res, next) {
+        var ret = [];
         logger.log('info', "Processing GET api/data/categories");
-        var ret = dStore.getCategories();
+        ret = dStore.getCategories();
         setResponseHeader(res);
         res.json(ret);
         next();
@@ -147,8 +148,9 @@
      * @returns  PlexNotes priorities
      */
     server.get('api/data/priorities', function (req, res, next) {
+        var ret = [];
         logger.log('info', "Processing GET api/data/priorities");
-        var ret = dStore.getPriorities();
+        ret = dStore.getPriorities();
         setResponseHeader(res);
         res.json(ret);
         next();
@@ -168,8 +170,9 @@
      * @returns  PlexNotes statuses
      */
     server.get('api/data/statuses', function (req, res, next) {
+        var ret = [];
         logger.log('info', "Processing GET api/data/statuses");
-        var ret = dStore.getStatuses();
+        ret = dStore.getStatuses();
         setResponseHeader(res);
         res.json(ret);
         next();

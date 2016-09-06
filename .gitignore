@@ -81,7 +81,6 @@ crashlytics-build.properties
 fabric.properties
 ### Node template
 # Logs
-logs
 *.log
 npm-debug.log*
 
