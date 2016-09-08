@@ -2,6 +2,8 @@
 <project version="4">
   <component name="JavaScriptLibraryMappings">
     <file url="file://$PROJECT_DIR$" libraries="{PlexNotes/node_modules}" />
+    <file url="file://$PROJECT_DIR$/www/plex-jumbo.html" libraries="{angular-ui-bootstrap-DefinitelyTyped}" />
+    <file url="PROJECT" libraries="{angular-ui-bootstrap-DefinitelyTyped, angularjs-DefinitelyTyped, bootstrap-DefinitelyTyped}" />
     <includedPredefinedLibrary name="Node.js Core" />
   </component>
 </project>

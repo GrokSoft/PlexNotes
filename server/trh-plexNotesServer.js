@@ -200,7 +200,19 @@
      */
     server.get('api/notes', function (req, res, next) {
         var ret = [];
-        var query = req.query.query;
+        var query = undefined;
+
+        if( req.query.query != undefined ) {
+            query = {
+                where: {
+                    details: { $contains: req.query.query }
+                }
+            };
+        }
+        else if ( req.body != undefined ) {
+            query = req.body ;
+        }
+
         logger.log('info', "Processing GET api/notes");
         ret = dStore.getNotes(query);
         if (ret.length == 0) {
