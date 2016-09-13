@@ -408,26 +408,73 @@ function Datastore() {
      * @returns {uuid, value, last_utc}
      */
     var getCategories = function () {
-        Categories.all().then(function (categories) {
-            return categories.dataValues;
-        });
+        var ret = [];
+        ret = Categories.all().then(function (categories) {
+                var results = [];
+                for (var i = 0; i < categories.length; ++i) {
+                    results[i] = categories[i].dataValues;
+                }
+                //resolve(results);
+                return results;
+            }, function (xhrObj) {
+                var t = xhrObj.toString();
+                reject(Error("getCategories failure: " + t));
+            }
+        );
+        return ret;
     };
 
     // ----------------------------------------------------------------------------------------------------------------
     /**
      * @name getNotes
      *
-     * @description
-     * Get the notes from the file.
+     * @description Returns an array of note1e9ac7ad-c221-48b3-b99e-111778ba7511s records. Where src == undefined: 0, URL: 1, BODY: 2.
+     * If src is URL the value is formatted in to an SQL WHERE clause. If src is BODY no formatting is
+     * done and the value is used as-is. NOTE that the clause MUST be formatted as required by the
+     * Sequelize module, see http://docs.sequelizejs.com/en/v3/docs/querying/#where. An empty query
+     * will return ALL records.
+     *
+     * @param src == undefined: 0, URL: 1, BODY: 2, by UUID: 3
+     * @param query String of the query
+     *
+     * @return Notes records or null
      */
-    var getNotes = function (query) {
-        Notes.findAll(query).then(function (notes) {
-            var ret = notes.dataValues;
-            if (ret.length == 0) {
-                ret = null;
+    var getNotes = function (src, query) {
+        var ret = [];
+        var clause = undefined;
+        if (src == 1) {                             // from URL
+            clause = {
+                where: {
+                    details: {$contains: query}
+                }
+            };
+        }
+        else if (src == 2) {                        // from body
+            clause = query;
+        } else if (src == 3) {                      // by UUID
+            clause = {
+                where: {
+                    uuid: query
+                }
+            };
+        }
+        if (clause == undefined) {
+            clause = {
+                where: {
+                    uuid: {$ne: ""}
+                }
+            };
+        }
+
+        ret = Notes.findAll(clause).then(function (notes) {
+            var results = [];
+            for (var i = 0; i < notes.length; ++i) {
+                results[i] = notes[i].dataValues;
             }
-            return ret;
+            return results;
         });
+
+        return ret;
     };
 
     // ----------------------------------------------------------------------------------------------------------------
@@ -439,9 +486,20 @@ function Datastore() {
      * @returns {uuid, value, last_utc}
      */
     var getPriorities = function () {
-        Priorities.all().then(function (priorities) {
-            return priorities.dataValues;
-        });
+        var ret = [];
+        ret = Priorities.all().then(function (priorities) {
+                var results = [];
+                for (var i = 0; i < priorities.length; ++i) {
+                    results[i] = priorities[i].dataValues;
+                }
+                //resolve(results);
+                return results;
+            }, function (xhrObj) {
+                var t = xhrObj.toString();
+                reject(Error("getPriorities failure: " + t));
+            }
+        );
+        return ret;
     };
 
     // ----------------------------------------------------------------------------------------------------------------
@@ -453,9 +511,20 @@ function Datastore() {
      * @returns {uuid, value, last_utc}
      */
     var getStatuses = function () {
-        Statuses.all().then(function (statuses) {
-            return statuses.dataValues;
-        });
+        var ret = [];
+        ret = Statuses.all().then(function (statuses) {
+                var results = [];
+                for (var i = 0; i < statuses.length; ++i) {
+                    results[i] = statuses[i].dataValues;
+                }
+                //resolve(results);
+                return results;
+            }, function (xhrObj) {
+                var t = xhrObj.toString();
+                reject(Error("getStatuses failure: " + t));
+            }
+        );
+        return ret;
     };
 
     // ----------------------------------------------------------------------------------------------------------------
@@ -467,9 +536,20 @@ function Datastore() {
      * @returns {uuid, value, last_utc}
      */
     var getUsers = function () {
-        Users.all().then(function (users) {
-            return users.dataValues;
-        });
+        var ret = [];
+        ret = Users.all().then(function (users) {
+                var results = [];
+                for (var i = 0; i < users.length; ++i) {
+                    results[i] = users[i].dataValues;
+                }
+                //resolve(results);
+                return results;
+            }, function (xhrObj) {
+                var t = xhrObj.toString();
+                reject(Error("getUsers failure: " + t));
+            }
+        );
+        return ret;
     };
 
     // ----------------------------------------------------------------------------------------------------------------
@@ -479,8 +559,15 @@ function Datastore() {
      * @description
      * Save the notes to a file
      */
-    var saveNote = function () {
-        return null;
+    var saveNote = function (note) {
+        var prom;
+        prom = Notes.upsert(note).then(function (wasCreated) {
+            return note;
+        }, function (xhrObj) {
+            var t = xhrObj.toString();
+            reject(Error("saveNote failure: " + t));
+        });
+        return prom;
     };
 
     // ----------------------------------------------------------------------------------------------------------------
@@ -496,6 +583,6 @@ function Datastore() {
         getNotes: getNotes
     };
 
-};
+}
 
 exports.Datastore = new Datastore();                            // singleton instance

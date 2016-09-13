@@ -10,6 +10,10 @@
  * This is the main module and start-up point for the PlexNotes REST Server.
  */
 (function () {
+
+    //-----------------------------------------------------------------------------------------------------------------
+    // Initialization
+
     var LOGFILE = '../logs/plex-notes.log';                    // relative to www directory
     var VERSION = '0.01.00';
 
@@ -105,9 +109,8 @@
 
     //=================================================================================================================
     // PlexNotes Server - Application Program Interface
-    //=================================================================================================================
-
-
+    //
+    //
     //-----------------------------------------------------------------------------------------------------------------
     // REST data routes
     //
@@ -126,12 +129,15 @@
      * @returns  PlexNotes categories
      */
     server.get('api/data/categories', function (req, res, next) {
-        var ret = [];
         logger.log('info', "Processing GET api/data/categories");
-        ret = dStore.getCategories();
-        setResponseHeader(res);
-        res.json(ret);
-        next();
+        dStore.getCategories().then(function (categories) {
+            if (categories === undefined || categories.length == 0) {
+                categories = notFound(res);
+            }
+            setResponseHeader(res);
+            res.json(categories);
+            next();
+        });
     });
 
     //-----------------------------------------------------------------------------------------------------------------
@@ -148,12 +154,15 @@
      * @returns  PlexNotes priorities
      */
     server.get('api/data/priorities', function (req, res, next) {
-        var ret = [];
         logger.log('info', "Processing GET api/data/priorities");
-        ret = dStore.getPriorities();
-        setResponseHeader(res);
-        res.json(ret);
-        next();
+        dStore.getPriorities().then(function (priorities) {
+            if (priorities === undefined || priorities.length == 0) {
+                priorities = notFound(res);
+            }
+            setResponseHeader(res);
+            res.json(priorities);
+            next();
+        });
     });
 
     //-----------------------------------------------------------------------------------------------------------------
@@ -170,12 +179,15 @@
      * @returns  PlexNotes statuses
      */
     server.get('api/data/statuses', function (req, res, next) {
-        var ret = [];
         logger.log('info', "Processing GET api/data/statuses");
-        ret = dStore.getStatuses();
-        setResponseHeader(res);
-        res.json(ret);
-        next();
+        dStore.getStatuses().then(function (statuses) {
+            if (statuses === undefined || statuses.length == 0) {
+                statuses = notFound(res);
+            }
+            setResponseHeader(res);
+            res.json(statuses);
+            next();
+        });
     });
 
 
@@ -189,8 +201,10 @@
      * @name get api/notes
      * get api/notes?query=movie
      *
-     * @description
-     * Get all notes with optional query parameter
+     * @description Get all notes with optional query parameter. If query is in URL a WHERE clause is built with
+     * that value. If the query is in the BODY it is taken literally without changes. Note that a BODY query is
+     * a WHERE clause that must formatted as required by the Sequelize module,
+     * see http://docs.sequelizejs.com/en/v3/docs/querying/#where. An empty query will return ALL records.
      *
      * @param req   The Request
      * @param res   The Response
@@ -201,35 +215,30 @@
     server.get('api/notes', function (req, res, next) {
         var ret = [];
         var query = undefined;
-
-        if( req.query.query != undefined ) {
-            query = {
-                where: {
-                    details: { $contains: req.query.query }
-                }
-            };
+        var src = 0;
+        if (req.query.query != undefined) {
+            src = 1;
+            query = req.query.query;
+        } else if (req.body != undefined) {
+            src = 2;
+            query = req.body;
         }
-        else if ( req.body != undefined ) {
-            query = req.body ;
-        }
-
         logger.log('info', "Processing GET api/notes");
-        ret = dStore.getNotes(query);
-        if (ret.length == 0) {
-            ret = notFound(res);
-        }
-        setResponseHeader(res);
-        res.json(ret);
-        next();
+        dStore.getNotes(src, query).then(function (notes) {
+            if (notes == undefined || notes.length == 0) {
+                ret = notFound(res);
+            }
+            setResponseHeader(res);
+            res.json(notes);
+            next();
+        })
     });
-
 
     //-----------------------------------------------------------------------------------------------------------------
     /**
-     * @name get api/notes/{id}
+     * @name get api/notes/{uuid}
      *
-     * @description
-     * Get a notes by id
+     * @description Get a notes by uuid. The uuid request must be in the URL.
      *
      * @param req   The Request
      * @param res   The Response
@@ -237,19 +246,26 @@
      *
      * @returns  The requested note or 404
      */
-    server.get('api/notes/:id', function (req, res, next) {
-        // There can not be duplicate notes, so always use the first element returned.
-        var ret = dsStatic.plexData.filter(function (node) {
-            return node.id == req.params.id;
-        })[0];
-        if (ret === undefined) {
-            ret = notFound(res);
+    server.get('api/notes/:uuid', function (req, res, next) {
+        var ret = [];
+        var query = req.params.uuid;
+        if (query == undefined) {
+            res.statusCode = 400;
+            ret = badRequest("A uuid key value is required for this request");
+            setResponseHeader(res);
+            res.json(notes);
+            next();
+        } else {
+            logger.log('info', "Processing GET api/notes/" + query);
+            dStore.getNotes(3, query).then(function (notes) {
+                if (notes === undefined || notes.length == 0) {
+                    notes = notFound(res);
+                }
+                setResponseHeader(res);
+                res.json(notes);
+                next();
+            });
         }
-        logger.log('info', "Processing GET api/notes/" + req.params.id);
-
-        setResponseHeader(res);
-        res.json(ret);
-        next();
     });
 
     //-----------------------------------------------------------------------------------------------------------------
@@ -267,11 +283,8 @@
      */
     server.get('api/routes', function (req, res, next) {
         var ret;
-
         logger.log('info', "Processing GET api/routes");
-
         ret = listAllRoutes(server);
-
         setResponseHeader(res);
         res.json(ret);
         next();
@@ -312,9 +325,6 @@
 
         logger.log('info', "Processing POST api/notes");
 
-        // Get the notes in case they were change
-        DatastoreJson.getNotes();
-
         // Check the body for valid data
         try {
             // Handle the body coming in as a JSON object or string.
@@ -322,13 +332,17 @@
             /* = typeof req.body !== "string"
              ? req.body.toString()
              : JSON.parse(req.body).body;*/
-
             note = req.body;
-            idLast++;
-            note.id = idLast;
-            ret = note;
-            plexData.push(ret);
-            DatastoreJson.saveNotes();
+            note.uuid = utils.getUUID();
+            note.last_utc = Date.now();
+            ret = dStore.saveNote(note).then(function (fullNote) {
+                    return fullNote;
+                },
+                function (xhrObj) {
+                    var t = xhrObj.toString();
+                    reject(Error("api/notes failure: " + t));
+                }
+            );
             res.statusCode = 201;
         }
         catch (e) {
@@ -568,7 +582,40 @@
     // var uid = utils.getUUID();
     // console.log('uuid = ' + uid);
 
-    var cats = dStore.getCategories();
+    // test data queries
+    var cats;
+    cats = dStore.getCategories();
+
+    // cats = dStore.getCategories().then(function (catret) {
+   //      console.log('cats=' + JSON.stringify(catret, null, 4));
+    //     return catret;
+    // });
+
+    var pris = dStore.getPriorities();
+    var stas = dStore.getStatuses();
+
+    var now = utils.getNow();
+    var note = {
+        uuid: utils.getUUID(),
+        fk_categories_uuid: '7c0fc735-1e7e-4f3f-b57b-3a8d2e47a14b',
+        fk_priorities_uuid: '16e106f1-0766-47df-b08e-d6c0fc5d91c3',
+        fk_statuses_uuid: '93a30a13-140d-418a-8c71-f8c9a5c59628',
+        fk_users_uuid: 'ef97cacf-f75e-4b22-9a7b-ad3d2ed95ec3',
+        fk_modifier_users_uuid: 'ef97cacf-f75e-4b22-9a7b-ad3d2ed95ec3',
+        plex_server_uuid: '955dec84-bea6-417f-98b6-dcf8308b002a',
+        created_date: now,
+        modified_date: now,
+        last_utc: now,
+        title: "The FIRST TEST to the database!",
+        details: "Now is the time for all good men to come to the aid of their country.",
+        opt_in: 1
+    };
+    dStore.saveNote(note).then(function (noteret) {
+        var aNote = noteret;
+        console.log('note added=' + JSON.stringify(noteret, null, 4));
+    });
+
+
 
 
     // Have restify listen on the configured port
