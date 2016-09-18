@@ -10,6 +10,11 @@
 function Datastore() {
     var Sequelize = require('sequelize');                       // datastore ORM
 
+    var SRC_UNDEFINED = 0;
+    var SRC_URL = 1;
+    var SRC_BODY = 2;
+    var SRC_UUID = 3;
+
     var dbHost = 'localhost';
     var dbName = undefined;
     var dbPoolMax = 5;
@@ -29,7 +34,8 @@ function Datastore() {
     /**
      * @name init
      *
-     * @description Initialize the PlexNotes database interface. The database and tables will be created if they
+     * @description
+     * Initialize the PlexNotes database interface. The database and tables will be created if they
      * do not exist. If created certain tables are pre-populated with basic data.
      *
      * @param aDbType
@@ -401,6 +407,29 @@ function Datastore() {
 
     // ----------------------------------------------------------------------------------------------------------------
     /**
+     * @name deleteNote
+     *
+     * @description
+     * Deletes a note
+     */
+    var deleteNote = function (theUuid) {
+        var prom;
+        var clause = {
+            where: {
+                uuid: theUuid
+            }
+        };
+        prom = Notes.destroy(clause).then(function (count) {
+            return count;
+        }, function (xhrObj) {
+            var t = xhrObj.toString();
+            Error("deleteNote failure: " + t);
+        });
+        return prom;
+    };
+
+    // ----------------------------------------------------------------------------------------------------------------
+    /**
      * @name getCategories
      *
      * @description Returns an array of categories records
@@ -418,7 +447,7 @@ function Datastore() {
                 return results;
             }, function (xhrObj) {
                 var t = xhrObj.toString();
-                reject(Error("getCategories failure: " + t));
+                Error("getCategories failure: " + t);
             }
         );
         return ret;
@@ -428,7 +457,7 @@ function Datastore() {
     /**
      * @name getNotes
      *
-     * @description Returns an array of note1e9ac7ad-c221-48b3-b99e-111778ba7511s records. Where src == undefined: 0, URL: 1, BODY: 2.
+     * @description Returns an array of notes records. Where src == undefined: 0, URL: 1, BODY: 2, by UUID: 3.
      * If src is URL the value is formatted in to an SQL WHERE clause. If src is BODY no formatting is
      * done and the value is used as-is. NOTE that the clause MUST be formatted as required by the
      * Sequelize module, see http://docs.sequelizejs.com/en/v3/docs/querying/#where. An empty query
@@ -496,7 +525,7 @@ function Datastore() {
                 return results;
             }, function (xhrObj) {
                 var t = xhrObj.toString();
-                reject(Error("getPriorities failure: " + t));
+                Error("getPriorities failure: " + t);
             }
         );
         return ret;
@@ -521,7 +550,7 @@ function Datastore() {
                 return results;
             }, function (xhrObj) {
                 var t = xhrObj.toString();
-                reject(Error("getStatuses failure: " + t));
+                Error("getStatuses failure: " + t);
             }
         );
         return ret;
@@ -546,7 +575,7 @@ function Datastore() {
                 return results;
             }, function (xhrObj) {
                 var t = xhrObj.toString();
-                reject(Error("getUsers failure: " + t));
+                Error("getUsers failure: " + t);
             }
         );
         return ret;
@@ -565,7 +594,7 @@ function Datastore() {
             return note;
         }, function (xhrObj) {
             var t = xhrObj.toString();
-            reject(Error("saveNote failure: " + t));
+            Error("saveNote failure: " + t);
         });
         return prom;
     };
@@ -573,8 +602,12 @@ function Datastore() {
     // ----------------------------------------------------------------------------------------------------------------
     // exports
     return {
-        // getAllNotes: getAllNotes,
+        SRC_UNDEFINED: SRC_UNDEFINED,
+        SRC_URL: SRC_URL,
+        SRC_BODY: SRC_BODY,
+        SRC_UUID: SRC_UUID,
         init: init,
+        deleteNote: deleteNote,
         getCategories: getCategories,
         getPriorities: getPriorities,
         getStatuses: getStatuses,

@@ -7,49 +7,65 @@
 /**
  * PlexNotes REST Server
  *
- * This is the main module and start-up point for the PlexNotes REST Server.
+ * This is the main module and start-up point for the PlexNotes REST Server
  */
 (function () {
 
-    //-----------------------------------------------------------------------------------------------------------------
+    //=================================================================================================================
     // Initialization
 
     var LOGFILE = '../logs/plex-notes.log';                    // relative to www directory
     var VERSION = '0.01.00';
 
     // configuration parameters
-    // todo: move these to a configuration file
+    // todo: move configuration parameters to a configuration file
     var serverPort = 8080;
     var dbType = 2;                                             // 0=static  1=JSON  2=SQLite  3=MySQL/MariaDB  4=MSSQL  5=Postgres
     var dbName = 'plex-notes.sqlite';                           // must make sense with dbType
     var loglevel = 'info';                                      // logging level
 
     // modules
+    var commandLineArgs = require('command-line-args')
     var dStore = require('./datastore.js').Datastore;           // PlexNotes datastore API
     var dsStatic = require('./datastore-static.js');            // always load for priming
     var fs = require('fs');                                     // file system
     var logger = require('winston');                            // logger
     var restify = require('restify');                           // REST Server
-    var utils = require('./utils.js');                          // server utilities
+    var utils = require('./utils.js').Utils;                    // server utilities
 
     var routes = {
         "GET": [],
-        "PUT": [],     // update
         "POST": [],    // create
+        "PUT": [],     // update
         "DELETE": []
     };
-
-    // todo: read a configuration file here
 
     // setup logging where level == error: 0, warn: 1, info: 2, verbose: 3, debug: 4, silly: 5
     logger.add(logger.transports.File, {filename: LOGFILE, level: loglevel});
     logger.log('info', '==== PlexNotes Server StartUp =============================================');
     logger.log('info', 'Version: ' + VERSION);
+    logger.log('info', "__dirname " + __dirname);
+
+    // todo: read a configuration file here
+
+    var commandArgs = [
+        {name: 'generate', alias: 'g', type: Number, description: 'generate N faux notes for testing'},
+        {name: 'help', alias: '?', type: Boolean, description: 'this help'},
+        {name: 'verbose', alias: 'v', type: Boolean, description: 'verbose logging'}
+    ];
+
+    var options = commandLineArgs(commandArgs);
 
     // Initialize the datastore interface
     if (dStore.init(dbType, dbName, logger) == false) {
         logger.log('error', 'Could not connect to datastore');
         return 1;
+    }
+
+    if (options.generate > 0) {
+        logger.log('info', 'Generate ' + options.generate + ' faux notes');
+        utils.createRandomNotes(options.generate, dStore);
+        return 0;
     }
 
     // Create the restify server
@@ -65,7 +81,7 @@
                     ret = cb(null, JSON.stringify(body, null, '\t'));
                 } catch (e) {
                     res.statusCode = 400;
-                    ret = badRequest(body);
+                    ret = utils.badRequest(body);
                     logger.log('error', body);
                 }
                 logger.log('verbose', 'return = ' + ret);
@@ -97,8 +113,6 @@
     server.use(restify.jsonp());
     //server.use(restify.CORS());
 
-    logger.log('info', "__dirname " + __dirname);
-
     // Set up  HTTP server on www/
     // This serves up the static webapp
     server.get(/www\/?.*/, restify.serveStatic({
@@ -108,10 +122,6 @@
 
 
     //=================================================================================================================
-    // PlexNotes Server - Application Program Interface
-    //
-    //
-    //-----------------------------------------------------------------------------------------------------------------
     // REST data routes
     //
 
@@ -132,9 +142,9 @@
         logger.log('info', "Processing GET api/data/categories");
         dStore.getCategories().then(function (categories) {
             if (categories === undefined || categories.length == 0) {
-                categories = notFound(res);
+                categories = utils.notFound(res);
             }
-            setResponseHeader(res);
+            res = utils.setResponseHeader(res);
             res.json(categories);
             next();
         });
@@ -157,9 +167,9 @@
         logger.log('info', "Processing GET api/data/priorities");
         dStore.getPriorities().then(function (priorities) {
             if (priorities === undefined || priorities.length == 0) {
-                priorities = notFound(res);
+                priorities = utils.notFound(res);
             }
-            setResponseHeader(res);
+            res = utils.setResponseHeader(res);
             res.json(priorities);
             next();
         });
@@ -182,17 +192,16 @@
         logger.log('info', "Processing GET api/data/statuses");
         dStore.getStatuses().then(function (statuses) {
             if (statuses === undefined || statuses.length == 0) {
-                statuses = notFound(res);
+                statuses = utils.notFound(res);
             }
-            setResponseHeader(res);
+            utils.setResponseHeader(res);
             res.json(statuses);
             next();
         });
     });
 
 
-    //-----------------------------------------------------------------------------------------------------------------
-    //
+    //=================================================================================================================
     // REST api routes
     //
 
@@ -215,20 +224,20 @@
     server.get('api/notes', function (req, res, next) {
         var ret = [];
         var query = undefined;
-        var src = 0;
+        var src = dStore.SRC_UNDEFINED;
         if (req.query.query != undefined) {
-            src = 1;
+            src = dStore.SRC_URL;
             query = req.query.query;
         } else if (req.body != undefined) {
-            src = 2;
+            src = dStore.SRC_BODY;
             query = req.body;
         }
         logger.log('info', "Processing GET api/notes");
         dStore.getNotes(src, query).then(function (notes) {
             if (notes == undefined || notes.length == 0) {
-                ret = notFound(res);
+                ret = utils.notFound(res);
             }
-            setResponseHeader(res);
+            utils.setResponseHeader(res);
             res.json(notes);
             next();
         })
@@ -249,19 +258,19 @@
     server.get('api/notes/:uuid', function (req, res, next) {
         var ret = [];
         var query = req.params.uuid;
-        if (query == undefined) {
+        if (query === undefined) {
             res.statusCode = 400;
-            ret = badRequest("A uuid key value is required for this request");
-            setResponseHeader(res);
+            ret = utils.badRequest("A uuid key value is required for this request");
+            utils.setResponseHeader(res);
             res.json(notes);
             next();
         } else {
             logger.log('info', "Processing GET api/notes/" + query);
-            dStore.getNotes(3, query).then(function (notes) {
+            dStore.getNotes(dStore.SRC_UUID, query).then(function (notes) {
                 if (notes === undefined || notes.length == 0) {
-                    notes = notFound(res);
+                    notes = utils.notFound(res);
                 }
-                setResponseHeader(res);
+                utils.setResponseHeader(res);
                 res.json(notes);
                 next();
             });
@@ -285,13 +294,13 @@
         var ret;
         logger.log('info', "Processing GET api/routes");
         ret = listAllRoutes(server);
-        setResponseHeader(res);
+        utils.setResponseHeader(res);
         res.json(ret);
         next();
     });
 
 
-    //-----------------------------------------------------------------------------------------------------------------
+    //=================================================================================================================
     // POST
     //
 
@@ -299,20 +308,7 @@
     /**
      * @name post api/notes
      *
-     * @description
-     * Create a new note
-     * ( body = {
-     *  "id" : 1,
-     *  "title"   : "",
-     *  "user" : "Bill",
-     *  "emailme", false,
-     *  "priority" : 3,
-     *  "status" : 3,
-     *  "details" : "",
-     *  "issues" : [
-     *  "3",
-     *  "6"
-     *  }])
+     * @description Save a note. The note JSON is in body. A new uuid will be generated.
      *
      * @param req   The Request
      * @param res   The Response
@@ -340,24 +336,23 @@
                 },
                 function (xhrObj) {
                     var t = xhrObj.toString();
-                    reject(Error("api/notes failure: " + t));
+                    Error(utils.ReturnObject(201, "Created", "api/notes failure: ", t));
                 }
             );
             res.statusCode = 201;
         }
         catch (e) {
             logger.log('error', e);
-            res.statusCode = 400;
-            ret = badRequest(note);
+            ret = utils.badRequest(note);
         }
-        setResponseHeader(res);
+        utils.setResponseHeader(res);
         res.json(ret);
         next();
     });
 
     //-----------------------------------------------------------------------------------------------------------------
     /**
-     * @name post api/data/add/:count
+     * @name post api/data/generate/:count
      *
      * @description
      * Create random notes for testing
@@ -368,7 +363,7 @@
      *
      * @returns  PlexNotes priorities
      */
-    server.post('api/data/add/:count', function (req, res, next) {
+    server.post('api/data/generate/:count', function (req, res, next) {
         var note;
         var count = req.params.count;
         var retJson = {
@@ -392,23 +387,23 @@
         }
 
         DatastoreJson.saveNotes();
-        setResponseHeader(res);
+        utils.setResponseHeader(res);
 
         res.json(retJson);
         next();
     });
 
 
-    //-----------------------------------------------------------------------------------------------------------------
+    //=================================================================================================================
     // DELETE
     //
 
     //-----------------------------------------------------------------------------------------------------------------
     /**
-     * @name delete api/notes/{id}
+     * @name delete api/notes/{uuid}
      *
      * @description
-     * Delete an notes by id
+     * Delete an notes by uuid
      *
      * @param req   The Request
      * @param res   The Response
@@ -417,119 +412,29 @@
      * @returns  The requested note or 404
      */
     server.del('api/notes/:id', function (req, res, next) {
-        // There can not be duplicate notes, so always use the first element returned.
-        var ret = dsStatic.plexData.filter(function (node) {
-            return node.id == req.params.id;
-        })[0];
-        if (ret === undefined) {
-            ret = notFound(res);
+        var ret = [];
+        var uuid = req.params.uuid;
+        if (uuid === undefined || uuid.length < 1) {
+            ret = utils.badRequest("A uuid key value is required for this request");
+            utils.setResponseHeader(res);
+            res.json(ret);
+            next();
         } else {
-            var index = plexData.indexOf(ret);
-            plexData.splice(index, 1);
-            DatastoreJson.saveNotes();
+            logger.log('info', "Processing DELETE api/notes/:id" + req.params.id);
+            dStore.deleteNote(uuid).then(function (count) {
+                if (count === undefined || count < 1) {
+                    ret = utils.notFound(res);
+                }
+                utils.setResponseHeader(res);
+                res.json(ret);
+                next();
+            });
         }
-        logger.log('info', "Processing DELETE api/notes/" + req.params.id);
-
-        setResponseHeader(res);
-        res.json(ret);
-        next();
     });
 
-
     //=================================================================================================================
-    // Common REST routes and supporting methods
+    // Miscellaneous
     //
-
-
-    //-----------------------------------------------------------------------------------------------------------------
-    /**
-     * Respond with name passed and parameter
-     *
-     * @param req
-     * @param res
-     * @param next
-     */
-    function respond(req, res, next) {
-        var param = req.query.whatever;
-        logger.log('info', "Received %s", req.params.name);
-        setResponseHeader(res);
-        res.send('hello ' + req.params.name + ' it works! (' + param + ')\n\n');
-        next();
-    }
-
-    //-----------------------------------------------------------------------------------------------------------------
-    /**
-     * @name setResponseHeader
-     *
-     * @description
-     * Set the header for the response
-     *
-     * Adds Access-Control-Allow-Origin *
-     * and
-     * Access-Control-Allow-Headers X-Requested-With
-     * to the header, so we can call REST servers on other domains.
-     *
-     * Note: This is needed to debug in IntelliJ/WebStorm.
-     * The server runs under one port, and the web app runs under another.
-     *
-     * @param res
-     */
-    var setResponseHeader = function (res) {
-        res.header("Access-Control-Allow-Origin", "*");
-        res.header("Access-Control-Allow-Headers", "X-Requested-With");
-    };
-
-    //-----------------------------------------------------------------------------------------------------------------
-    /**
-     * @name badRequest
-     *
-     * @description
-     * Return a json error showing a bad request
-     *
-     * @param body
-     * @returns {{jse_shortmsg: string, jse_info: {}, message: string, statusCode: number, body: {code: string, message: string}, restCode: string}}
-     */
-    var badRequest = function (body) {
-        var retJson = {
-            "jse_shortmsg": "Invalid Data",
-            "jse_info": {},
-            "message": "Body contained invalid Data",
-            "statusCode": 400,
-            "body": {
-                "code": "BadRequest",
-                "message": "data invalid Body = " + body
-            },
-            "restCode": "BadRequest"
-        };
-        return retJson;
-    };
-
-    //-----------------------------------------------------------------------------------------------------------------
-    /**
-     * @name notFound
-     *
-     * @description
-     * Load the passed response with a 404 Not Found error and return the error text
-     *
-     * @param res  The response to modify
-     * @returns {string} Note NOT found
-     */
-    var notFound = function (res) {
-        res.statusCode = 404;
-        var retJson = {
-            "jse_shortmsg": "Note not found",
-            "jse_info": {},
-            "message": "Requested note was not found",
-            "statusCode": 404,
-            "body": {
-                "code": "NotFound",
-                "message": "Note was not found!"
-            },
-            "restCode": "NotFound"
-        };
-
-        return retJson;
-    };
 
     //-----------------------------------------------------------------------------------------------------------------
     /**
@@ -548,16 +453,16 @@
                 routes.GET.push(value.spec.path.toString());
             }
         );
-        routes.PUT = [];
-        server.router.routes.PUT.forEach(
-            function (value) {
-                routes.PUT.push(value.spec.path.toString());
-            }
-        );
         routes.POST = [];
         server.router.routes.POST.forEach(
             function (value) {
                 routes.POST.push(value.spec.path.toString());
+            }
+        );
+        routes.PUT = [];
+        server.router.routes.PUT.forEach(
+            function (value) {
+                routes.PUT.push(value.spec.path.toString());
             }
         );
         routes.DELETE = [];
@@ -573,8 +478,7 @@
 
 
     //=================================================================================================================
-    // Initialization & Start-up
-    //=================================================================================================================
+    // Start-up
 
     // List all the routes
     logger.log('info', "Available Route Paths: " + JSON.stringify(listAllRoutes(server), null, 4));
@@ -583,37 +487,33 @@
     // console.log('uuid = ' + uid);
 
     // test data queries
-    var cats;
-    cats = dStore.getCategories();
-
-    // cats = dStore.getCategories().then(function (catret) {
-   //      console.log('cats=' + JSON.stringify(catret, null, 4));
-    //     return catret;
+    // var cats;
+    // cats = dStore.getCategories();
+    // var pris;
+    // pris = dStore.getPriorities();
+    // var stas;
+    // stas = dStore.getStatuses();
+    //
+    // var now = utils.getNow();
+    // var note = {
+    //     uuid: utils.getUUID(),
+    //     fk_categories_uuid: '7c0fc735-1e7e-4f3f-b57b-3a8d2e47a14b',
+    //     fk_priorities_uuid: '16e106f1-0766-47df-b08e-d6c0fc5d91c3',
+    //     fk_statuses_uuid: '93a30a13-140d-418a-8c71-f8c9a5c59628',
+    //     fk_users_uuid: 'ef97cacf-f75e-4b22-9a7b-ad3d2ed95ec3',
+    //     fk_modifier_users_uuid: 'ef97cacf-f75e-4b22-9a7b-ad3d2ed95ec3',
+    //     plex_server_uuid: '955dec84-bea6-417f-98b6-dcf8308b002a',
+    //     created_date: now,
+    //     modified_date: now,
+    //     last_utc: now,
+    //     title: "The FIRST TEST to the database!",
+    //     details: "Now is the time for all good men to come to the aid of their country.",
+    //     opt_in: 1
+    // };
+    // dStore.saveNote(note).then(function (noteret) {
+    //     var aNote = noteret;
+    //     console.log('note added=' + JSON.stringify(aNote, null, 4));
     // });
-
-    var pris = dStore.getPriorities();
-    var stas = dStore.getStatuses();
-
-    var now = utils.getNow();
-    var note = {
-        uuid: utils.getUUID(),
-        fk_categories_uuid: '7c0fc735-1e7e-4f3f-b57b-3a8d2e47a14b',
-        fk_priorities_uuid: '16e106f1-0766-47df-b08e-d6c0fc5d91c3',
-        fk_statuses_uuid: '93a30a13-140d-418a-8c71-f8c9a5c59628',
-        fk_users_uuid: 'ef97cacf-f75e-4b22-9a7b-ad3d2ed95ec3',
-        fk_modifier_users_uuid: 'ef97cacf-f75e-4b22-9a7b-ad3d2ed95ec3',
-        plex_server_uuid: '955dec84-bea6-417f-98b6-dcf8308b002a',
-        created_date: now,
-        modified_date: now,
-        last_utc: now,
-        title: "The FIRST TEST to the database!",
-        details: "Now is the time for all good men to come to the aid of their country.",
-        opt_in: 1
-    };
-    dStore.saveNote(note).then(function (noteret) {
-        var aNote = noteret;
-        console.log('note added=' + JSON.stringify(noteret, null, 4));
-    });
 
 
 
