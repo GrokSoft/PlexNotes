@@ -207,14 +207,16 @@
      * @description
      * Horizontal & Vertical collapse
      */
-    app.directive('uibCollapseWidthHeight', ['$scope', '$animation', function ($scope, $animation) {
+    app.directive('collapseWidthHeight', ['$scope', '$animation', function ($scope, $animation) {
 
         /*
         This stop working when I switched to the latest version of ui-bootstrap. I needed to start using uib-collapse, but not sure how to get to the ubi-????? with this javascript.
 
          */
         return {
+            restrict: 'E',
             restrict: 'A',
+            restrict: 'C',
 
             link: function (scope, element, attrs) {
 
@@ -294,7 +296,7 @@
      * @description
      * Horizontal collapse
      */
-    app.directive('ubiCollapseWidth', ['$scope', '$animate', '$timeout', function ($scope, $animate, $timeout) {
+    app.directive('collapseWidth', ['$scope', '$animate', '$timeout', function ($scope, $animate, $timeout) {
 
         return {
             link: function (scope, element, attrs) {
@@ -372,6 +374,7 @@
     /**
      * The restrict option is typically set to:
      *
+     * restrict:
      * 'A' - only matches attribute name    <div myAttribute>
      * 'E' - only matches element name      <myDirective>
      * 'C' - only matches class name        <div class="myClass"
@@ -432,7 +435,7 @@
             templateUrl : "plex-jumbo.html",
             controller  : function ($scope) {
                 $scope.myInterval = 5000;
-                $scope.noWrapSlides = false;
+                $scope.noWrapSlides = true;
                 $scope.active = 0;
                 var slides = $scope.slides = [];
                 var currIndex = 0;

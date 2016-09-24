@@ -54,7 +54,7 @@
                     <span><b>User:</b> {{note.user}}
                         <span class="glyphicon glyphicon-envelope"
                                 ng-show="note.emailme==true"
-                                title="{{note.user}} will be emailed when the note is resolved"></span>
+                                title="{{note.user}} will be emailed when the status of the note changes"></span>
                     </span>
                     <span class="pull-right"><b>Priority:</b> {{priorities()[note.priority]}}</span>
 
@@ -88,7 +88,7 @@
                             ng-class="[{'gly-flip-vertical':isCollapsedCat}]"></span>
                 </span>
                 <b>Categories:</b> <br>
-                <div uib-collapse-width-height="isCollapsedCat"
+                <collapse-width-height  collapse-width-height="isCollapsedCat"
                         get-size>
                     <div class="categories">
                         <div class="category"
@@ -96,7 +96,7 @@
                             {{categories()[category]}}
                         </div>
                     </div>
-                </div>
+                </collapse-width-height>
             </div>
         </div>
     </div>
