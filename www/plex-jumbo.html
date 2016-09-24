@@ -1,17 +1,53 @@
 <!--
   ~ Copyright (c) 2016. GrokSoft LLC - All Rights Reserved
   -->
-
+<style>
+    #slides_control > div{
+        height: 200px;
+    }
+    slide > img{
+        margin:auto;
+        width: 400px;
+    }
+    #slides_control {
+        position:absolute;
+        width: 400px;
+        left:50%;
+        top:20px;
+        margin-left:-200px;
+    }
+</style>
 <br><br>
 <div class="jumbotron ">
+        <div style="height: 305px">
+            <div uib-carousel active="active" interval="myInterval" no-wrap="noWrapSlides">
+                <div uib-slide ng-repeat="slide in slides track by slide.id" index="slide.id">
+                    <img ng-src="{{slide.image}}" style="margin:auto;">
+                    <div class="carousel-caption">
+                        <h4>Slide {{slide.id}}</h4>
+                        <p>{{slide.text}}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <button type="button" class="btn btn-info" ng-click="addSlide()">Add Slide</button>
+                <button type="button" class="btn btn-info" ng-click="randomize()">Randomize slides</button>
+                <div class="checkbox">
+                    <label>
+                        <input type="checkbox" ng-model="noWrapSlides">
+                        Disable Slide Looping
+                    </label>
+                </div>
+            </div>
+            <div class="col-md-6">
+                Interval, in milliseconds: <input type="number" class="form-control" ng-model="myInterval">
+                <br />Enter a negative number or 0 to stop the interval.
+            </div>
+        </div>
 
-    <div class="container-fluid">
-        <!--<script>
-            $('#topCarousel').carousel({interval: 10000});
-            //noinspection JSJQueryEfficiency
-            $('#topCarousel').carousel("pause");
-            setTimeout("$('#topCarousel').carousel('cycle');", 4000);
-        </script>-->
+   <!-- <div class="container-fluid">
 
         <div id="topCarousel"
                 class="carousel slide carousel-fade"
@@ -68,5 +104,5 @@
         </a>
         </div>
 
-    </div>
+    </div>-->
 </div>

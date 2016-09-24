@@ -32,10 +32,10 @@
  */
 (function () {
 
-    var PORT = 8080;
+    var PORT     = 8080;
     var dataFile = "plexData.json"; // The file to save the plex data in
-    var fs = require('fs'); // The file system
-    var restify = require('restify'); // REST Server
+    var fs       = require('fs'); // The file system
+    var restify  = require('restify'); // REST Server
 
     // The following data contains all of the data used in the UI
     var plexData = [
@@ -84,7 +84,7 @@
         }
 
     ];
-    var idLast = parseInt(plexData[plexData.length - 1].id);
+    var idLast   = parseInt(plexData[plexData.length - 1].id);
     /** id to used when creating the next note */
 
     /**
@@ -146,7 +146,7 @@
                     ret = cb(null, JSON.stringify(body, null, '\t'));
                 } catch (e) {
                     res.statusCode = 400;
-                    ret = badRequest(body);
+                    ret            = badRequest(body);
                     console.log("Error = " + body);
                 }
                 //console.log(ret);
@@ -302,7 +302,7 @@
      * @returns  The requested note or 404
      */
     server.get('api/notes', function (req, res, next) {
-        var ret = [];
+        var ret   = [];
         var query = req.query.query;
 
         console.log("Processing GET api/notes");
@@ -396,7 +396,7 @@
             note = req.body;
             idLast++;
             note.id = idLast;
-            ret = note;
+            ret     = note;
             plexData.push(ret);
             saveNotes();
             res.statusCode = 201;
@@ -427,7 +427,7 @@
      */
     server.post('api/data/add/:count', function (req, res, next) {
         var note;
-        var count = req.params.count;
+        var count   = req.params.count;
         var retJson = {
             "jse_shortmsg": count + " Notes added",
             "jse_info"    : {},
@@ -476,6 +476,7 @@
         var ret = plexData.filter(function (node) {
             return node.id == req.params.id;
         })[0];
+
         if (ret === undefined) {
             ret = notFound(res);
         } else {
@@ -522,7 +523,8 @@
      * Return a json error showing a bad request
      *
      * @param body
-     * @returns {{jse_shortmsg: string, jse_info: {}, message: string, statusCode: number, body: {code: string, message: string}, restCode: string}}
+     * @returns {{jse_shortmsg: string, jse_info: {}, message: string, statusCode: number, body: {code: string,
+     *     message: string}, restCode: string}}
      */
     var badRequest = function (body) {
         var retJson = {
@@ -550,7 +552,7 @@
      */
     var notFound = function (res) {
         res.statusCode = 404;
-        var retJson = {
+        var retJson    = {
             "jse_shortmsg": "Note not found",
             "jse_info"    : {},
             "message"     : "Requested note was not found",
@@ -626,7 +628,7 @@
         var noteCnt;
         var noteNum;
         var users = ["Bill", "Todd", "Sarah", "Reid", "Erin", "Ellissa"];
-        var note = {
+        var note  = {
             "id"        : 0,
             "title"     : "",
             "user"      : "",
@@ -638,21 +640,21 @@
         };
 
         //console.log("idLast " + idLast);
-        note.id = ++idLast;
-        note.title = "Title for #" + note.id + " (Random generated)";
-        note.user = users[parseInt(Math.random() * users.length)];
-        note.emailme = Math.random() < .5;
+        note.id       = ++idLast;
+        note.title    = "Title for #" + note.id + " (Random generated)";
+        note.user     = users[parseInt(Math.random() * users.length)];
+        note.emailme  = Math.random() < .5;
         note.priority = parseInt(Math.random() * plexPriorites.length);
         //console.log("note.priority " + note.priority);
-        note.status = parseInt(Math.random() * plexStatuses.length);
-        note.details = loremIpsum();
+        note.status   = parseInt(Math.random() * plexStatuses.length);
+        note.details  = loremIpsum();
 
         // Ensure we have at least 1 issueType.
         noteCnt = Math.max(1, parseInt(Math.random() * plexCategories.length));
         //console.log("noteCnt " + noteCnt);
         for (var j = 0; j < noteCnt; j++) {
             for (var k = 0; k < noteCnt; k++) {
-                noteNum = parseInt(Math.random() * plexData.length);
+                noteNum    = parseInt(Math.random() * plexData.length);
                 var isUsed = note.categories.find(function (node) {
                     //console.log("node " + node);
                     return node == noteNum;
@@ -722,8 +724,8 @@
      * @param len
      * @returns {string}
      */
-     function loremIpsum (start, len) {
-        var MIN = 10;
+    function loremIpsum(start, len) {
+        var MIN           = 10;
         /** The minimum number of characters to return. */
         var loremIpsumTxt = "Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur? Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur, vel illum qui dolorem eum fugiat quo voluptas nulla pariatur?";
 

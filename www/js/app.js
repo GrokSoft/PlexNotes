@@ -207,9 +207,15 @@
      * @description
      * Horizontal & Vertical collapse
      */
-    app.directive('collapseWidthHeight', ['$transition', '$timeout', function ($animation, $timeout) {
+    app.directive('uibCollapseWidthHeight', ['$scope', '$animation', function ($scope, $animation) {
 
+        /*
+        This stop working when I switched to the latest version of ui-bootstrap. I needed to start using uib-collapse, but not sure how to get to the ubi-????? with this javascript.
+
+         */
         return {
+            restrict: 'A',
+
             link: function (scope, element, attrs) {
 
                 var initialAnimSkip = true;
@@ -271,7 +277,7 @@
                     element.addClass('collapse');
                 }
 
-                scope.$watch(attrs.collapseWidthHeight, function (shouldCollapse) {
+                scope.$watch(attrs.uibCollapseWidthHeight, function (shouldCollapse) {
                     if (shouldCollapse) {
                         collapse();
                     } else {
@@ -288,7 +294,7 @@
      * @description
      * Horizontal collapse
      */
-    app.directive('collapseWidth', ['$animate', '$timeout', function ($animate, $timeout) {
+    app.directive('ubiCollapseWidth', ['$scope', '$animate', '$timeout', function ($scope, $animate, $timeout) {
 
         return {
             link: function (scope, element, attrs) {
@@ -424,13 +430,125 @@
         return {
             restrict    : "E",
             templateUrl : "plex-jumbo.html",
-            controller  : function () {
-                // Init the carousel
-                new Carousel('#topCarousel');
+            controller  : function ($scope) {
+                $scope.myInterval = 5000;
+                $scope.noWrapSlides = false;
+                $scope.active = 0;
+                var slides = $scope.slides = [];
+                var currIndex = 0;
+
+                $scope.addSlide = function() {
+                    var newWidth = 600 + slides.length + 1;
+                    slides.push({
+                        image: '//unsplash.it/' + newWidth + '/300',
+                        text: ['Nice image','Awesome photograph','That is so cool','I love that'][slides.length % 4],
+                        id: currIndex++
+                    });
+                };
+
+                $scope.randomize = function() {
+                    var indexes = generateIndexesArray();
+                    assignNewIndexesToSlides(indexes);
+                };
+
+                for (var i = 0; i < 4; i++) {
+                    $scope.addSlide();
+                }
+
+                // Randomize logic below
+
+                function assignNewIndexesToSlides(indexes) {
+                    for (var i = 0, l = slides.length; i < l; i++) {
+                        slides[i].id = indexes.pop();
+                    }
+                }
+
+                function generateIndexesArray() {
+                    var indexes = [];
+                    for (var i = 0; i < currIndex; ++i) {
+                        indexes[i] = i;
+                    }
+                    return shuffle(indexes);
+                }
+
+                // http://stackoverflow.com/questions/962802#962890
+                function shuffle(array) {
+                    var tmp, current, top = array.length;
+
+                    if (top) {
+                        while (--top) {
+                            current = Math.floor(Math.random() * (top + 1));
+                            tmp = array[current];
+                            array[current] = array[top];
+                            array[top] = tmp;
+                        }
+                    }
+
+                    return array;
+                }
             },
             controllerAs: "jumboCtrl"
         };
     });
+
+    /*app.controller('CarouselDemoCtrl', function ($scope) {
+        $scope.myInterval = 5000;
+        $scope.noWrapSlides = false;
+        $scope.active = 0;
+        var slides = $scope.slides = [];
+        var currIndex = 0;
+
+        $scope.addSlide = function() {
+            var newWidth = 600 + slides.length + 1;
+            slides.push({
+                image: '//unsplash.it/' + newWidth + '/300',
+                text: ['Nice image','Awesome photograph','That is so cool','I love that'][slides.length % 4],
+                id: currIndex++
+            });
+        };
+
+        $scope.randomize = function() {
+            var indexes = generateIndexesArray();
+            assignNewIndexesToSlides(indexes);
+        };
+
+        for (var i = 0; i < 4; i++) {
+            $scope.addSlide();
+        }
+
+        // Randomize logic below
+
+        function assignNewIndexesToSlides(indexes) {
+            for (var i = 0, l = slides.length; i < l; i++) {
+                slides[i].id = indexes.pop();
+            }
+        }
+
+        function generateIndexesArray() {
+            var indexes = [];
+            for (var i = 0; i < currIndex; ++i) {
+                indexes[i] = i;
+            }
+            return shuffle(indexes);
+        }
+
+        // http://stackoverflow.com/questions/962802#962890
+        function shuffle(array) {
+            var tmp, current, top = array.length;
+
+            if (top) {
+                while (--top) {
+                    current = Math.floor(Math.random() * (top + 1));
+                    tmp = array[current];
+                    array[current] = array[top];
+                    array[top] = tmp;
+                }
+            }
+
+            return array;
+        }
+    });
+*/
 
     /**
      * Controller NotesController

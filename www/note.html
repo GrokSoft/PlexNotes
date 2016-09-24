@@ -27,8 +27,8 @@
 
     <div id="collapse-note{{note.id}}"
             class="collapse in">
-        <div class="panel-body ">
-            <div class="note-sub-header">
+        <div class="panel-body">
+            <div class=" note-sub-header">
                 <h4 style="border-bottom: solid thin">
                     <span><b>Note#</b> {{note.id}}</span>
 
@@ -61,12 +61,20 @@
                 </h4>
             </div>
 
-            <div class="slow-ease-all"
-                    collapse-width-height="isCollapsedNote"
+            <!--<div class="ease-all horizontal-collapse"
+                    uib-collapse-width-height="isCollapsedNote"
                     get-size>
                 <div id="details+{{note.id}}"
                         class="note-notes bordered text-left"
                         ng-style="{'width':getSizeWidth()}">
+                    &lt;!&ndash;ng-style="{'width':getWidth(this)}"&ndash;&gt;
+                    <b>Details:</b> "{{note.details}}"
+                </div>
+            </div>-->
+            <div class="ease-all"
+                    uib-collapse="isCollapsedNote" >
+                <div id="details+{{note.id}}"
+                        class="note-notes bordered text-left">
                     <!--ng-style="{'width':getWidth(this)}"-->
                     <b>Details:</b> "{{note.details}}"
                 </div>
@@ -80,7 +88,7 @@
                             ng-class="[{'gly-flip-vertical':isCollapsedCat}]"></span>
                 </span>
                 <b>Categories:</b> <br>
-                <div collapse="isCollapsedCat"
+                <div uib-collapse-width-height="isCollapsedCat"
                         get-size>
                     <div class="categories">
                         <div class="category"

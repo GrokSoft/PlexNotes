@@ -2,6 +2,7 @@
 
 <div class="fluid">
     <note id="note{{note.id}}"
-            class="col-lg-4 "
+            class="col-lg-4 "  ng-class="{'clearfix':($index)%3==0}"
             ng-repeat="note in notes()"></note>
+    <br class="clear">
 </div>
