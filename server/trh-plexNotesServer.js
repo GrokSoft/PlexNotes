@@ -24,7 +24,7 @@
     var loglevel = 'info';                                      // logging level
 
     // modules
-    var commandLineArgs = require('command-line-args')
+    var commandLineArgs = require('command-line-args');
     var dStore = require('./datastore.js').Datastore;           // PlexNotes datastore API
     var dsStatic = require('./datastore-static.js');            // always load for priming
     var fs = require('fs');                                     // file system
@@ -263,13 +263,12 @@
      * @returns  The requested note or 404
      */
     server.get('api/notes/:uuid', function (req, res, next) {
-        var ret = [];
         var query = req.params.uuid;
         if (query === undefined) {
+            var ret = utils.badRequest("A uuid key value is required to request a note");
+            res = utils.setResponseHeader(res);
             res.statusCode = 400;
-            ret = utils.badRequest("A uuid key value is required to request a note");
-            utils.setResponseHeader(res);
-            res.json(notes);
+            res.json(ret);
             next();
         } else {
             logger.log('info', "Processing GET api/notes/" + query);
@@ -277,7 +276,7 @@
                 if (notes === undefined || notes.length == 0) {
                     notes = utils.notFound(res);
                 }
-                utils.setResponseHeader(res);
+                res = utils.setResponseHeader(res);
                 res.json(notes);
                 next();
             });

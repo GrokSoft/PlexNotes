@@ -11,7 +11,6 @@
  * @constructor
  */
 function Utils() {
-    var placeholder;
 
     //-----------------------------------------------------------------------------------------------------------------
     /**
@@ -46,7 +45,7 @@ function Utils() {
      *
      * @param count
      * @param dStore
-     * @returns count
+     * @returns cnt
      */
     var createRandomNotes = function (count, dStore) {
         var cats = [];
@@ -85,22 +84,20 @@ function Utils() {
                             var xu = parseInt(Math.random() * usrs.length);
                             var xv = parseInt(Math.random() * svrs.length);
 
-                            console.log(xc + " " + xp + " " + xs + " xu " + xu + " xv " + xv);
-
                             var note = {
                                 uuid: getUUID(),
-                                fk_categories_uuid: cats[xc],
-                                fk_priorities_uuid: pris[xp],
-                                fk_statuses_uuid: stas[xs],
-                                fk_users_uuid: usrs[xu],
-                                fk_modifier_users_uuid: usrs[xu],
+                                fk_categories_uuid: cats[xc].uuid,
+                                fk_priorities_uuid: pris[xp].uuid,
+                                fk_statuses_uuid: stas[xs].uuid,
+                                fk_users_uuid: usrs[xu].uuid,
+                                fk_modifier_users_uuid: usrs[xu].uuid,
                                 plex_server_uuid: svrs[xv],
                                 created_date: now,
                                 modified_date: now,
                                 last_utc: now,
                                 title: "Title for #" + i + " (randomly generated)",
                                 details: loremIpsum(),
-                                opt_in: Math.random() < .5
+                                opt_in: Math.round(Math.random() < .5)
                             };
 
 
@@ -117,7 +114,7 @@ function Utils() {
                             );
 
 
-                            console.log(xc + " " + xp + " " + xs + " xu " + xu + " xv " + xv);
+                            console.log(xc + " " + xp + " " + xs + " " + xu + " " + xv);
                         }
                     }, function (xhrObj) {
                             var t = xhrObj.toString();

@@ -23,7 +23,8 @@ function Datastore() {
     var dbPoolMax = 5;
     var dbPoolIdle = 10000;
     var dbDialect = undefined;
-    var dStore = undefined;
+    var sqldb = undefined;
+    var me = this;
     var logger = undefined;
 
     var Categories;
@@ -52,18 +53,18 @@ function Datastore() {
         // Setup the datastore interface
         // if (aDbType == 0) {
         //     dbDialect = 'static';
-        //     dStore = dsStatic;
+        //     sqldb = dsStatic;
         //     logger.log('info', 'dbType set: static');
         //
         // } else if (aDbType == 1) {
         //     dbDialect = 'json';
-        //     dStore = require('./datastore-json.js');
-        //     dStore.setDataFile(aDbName);
+        //     sqldb = require('./datastore-json.js');
+        //     sqldb.setDataFile(aDbName);
         //     logger.log('info', 'dbType set: JSON');
         //
         // } else if (aDbType == 2) {
         dbDialect = 'sqlite';
-        dStore = new Sequelize(dbName, 'plexnotes', 'plexnotes', {
+        sqldb = new Sequelize(dbName, 'plexnotes', 'plexnotes', {
             host: dbHost,
             dialect: dbDialect,
             define: {
@@ -89,7 +90,7 @@ function Datastore() {
         //
 
         //-------------------------------------------------------------------------------------------- Categories ---------
-        Categories = dStore.define('categories', {
+        Categories = sqldb.define('categories', {
             uuid: {
                 type: Sequelize.STRING(36),
                 primaryKey: true,
@@ -181,7 +182,7 @@ function Datastore() {
         });
 
         //-------------------------------------------------------------------------------------------- Priorities ---------
-        Priorities = dStore.define('priorities', {
+        Priorities = sqldb.define('priorities', {
             uuid: {
                 type: Sequelize.STRING(36),
                 primaryKey: true,
@@ -233,7 +234,7 @@ function Datastore() {
         });
 
         //-------------------------------------------------------------------------------------------- Statuses -----------
-        Statuses = dStore.define('statuses', {
+        Statuses = sqldb.define('statuses', {
             uuid: {
                 type: Sequelize.STRING(36),
                 primaryKey: true,
@@ -300,7 +301,7 @@ function Datastore() {
         });
 
         //-------------------------------------------------------------------------------------------- Users --------------
-        Users = dStore.define('users', {
+        Users = sqldb.define('users', {
             uuid: {
                 type: Sequelize.STRING(36),
                 primaryKey: true,
@@ -335,7 +336,7 @@ function Datastore() {
         Users.sync();
 
         //-------------------------------------------------------------------------------------------- Notes --------------
-        Notes = dStore.define('notes', {
+        Notes = sqldb.define('notes', {
             uuid: {
                 type: Sequelize.STRING(36),
                 primaryKey: true,
@@ -499,16 +500,16 @@ function Datastore() {
     var getNotes = function (src, query) {
         var ret = [];
         var clause = undefined;
-        if (src == dStore.SRC_URL) {                    // from URL
+        if (src == SRC_URL) {                    // from URL
             clause = {
                 where: {
                     details: {$contains: query}
                 }
             };
         }
-        else if (src == dStore.SRC_BODY) {              // from body
+        else if (src == SRC_BODY) {              // from body
             clause = query;
-        } else if (src == dStore.SRC_UUID) {            // by UUID
+        } else if (src == SRC_UUID) {            // by UUID
             clause = {
                 where: {
                     uuid: query
@@ -603,16 +604,16 @@ function Datastore() {
     var getUsers = function (src, query) {
         var ret = [];
         var clause = undefined;
-        if (src == dStore.SRC_URL) {                    // from URL
+        if (src == SRC_URL) {                    // from URL
             clause = {
                 where: {
                     details: {$contains: query}
                 }
             };
         }
-        else if (src == dStore.SRC_BODY) {              // from body
+        else if (src == SRC_BODY) {              // from body
             clause = query;
-        } else if (src == dStore.SRC_UUID) {            // by UUID
+        } else if (src == SRC_UUID) {            // by UUID
             clause = {
                 where: {
                     uuid: query
