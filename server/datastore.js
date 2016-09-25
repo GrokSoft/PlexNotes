@@ -6,6 +6,9 @@
 
 /**
  * PlexNotes datastore interface - singleton
+ *
+ * @returns {{SRC_UNDEFINED: number, SRC_URL: number, SRC_BODY: number, SRC_UUID: number, init: init, deleteNote: deleteNote, deleteUser: deleteUser, getCategories: getCategories, getPriorities: getPriorities, getNotes: getNotes, getStatuses: getStatuses, getUsers: getUsers, saveNote: saveNote, saveUser: saveUser}}
+ * @constructor
  */
 function Datastore() {
     var Sequelize = require('sequelize');                       // datastore ORM
@@ -430,9 +433,33 @@ function Datastore() {
 
     // ----------------------------------------------------------------------------------------------------------------
     /**
+     * @name deleteUser
+     *
+     * @description
+     * Deletes a user
+     */
+    var deleteUser = function (theUuid) {
+        var prom;
+        var clause = {
+            where: {
+                uuid: theUuid
+            }
+        };
+        prom = Users.destroy(clause).then(function (count) {
+            return count;
+        }, function (xhrObj) {
+            var t = xhrObj.toString();
+            Error("deleteUser failure: " + t);
+        });
+        return prom;
+    };
+
+    // ----------------------------------------------------------------------------------------------------------------
+    /**
      * @name getCategories
      *
-     * @description Returns an array of categories records
+     * @description
+     * Returns an array of categories records
      *
      * @returns {uuid, value, last_utc}
      */
@@ -457,7 +484,8 @@ function Datastore() {
     /**
      * @name getNotes
      *
-     * @description Returns an array of notes records. Where src == undefined: 0, URL: 1, BODY: 2, by UUID: 3.
+     * @description
+     * Returns an array of notes records. Where src == undefined: 0, URL: 1, BODY: 2, by UUID: 3.
      * If src is URL the value is formatted in to an SQL WHERE clause. If src is BODY no formatting is
      * done and the value is used as-is. NOTE that the clause MUST be formatted as required by the
      * Sequelize module, see http://docs.sequelizejs.com/en/v3/docs/querying/#where. An empty query
@@ -471,16 +499,16 @@ function Datastore() {
     var getNotes = function (src, query) {
         var ret = [];
         var clause = undefined;
-        if (src == 1) {                             // from URL
+        if (src == dStore.SRC_URL) {                    // from URL
             clause = {
                 where: {
                     details: {$contains: query}
                 }
             };
         }
-        else if (src == 2) {                        // from body
+        else if (src == dStore.SRC_BODY) {              // from body
             clause = query;
-        } else if (src == 3) {                      // by UUID
+        } else if (src == dStore.SRC_UUID) {            // by UUID
             clause = {
                 where: {
                     uuid: query
@@ -510,7 +538,8 @@ function Datastore() {
     /**
      * @name getPriorities
      *
-     * @description Returns an array of priorities records
+     * @description
+     * Returns an array of priorities records
      *
      * @returns {uuid, value, last_utc}
      */
@@ -535,7 +564,8 @@ function Datastore() {
     /**
      * @name getStatuses
      *
-     * @description Returns an array of status records
+     * @description
+     * Returns an array of status records
      *
      * @returns {uuid, value, last_utc}
      */
@@ -560,24 +590,51 @@ function Datastore() {
     /**
      * @name getUsers
      *
-     * @description Returns an array of users records
+     * Returns an array of user records. Where src == undefined: 0, URL: 1, BODY: 2, by UUID: 3.
+     * If src is URL the value is formatted in to an SQL WHERE clause. If src is BODY no formatting is
+     * done and the value is used as-is. NOTE that the clause MUST be formatted as required by the
+     * Sequelize module, see http://docs.sequelizejs.com/en/v3/docs/querying/#where. An empty query
+     * will return ALL records.
      *
-     * @returns {uuid, value, last_utc}
+     * @param src == undefined: 0, URL: 1, BODY: 2, by UUID: 3
+     * @param query String of the query
+     * @returns {Array}
      */
-    var getUsers = function () {
+    var getUsers = function (src, query) {
         var ret = [];
-        ret = Users.all().then(function (users) {
-                var results = [];
-                for (var i = 0; i < users.length; ++i) {
-                    results[i] = users[i].dataValues;
+        var clause = undefined;
+        if (src == dStore.SRC_URL) {                    // from URL
+            clause = {
+                where: {
+                    details: {$contains: query}
                 }
-                //resolve(results);
-                return results;
-            }, function (xhrObj) {
-                var t = xhrObj.toString();
-                Error("getUsers failure: " + t);
+            };
+        }
+        else if (src == dStore.SRC_BODY) {              // from body
+            clause = query;
+        } else if (src == dStore.SRC_UUID) {            // by UUID
+            clause = {
+                where: {
+                    uuid: query
+                }
+            };
+        }
+        if (clause == undefined) {
+            clause = {
+                where: {
+                    uuid: {$ne: ""}
+                }
+            };
+        }
+
+        ret = Users.findAll(clause).then(function (users) {
+            var results = [];
+            for (var i = 0; i < users.length; ++i) {
+                results[i] = users[i].dataValues;
             }
-        );
+            return results;
+        });
+
         return ret;
     };
 
@@ -586,15 +643,41 @@ function Datastore() {
      * @name saveNote
      *
      * @description
-     * Save the notes to a file
+     * Save a note to the datastore
+     *
+     * @param note
+     * @returns {*}
      */
     var saveNote = function (note) {
         var prom;
+        note.last_utc = Date.now();
         prom = Notes.upsert(note).then(function (wasCreated) {
             return note;
         }, function (xhrObj) {
             var t = xhrObj.toString();
             Error("saveNote failure: " + t);
+        });
+        return prom;
+    };
+
+    // ----------------------------------------------------------------------------------------------------------------
+    /**
+     * @name saveUser
+     *
+     * @description
+     * Save a single user record
+     *
+     * @param user
+     * @returns {*}
+     */
+    var saveUser = function (user) {
+        var prom;
+        user.last_utc = Date.now();
+        prom = Notes.upsert(user).then(function (wasCreated) {
+            return user;
+        }, function (xhrObj) {
+            var t = xhrObj.toString();
+            Error("saveUser failure: " + t);
         });
         return prom;
     };
@@ -608,12 +691,14 @@ function Datastore() {
         SRC_UUID: SRC_UUID,
         init: init,
         deleteNote: deleteNote,
+        deleteUser: deleteUser,
         getCategories: getCategories,
         getPriorities: getPriorities,
+        getNotes: getNotes,
         getStatuses: getStatuses,
         getUsers: getUsers,
         saveNote: saveNote,
-        getNotes: getNotes
+        saveUser: saveUser
     };
 
 }

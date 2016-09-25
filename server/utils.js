@@ -5,11 +5,13 @@
 'use strict';
 
 /**
- * Utility functions
+ * Utilities
+ *
+ * @returns {{badRequest: badRequest, createRandomNotes: createRandomNotes, getNow: getNow, getUUID: getUUID, loremIpsum: loremIpsum, notFound: notFound, ReturnObject: ReturnObject, setResponseHeader: setResponseHeader}}
+ * @constructor
  */
-
-
 function Utils() {
+    var placeholder;
 
     //-----------------------------------------------------------------------------------------------------------------
     /**
@@ -38,15 +40,22 @@ function Utils() {
 
     // ----------------------------------------------------------------------------------------------------------------
     /**
-     * @name createRandomNote
+     * @name createRandomNotes
+     *
+     * @description Generate any number of random notes for testing.
+     *
      * @param count
      * @param dStore
-     * @returns {{uuid: *, fk_categories_uuid: string, fk_priorities_uuid: string, fk_statuses_uuid: string, fk_users_uuid: string, fk_modifier_users_uuid: string, plex_server_uuid: string, created_date: *, modified_date: *, last_utc: *, title: string, details: string, opt_in: boolean}}
+     * @returns count
      */
     var createRandomNotes = function (count, dStore) {
         var cats = [];
         var pris = [];
         var stas = [];
+        var usrs = [];
+        var svrs = ['802221a5-1383-4ea4-b60e-1b5838a546e9', 'c90a407a-c12b-4046-a5c2-9bdeacef8036'];
+        var cnt = 0;
+
 
         cats = dStore.getCategories().then(function (cats) {
             if (cats === undefined || cats.length == 0) {
@@ -63,37 +72,177 @@ function Utils() {
                         return 0;
                     }
 
-                    for (var i = 0; i < count; ++i) {
-                        var now = getNow();
-                        var xc = parseInt(Math.random() * cats.length);
-                        var xp = parseInt(Math.random() * pris.length);
-                        var xs = parseInt(Math.random() * stas.length);
+                    usrs = dStore.getUsers().then(function (usrs) {
+                        if (usrs === undefined || usrs.length == 0) {
+                            usrs = createTestUsers(dStore);                    // generate fake test users
+                        }
 
-                        var note = {
-                            uuid: getUUID(),
-                            fk_categories_uuid: cats[xc],
-                            fk_priorities_uuid: pris[xp],
-                            fk_statuses_uuid: stas[xs],
-                            fk_users_uuid: 'ef97cacf-f75e-4b22-9a7b-ad3d2ed95ec3',
-                            fk_modifier_users_uuid: 'ef97cacf-f75e-4b22-9a7b-ad3d2ed95ec3',
-                            plex_server_uuid: '955dec84-bea6-417f-98b6-dcf8308b002a',
-                            created_date: now,
-                            modified_date: now,
-                            last_utc: now,
-                            title: "Title for #" + i + " (randomly generated)",
-                            details: loremIpsum(),
-                            opt_in: Math.random() < .5
-                        };
+                        for (var i = 0; i < count; ++i) {
+                            var now = getNow();
+                            var xc = parseInt(Math.random() * cats.length);
+                            var xp = parseInt(Math.random() * pris.length);
+                            var xs = parseInt(Math.random() * stas.length);
+                            var xu = parseInt(Math.random() * usrs.length);
+                            var xv = parseInt(Math.random() * svrs.length);
 
-                        console.log(xc + " " + xp + " " + xs);
+                            console.log(xc + " " + xp + " " + xs + " xu " + xu + " xv " + xv);
+
+                            var note = {
+                                uuid: getUUID(),
+                                fk_categories_uuid: cats[xc],
+                                fk_priorities_uuid: pris[xp],
+                                fk_statuses_uuid: stas[xs],
+                                fk_users_uuid: usrs[xu],
+                                fk_modifier_users_uuid: usrs[xu],
+                                plex_server_uuid: svrs[xv],
+                                created_date: now,
+                                modified_date: now,
+                                last_utc: now,
+                                title: "Title for #" + i + " (randomly generated)",
+                                details: loremIpsum(),
+                                opt_in: Math.random() < .5
+                            };
+
+
+                            note = dStore.saveNote(note).then(function (fullNote) {
+                                    if (fullNote === undefined || fullNote.length == 0) {
+                                        return null;
+                                    }
+                                    ++cnt;
+                                },
+                                function (xhrObj) {
+                                    var t = xhrObj.toString();
+                                    Error(utils.ReturnObject(201, "Poar", "createRandomNotes failure: ", t));
+                                }
+                            );
+
+
+                            console.log(xc + " " + xp + " " + xs + " xu " + xu + " xv " + xv);
+                        }
+                    }, function (xhrObj) {
+                            var t = xhrObj.toString();
+                            Error("createRandomNotes failure 4: " + t);
+                        }
+                    );
+                }, function (xhrObj) {
+                        var t = xhrObj.toString();
+                        Error("createRandomNotes failure 3: " + t);
                     }
-                });
-            });
-        });
+                );
+            }, function (xhrObj) {
+                    var t = xhrObj.toString();
+                    Error("createRandomNotes failure 2: " + t);
+                }
+            );
+        }, function (xhrObj) {
+                var t = xhrObj.toString();
+                Error("createRandomNotes failure 1: " + t);
+            }
+        );
 
+        return cnt;
+    };
 
-        //console.log("createNote = " + JSON.stringify(note));
-        return count;
+    // ----------------------------------------------------------------------------------------------------------------
+    /**
+     * @name create several test users
+     *
+     * @description
+     * For createRandomNotes() when generating test data in an empty database.  Creates fake users in the datastore.
+     *
+     * @param dStore
+     */
+    var createTestUsers = function (dStore) {
+
+        // make a user
+        var u = {
+            uuid: 'f430cdbb-f55b-435a-9818-04bd0c8d82d5',
+            plex_user_id: '4b0d3c02-69cf-4df7-9b1d-4c837ab2629b',
+            last_utc: getNow(),
+            friendly_name: 'Bill Gray',
+            email: 'bill@somewhere.com',
+            opt_in: 1,
+            role: 'Administrator'
+        };
+        var ret = dStore.saveUser(u).then(function (fullUser) {
+
+                // make a user
+                var u = {
+                    uuid: '7194caf4-8735-4a9e-8554-6a704bf97b48',
+                    plex_user_id: '4ce92bc6-7464-4c31-8f74-1a00b194df11',
+                    last_utc: getNow(),
+                    friendly_name: 'Todd Hill',
+                    email: 'todd@somewhere.com',
+                    opt_in: 1,
+                    role: 'Administrator'
+                };
+                var ret = dStore.saveUser(u).then(function (fullUser) {
+
+                        // make a user
+                        var u = {
+                            uuid: '9f1ecfcc-c751-4050-a4a3-a47a1c62cd27',
+                            plex_user_id: '87d489ea-f5d7-44d7-99c4-3a183c9cac47',
+                            last_utc: getNow(),
+                            friendly_name: 'Suzy User',
+                            email: 'suzy@somewhere.com',
+                            opt_in: 0,
+                            role: 'User'
+                        };
+                        var ret = dStore.saveUser(u).then(function (fullUser) {
+
+                                // make a user
+                                var u = {
+                                    uuid: '9f0305c7-0d40-480e-bdc5-813c6febb5e2',
+                                    plex_user_id: 'd380a0fb-736d-412e-b440-2decb8a26865',
+                                    last_utc: getNow(),
+                                    friendly_name: 'John Doe',
+                                    email: 'john@somewhere.com',
+                                    opt_in: 1,
+                                    role: 'User'
+                                };
+                                var ret = dStore.saveUser(u).then(function (fullUser) {
+
+                                        // return the new users from the datastore
+                                        var usrs = dStore.getUsers().then(function (usrs) {
+                                            if (usrs === undefined || usrs.length == 0) {
+                                                return null;
+                                            }
+                                            return usrs;
+                                        },
+                                            function (xhrObj) {
+                                                var t = xhrObj.toString();
+                                                Error(utils.ReturnObject(201, "Get", "createTestUsers failure: ", t));
+                                            }
+                                        );
+
+                                    },
+                                    function (xhrObj) {
+                                        var t = xhrObj.toString();
+                                        Error(utils.ReturnObject(201, "Create", "acreateTestUsers failure: ", t));
+                                    }
+                                );
+
+                            },
+                            function (xhrObj) {
+                                var t = xhrObj.toString();
+                                Error(utils.ReturnObject(201, "Create", "createTestUsers failure: ", t));
+                            }
+                        );
+
+                    },
+                    function (xhrObj) {
+                        var t = xhrObj.toString();
+                        Error(utils.ReturnObject(201, "Create", "createTestUsers failure: ", t));
+                    }
+                );
+
+            },
+            function (xhrObj) {
+                var t = xhrObj.toString();
+                Error(utils.ReturnObject(201, "Create", "createTestUsersfailure: ", t));
+            }
+        );
+
     };
 
     // ----------------------------------------------------------------------------------------------------------------
@@ -237,6 +386,7 @@ function Utils() {
     return {
         badRequest: badRequest,
         createRandomNotes: createRandomNotes,
+        createTestUsers: createTestUsers,
         getNow: getNow,
         getUUID: getUUID,
         loremIpsum: loremIpsum,

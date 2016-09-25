@@ -11,7 +11,6 @@
  */
 (function () {
 
-    //=================================================================================================================
     // Initialization
 
     var LOGFILE = '../logs/plex-notes.log';                    // relative to www directory
@@ -63,9 +62,17 @@
     }
 
     if (options.generate > 0) {
+        var cnt;
         logger.log('info', 'Generate ' + options.generate + ' faux notes');
-        utils.createRandomNotes(options.generate, dStore);
-        return 0;
+        cnt = utils.createRandomNotes(options.generate, dStore);
+//        cnt = utils.createRandomNotes(options.generate, dStore).then(function (cnt) {
+            console.log("Created " + cnt + " random notes");
+//            return 0;
+//        }, function (xhrObj) {
+//                var t = xhrObj.toString();
+//                Error("createRandomNotes failure 0: " + t);
+//            }
+//        );
     }
 
     // Create the restify server
@@ -122,7 +129,7 @@
 
 
     //=================================================================================================================
-    // REST data routes
+    // GET data                                                                                                GET data
     //
 
     //-----------------------------------------------------------------------------------------------------------------
@@ -130,7 +137,7 @@
      * @name get api/data/categories
      *
      * @description
-     * Get the PlexNotes categories
+     * Get all PlexNotes categories
      *
      * @param req   The Request
      * @param res   The Response
@@ -155,7 +162,7 @@
      * @name get api/data/priorities
      *
      * @description
-     * Get the PlexNotes priorities
+     * Get all PlexNotes priorities
      *
      * @param req   The Request
      * @param res   The Response
@@ -180,7 +187,7 @@
      * @name get api/data/statuses
      *
      * @description
-     * Get the PlexNotes statuses
+     * Get all PlexNotes statuses
      *
      * @param req   The Request
      * @param res   The Response
@@ -202,7 +209,7 @@
 
 
     //=================================================================================================================
-    // REST api routes
+    // GET api                                                                                                  GET api
     //
 
     //-----------------------------------------------------------------------------------------------------------------
@@ -247,7 +254,7 @@
     /**
      * @name get api/notes/{uuid}
      *
-     * @description Get a notes by uuid. The uuid request must be in the URL.
+     * @description Get a note by uuid. The uuid request must be in the URL.
      *
      * @param req   The Request
      * @param res   The Response
@@ -260,7 +267,7 @@
         var query = req.params.uuid;
         if (query === undefined) {
             res.statusCode = 400;
-            ret = utils.badRequest("A uuid key value is required for this request");
+            ret = utils.badRequest("A uuid key value is required to request a note");
             utils.setResponseHeader(res);
             res.json(notes);
             next();
@@ -299,9 +306,81 @@
         next();
     });
 
+    //-----------------------------------------------------------------------------------------------------------------
+    /**
+     * @name get api/users
+     * get api/users?query=name
+     *
+     * @description Get all users with optional query parameter. If query is in URL a WHERE clause is built with
+     * that value. If the query is in the BODY it is taken literally without changes. Note that a BODY query is
+     * a WHERE clause that must formatted as required by the Sequelize module,
+     * see http://docs.sequelizejs.com/en/v3/docs/querying/#where. An empty query will return ALL records.
+     *
+     * @param req   The Request
+     * @param res   The Response
+     * @param next  The Next route in the chain
+     *
+     * @returns  The requested users or 404
+     */
+    server.get('api/users', function (req, res, next) {
+        var ret = [];
+        var query = undefined;
+        var src = dStore.SRC_UNDEFINED;
+        if (req.query.query != undefined) {
+            src = dStore.SRC_URL;
+            query = req.query.query;
+        } else if (req.body != undefined) {
+            src = dStore.SRC_BODY;
+            query = req.body;
+        }
+        logger.log('info', "Processing GET api/users");
+        dStore.getUsers(src, query).then(function (users) {
+            if (users == undefined || users.length == 0) {
+                ret = utils.notFound(res);
+            }
+            res = utils.setResponseHeader(res);
+            res.json(users);
+            next();
+        })
+    });
+
+    //-----------------------------------------------------------------------------------------------------------------
+    /**
+     * @name get api/user/{uuid}
+     *
+     * @description Get a user by uuid. The uuid request must be in the URL.
+     *
+     * @param req   The Request
+     * @param res   The Response
+     * @param next  The Next route in the chain
+     *
+     * @returns  The requested user or 404
+     */
+    server.get('api/user/:uuid', function (req, res, next) {
+        var ret = [];
+        var query = req.params.uuid;
+        if (query === undefined) {
+            res.statusCode = 400;
+            ret = utils.badRequest("A uuid key value is required to request a user");
+            res = utils.setResponseHeader(res);
+            res.json(ret);
+            next();
+        } else {
+            logger.log('info', "Processing GET api/user/" + query);
+            dStore.getNotes(dStore.SRC_UUID, query).then(function (user) {
+                if (user === undefined || user.length == 0) {
+                    user = utils.notFound(res);
+                }
+                res = utils.setResponseHeader(res);
+                res.json(user);
+                next();
+            });
+        }
+    });
+
 
     //=================================================================================================================
-    // POST
+    // POST                                                                                                       POST
     //
 
     //-----------------------------------------------------------------------------------------------------------------
@@ -317,6 +396,7 @@
      * @returns  The new note, or 400 if the note could not be created.
      */
     server.post('api/notes', function (req, res, next) {
+        var note = undefined;
         var ret;
 
         logger.log('info', "Processing POST api/notes");
@@ -324,13 +404,8 @@
         // Check the body for valid data
         try {
             // Handle the body coming in as a JSON object or string.
-            var note;
-            /* = typeof req.body !== "string"
-             ? req.body.toString()
-             : JSON.parse(req.body).body;*/
             note = req.body;
             note.uuid = utils.getUUID();
-            note.last_utc = Date.now();
             ret = dStore.saveNote(note).then(function (fullNote) {
                     return fullNote;
                 },
@@ -344,6 +419,48 @@
         catch (e) {
             logger.log('error', e);
             ret = utils.badRequest(note);
+        }
+        utils.setResponseHeader(res);
+        res.json(ret);
+        next();
+    });
+
+    //-----------------------------------------------------------------------------------------------------------------
+    /**
+     * @name post api/user
+     *
+     * @description Save a user. The user JSON is in body. A new uuid will be generated.
+     *
+     * @param req   The Request
+     * @param res   The Response
+     * @param next  The Next route in the chain
+     *
+     * @returns  The new user, or 400 if the user could not be created.
+     */
+    server.post('api/user', function (req, res, next) {
+        var ret;
+        var user = undefined;
+
+        logger.log('info', "Processing POST api/user");
+
+        // Check the body for valid data
+        try {
+            // Handle the body coming in as a JSON object or string.
+            user = req.body;
+            user.uuid = utils.getUUID();
+            ret = dStore.saveNote(user).then(function (fullUser) {
+                    return fullUser;
+                },
+                function (xhrObj) {
+                    var t = xhrObj.toString();
+                    Error(utils.ReturnObject(201, "Created", "api/user failure: ", t));
+                }
+            );
+            res.statusCode = 201;
+        }
+        catch (e) {
+            logger.log('error', e);
+            ret = utils.badRequest(user);
         }
         utils.setResponseHeader(res);
         res.json(ret);
@@ -395,7 +512,102 @@
 
 
     //=================================================================================================================
-    // DELETE
+    // PUT                                                                                                          PUT
+    //
+
+    //-----------------------------------------------------------------------------------------------------------------
+    /**
+     * @name put api/notes
+     *
+     * @description
+     * Update a note. The note JSON is in body. The existing uuid is not changed.  If the uuid is
+     * undefined or null a new uuid will be generated.
+     *
+     * @param req   The Request
+     * @param res   The Response
+     * @param next  The Next route in the chain
+     *
+     * @returns  The updated note, or 400 if the note could not be created.
+     */
+    server.put('api/notes', function (req, res, next) {
+        var note = undefined;
+        var ret;
+
+        logger.log('info', "Processing PUT api/notes");
+
+        // Check the body for valid data
+        try {
+            // Handle the body coming in as a JSON object or string.
+            note = req.body;
+            if (note.uuid === undefined || note.uuid == null || note.uuid.length() < 1) {
+                note.uuid = utils.getUUID();
+            }
+            ret = dStore.saveNote(note).then(function (fullNote) {
+                    return fullNote;
+                },
+                function (xhrObj) {
+                    var t = xhrObj.toString();
+                    Error(utils.ReturnObject(201, "Updated", "api/notes failure: ", t));
+                }
+            );
+            res.statusCode = 201;
+        }
+        catch (e) {
+            logger.log('error', e);
+            ret = utils.badRequest(note);
+        }
+        utils.setResponseHeader(res);
+        res.json(ret);
+        next();
+    });
+
+    //-----------------------------------------------------------------------------------------------------------------
+    /**
+     * @name put api/user
+     *
+     * @description Update a user. The user JSON is in body. The existing uuid is not changed. If the uuid is
+     * undefined or null a new uuid will be generated.
+     *
+     * @param req   The Request
+     * @param res   The Response
+     * @param next  The Next route in the chain
+     *
+     * @returns  The updated user, or 400 if the user could not be created.
+     */
+    server.put('api/user', function (req, res, next) {
+        var ret;
+        var user = undefined;
+
+        logger.log('info', "Processing PUT api/user");
+
+        // Check the body for valid data
+        try {
+            // Handle the body coming in as a JSON object or string.
+            user = req.body;
+            if (user.uuid === undefined || user.uuid == null || user.uuid.length() < 1) {
+                user.uuid = utils.getUUID();
+            }
+            ret = dStore.saveNote(user).then(function (fullUser) {
+                    return fullUser;
+                },
+                function (xhrObj) {
+                    var t = xhrObj.toString();
+                    Error(utils.ReturnObject(201, "Updated", "api/user failure: ", t));
+                }
+            );
+            res.statusCode = 201;
+        }
+        catch (e) {
+            logger.log('error', e);
+            ret = utils.badRequest(user);
+        }
+        utils.setResponseHeader(res);
+        res.json(ret);
+        next();
+    });
+
+    //=================================================================================================================
+    // DELETE                                                                                                    DELETE
     //
 
     //-----------------------------------------------------------------------------------------------------------------
@@ -415,13 +627,47 @@
         var ret = [];
         var uuid = req.params.uuid;
         if (uuid === undefined || uuid.length < 1) {
-            ret = utils.badRequest("A uuid key value is required for this request");
+            ret = utils.badRequest("A uuid key value is required remove a note");
             utils.setResponseHeader(res);
             res.json(ret);
             next();
         } else {
-            logger.log('info', "Processing DELETE api/notes/:id" + req.params.id);
+            logger.log('info', "Processing DELETE api/notes/:id" + uuid);
             dStore.deleteNote(uuid).then(function (count) {
+                if (count === undefined || count < 1) {
+                    ret = utils.notFound(res);
+                }
+                utils.setResponseHeader(res);
+                res.json(ret);
+                next();
+            });
+        }
+    });
+
+    //-----------------------------------------------------------------------------------------------------------------
+    /**
+     * @name delete api/user/{uuid}
+     *
+     * @description
+     * Delete a user by uuid
+     *
+     * @param req   The Request
+     * @param res   The Response
+     * @param next  The Next route in the chain
+     *
+     * @returns  The requested note or 404
+     */
+    server.del('api/user/:id', function (req, res, next) {
+        var ret = [];
+        var uuid = req.params.uuid;
+        if (uuid === undefined || uuid.length < 1) {
+            ret = utils.badRequest("A uuid key value is required to remove a user");
+            utils.setResponseHeader(res);
+            res.json(ret);
+            next();
+        } else {
+            logger.log('info', "Processing DELETE api/user/:id" + uuid);
+            dStore.deleteUser(uuid).then(function (count) {
                 if (count === undefined || count < 1) {
                     ret = utils.notFound(res);
                 }
