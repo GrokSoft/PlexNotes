@@ -1095,7 +1095,7 @@
             controllerAs: "categoriesCtrl"
         };
     });
-    
+
 
     // Misc helper functions
 
