@@ -214,9 +214,7 @@
 
          */
         return {
-            restrict: 'E',
-            restrict: 'A',
-            restrict: 'C',
+            restrict: 'EAC',
 
             link: function (scope, element, attrs) {
 
@@ -657,6 +655,7 @@
                 element.addClass('grow-md');
             }
         };
+
         /**
          * @name deleteNote
          *
@@ -685,10 +684,22 @@
             });
         };
 
+        $scope.toggleAllNotesCollapse = function () {
+
+            _notes.forEach(function (note) {
+                var id = "note"+note.id;
+                var elem = document.querySelector('#' + id);
+                elem.isCollapsedNote = !elem.isCollapsedNote;
+            })
+        };
+
         //
         // Initialize collapse defaults
         //
         $scope.isCollapsedNotes = false;
+        $scope.isCollapsedNotesAll = false;
+        $scope.isCollapsedNote = true;
+        $scope.isCollapsedDetails = false;
         $scope.isCollapsedHorizontal = false;
         $scope.isCollapsedList = false;
         $scope.isCollapsedCat = false;
@@ -1064,6 +1075,7 @@
         };
     });
 
+
     /**
      * Directive categories
      *
@@ -1083,6 +1095,7 @@
             controllerAs: "categoriesCtrl"
         };
     });
+    
 
     // Misc helper functions
 

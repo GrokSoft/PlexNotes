@@ -14,10 +14,7 @@
     </content>
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="node-DefinitelyTyped" level="application" />
-    <orderEntry type="library" name="restify-DefinitelyTyped" level="application" />
-    <orderEntry type="library" name="angular-ui-bootstrap-DefinitelyTyped" level="application" />
-    <orderEntry type="library" name="angularjs-DefinitelyTyped" level="application" />
-    <orderEntry type="library" name="bootstrap-DefinitelyTyped" level="application" />
     <orderEntry type="library" name="jasmine" level="application" />
+    <orderEntry type="library" name="Jasmine" level="application" />
   </component>
 </module>

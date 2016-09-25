@@ -14,6 +14,14 @@
                 title="Click to Toggle Collapse state of note titles">
         </span>-->
 
+        <span class="grow badge"
+                ng-click="isCollapsedNote = !isCollapsedNote"
+                title="Click to Toggle Collapse state of note">
+            <span class="glyphicon glyphicon-chevron-up ease-all"
+                    ng-class="[{'gly-rotate-180':isCollapsedNote}]"></span>
+            <!--<span style="font-size: x-large">Click to Toggle Collapse of all notes</span>-->
+        </span>
+
         <a class="glyphicon glyphicon-zoom-in"
                 style="color: #eeeeee"
                 ng-click="zoom('note'+note.id, $event)"
@@ -25,8 +33,8 @@
             title="Click this to delete the note."></a>
     </h4>
 
-    <div id="collapse-note{{note.id}}"
-            class="collapse in">
+    <div id="collapse-note{{note.id}}" class="ease-all"
+            uib-collapse="isCollapsedNote"  >
         <div class="panel-body">
             <div class=" note-sub-header">
                 <h4 style="border-bottom: solid thin">
@@ -44,11 +52,11 @@
                         style="height: 18px; margin-left: -8px">
 
                     <span class="grow badge"
-                            ng-click="isCollapsedNote = !isCollapsedNote"
+                            ng-click="isCollapsedDetails = !isCollapsedDetails"
                             title="Click to Toggle Collapse state of note titles">
                         <span id="chevron-note-titles"
                                 class="glyphicon glyphicon-chevron-up ease-all"
-                                ng-class="[{'gly-rotate-180':isCollapsedNote}]"></span>
+                                ng-class="[{'gly-rotate-180':isCollapsedDetails}]"></span>
                         <!--<span style="font-size: x-large">Click to Toggle Collapse of all notes</span>-->
                     </span>
                     <span><b>User:</b> {{note.user}}
@@ -62,7 +70,7 @@
             </div>
 
             <!--<div class="ease-all horizontal-collapse"
-                    uib-collapse-width-height="isCollapsedNote"
+                    uib-collapse-width-height="isCollapsedDetails"
                     get-size>
                 <div id="details+{{note.id}}"
                         class="note-notes bordered text-left"
@@ -72,7 +80,7 @@
                 </div>
             </div>-->
             <div class="ease-all"
-                    uib-collapse="isCollapsedNote" >
+                    uib-collapse="isCollapsedDetails" >
                 <div id="details+{{note.id}}"
                         class="note-notes bordered text-left">
                     <!--ng-style="{'width':getWidth(this)}"-->
