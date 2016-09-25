@@ -1,3 +1,3 @@
 <component name="DependencyValidationManager">
-  <scope name="File Watcher" pattern="!file[PlexNotes]:.idea//*&amp;&amp;!file[PlexNotes]:misc/rest//*&amp;&amp;!file[PlexNotes]:www/js/angular//*&amp;&amp;!file[PlexNotes]:www/js/angular/*&amp;&amp;!file:www/js/bootstrap.js&amp;&amp;!file:www/js/bootstrap.js.map&amp;&amp;!file:www/js/bootstrap.min.js&amp;&amp;!file:www/js/jquery-1.11.3.min.js&amp;&amp;!file:www/css/bootstrap-xl.css&amp;&amp;!file:www/css/bootstrap-xl.min.css&amp;&amp;!file:www/css/bootstrap.css&amp;&amp;!file:www/css/bootstrap.css.map&amp;&amp;!file:www/css/bootstrap.icon-large.css&amp;&amp;!file:www/css/bootstrap.icon-large.min.css&amp;&amp;!file:www/css/bootstrap.min.css&amp;&amp;!file:www/css/bootstrap.min.css.map&amp;&amp;!file[PlexNotes]:node_modules//*" />
+  <scope name="File Watcher" pattern="file[PlexNotes]:www/js//*||file[PlexNotes]:www/css//*" />
 </component>

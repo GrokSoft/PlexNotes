@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ProjectTasksOptions">
-    <TaskOptions isEnabled="false">
+    <TaskOptions isEnabled="true">
       <option name="arguments" value="--compilation_level SIMPLE_OPTIMIZATIONS --js $FileName$ --create_source_map $FileName$.map --output_wrapper &quot;%output% //# sourceMappingURL=$FileName$.map&quot;" />
       <option name="checkSyntaxErrors" value="true" />
       <option name="description" value="Compiles .js files" />
@@ -14,7 +14,26 @@
         <array />
       </option>
       <option name="outputFromStdout" value="true" />
-      <option name="program" value="$PROJECT_DIR$/misc/tools/compiler.jar" />
+      <option name="program" value="$ProjectFileDir$/artifacts/tools/compiler.jar" />
+      <option name="scopeName" value="File Watcher" />
+      <option name="trackOnlyRoot" value="true" />
+      <option name="workingDir" value="$FileDir$" />
+      <envs />
+    </TaskOptions>
+    <TaskOptions isEnabled="true">
+      <option name="arguments" value="$FileName$ -o $FileNameWithoutExtension$.min.css" />
+      <option name="checkSyntaxErrors" value="true" />
+      <option name="description" value="Compresses .css files" />
+      <option name="exitCodeBehavior" value="ERROR" />
+      <option name="fileExtension" value="css" />
+      <option name="immediateSync" value="true" />
+      <option name="name" value="YUI Compressor CSS" />
+      <option name="output" value="$FileNameWithoutExtension$.min.css" />
+      <option name="outputFilters">
+        <array />
+      </option>
+      <option name="outputFromStdout" value="false" />
+      <option name="program" value="$ProjectFileDir$/node_modules/yuicompressor/build/yuicompressor-2.4.8.jar" />
       <option name="scopeName" value="File Watcher" />
       <option name="trackOnlyRoot" value="true" />
       <option name="workingDir" value="$FileDir$" />

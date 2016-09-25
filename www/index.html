@@ -14,10 +14,10 @@
             rel="stylesheet">
 
     <!-- See https://angular-ui.github.io/bootstrap/ for info on angular & bootstrap -->
-    <script src="js/angular.js"></script>
-    <script src="js/angular-animate.js"></script>
-    <script src="js/angular-touch.js"></script>
-    <script src="js/ui-bootstrap-tpls-2.1.3.min.js"></script>
+    <script src="js/lib/angular.js"></script>
+    <script src="js/lib/angular-animate.js"></script>
+    <script src="js/lib/angular-touch.js"></script>
+    <script src="js/lib/ui-bootstrap-tpls-2.1.3.min.js"></script>
 
     <script src="js/app.js"></script>
     <script src="js/media.js"></script>
@@ -61,6 +61,42 @@
                  class=""></notes-carousel>-->
     </div>
 </div>
+
+<hr>
+
+<div class="container-fluid"
+        ng-controller="NotesController as notesCtrl">
+    <h2 class="text-center shadowed"
+            style="font-weight: bold; color: #918a8d;">
+
+        <span class="grow badge"
+                ng-click="isCollapsedNotes = !isCollapsedNotes;"
+                title="Click to Toggle Collapse state of all notes">
+            <span id="chevron"
+                    class="glyphicon glyphicon-chevron-up  ease-all"
+                    ng-class="[{'gly-rotate-180':isCollapsedNotes}]"
+                    style="font-size: x-large"></span>
+            <!--<span style="font-size: x-large">Click to Toggle Collapse of all notes</span>-->
+        </span>
+        <img src="images/Plex-h2-white.png"
+                class="plex-logo img-shadowed-frame">Notes
+
+        <span class="grow badge pull-right" title="Toggle Collapse of ALL notes">
+        <span class="glyphicon glyphicon-chevron-up  ease-all"
+                ng-class="[{'gly-rotate-180':isCollapsedNotesAll}]"
+                ng-click="toggleAllNotesCollapse()"
+                style="font-size: x-large"></span></span>
+    </h2>
+    <div id="notes" class="ease-all"
+            uib-collapse="isCollapsedNotes">
+        <div class="panel-body">
+            <notes></notes>
+        </div>
+    </div>
+</div>
+
+<hr>
+
 <div id="noteTitles"
         class="container-fluid"
         ng-controller="NotesController as notesCtrl">
@@ -83,33 +119,6 @@
     <div class="ease-all" uib-collapse="isCollapsedList">
         <div class="panel-body slow-ease-all">
             <notes-list></notes-list>
-        </div>
-    </div>
-</div>
-
-<hr>
-
-<div class="container-fluid"
-        ng-controller="NotesController as notesCtrl">
-    <h2 class="text-center shadowed"
-            style="font-weight: bold; color: #918a8d;">
-
-        <span class="grow badge"
-                ng-click="isCollapsedNotes = !isCollapsedNotes;"
-                title="Click to Toggle Collapse state of all notes">
-            <span id="chevron"
-                    class="glyphicon glyphicon-chevron-up  ease-all"
-                    ng-class="[{'gly-rotate-180':isCollapsedNotes}]"
-                    style="font-size: x-large"></span>
-            <!--<span style="font-size: x-large">Click to Toggle Collapse of all notes</span>-->
-        </span>
-        <img src="images/Plex-h2-white.png"
-                class="plex-logo img-shadowed-frame">Notes
-    </h2>
-    <div id="notes" class="ease-all"
-            uib-collapse="isCollapsedNotes">
-        <div class="panel-body">
-            <notes></notes>
         </div>
     </div>
 </div>
@@ -141,9 +150,10 @@
 </div>
 
 <footer class="container-fluid">
+
     <hr>
-    <button class="glyphicon glyphicon-arrow-up"
-            ng-click="scrollTo('noteTitles')"></button>
+    <span role="button" class="glyphicon glyphicon-arrow-up pull-left"
+            ng-click="scrollTo('noteTitles')" style="font-size: large; color: white;"></span>
     <span class="pull-right">Copyright &copy; 2016</span>
 </footer>
 
