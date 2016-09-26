@@ -24,7 +24,6 @@ function Datastore() {
     var dbPoolIdle = 10000;
     var dbDialect = undefined;
     var sqldb = undefined;
-    var me = this;
     var logger = undefined;
 
     var Categories;
@@ -320,6 +319,9 @@ function Datastore() {
             email: {
                 type: Sequelize.STRING
             },
+            role: {
+                type: Sequelize.STRING
+            },
             opt_in: {
                 type: Sequelize.INTEGER
             }
@@ -415,6 +417,10 @@ function Datastore() {
      *
      * @description
      * Deletes a note
+     *
+     * @param theUuid
+     *
+     * @returns {*}
      */
     var deleteNote = function (theUuid) {
         var prom;
@@ -438,6 +444,10 @@ function Datastore() {
      *
      * @description
      * Deletes a user
+     *
+     * @param theUuid
+     *
+     * @returns {*}
      */
     var deleteUser = function (theUuid) {
         var prom;
@@ -591,6 +601,7 @@ function Datastore() {
     /**
      * @name getUsers
      *
+     * @description
      * Returns an array of user records. Where src == undefined: 0, URL: 1, BODY: 2, by UUID: 3.
      * If src is URL the value is formatted in to an SQL WHERE clause. If src is BODY no formatting is
      * done and the value is used as-is. NOTE that the clause MUST be formatted as required by the
@@ -599,6 +610,7 @@ function Datastore() {
      *
      * @param src == undefined: 0, URL: 1, BODY: 2, by UUID: 3
      * @param query String of the query
+     *
      * @returns {Array}
      */
     var getUsers = function (src, query) {
@@ -666,7 +678,7 @@ function Datastore() {
      * @name saveUser
      *
      * @description
-     * Save a single user record
+     * Save a user to the datastore
      *
      * @param user
      * @returns {*}
@@ -674,7 +686,7 @@ function Datastore() {
     var saveUser = function (user) {
         var prom;
         user.last_utc = Date.now();
-        prom = Notes.upsert(user).then(function (wasCreated) {
+        prom = Users.upsert(user).then(function (wasCreated) {
             return user;
         }, function (xhrObj) {
             var t = xhrObj.toString();

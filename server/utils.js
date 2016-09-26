@@ -4,12 +4,6 @@
 
 'use strict';
 
-/**
- * Utilities
- *
- * @returns {{badRequest: badRequest, createRandomNotes: createRandomNotes, getNow: getNow, getUUID: getUUID, loremIpsum: loremIpsum, notFound: notFound, ReturnObject: ReturnObject, setResponseHeader: setResponseHeader}}
- * @constructor
- */
 function Utils() {
 
     //-----------------------------------------------------------------------------------------------------------------
@@ -20,6 +14,7 @@ function Utils() {
      * Return a json error showing a bad request
      *
      * @param body
+     *
      * @returns {{jse_shortmsg: string, jse_info: {}, message: string, statusCode: number, body: {code: string, message: string}, restCode: string}}
      */
     var badRequest = function (body) {
@@ -41,11 +36,13 @@ function Utils() {
     /**
      * @name createRandomNotes
      *
-     * @description Generate any number of random notes for testing.
+     * @description
+     * Generate any number of random notes for testing.
      *
      * @param count
      * @param dStore
-     * @returns cnt
+     *
+     * @returns number
      */
     var createRandomNotes = function (count, dStore) {
         var cats = [];
@@ -100,19 +97,18 @@ function Utils() {
                                 opt_in: Math.round(Math.random() < .5)
                             };
 
-
                             note = dStore.saveNote(note).then(function (fullNote) {
                                     if (fullNote === undefined || fullNote.length == 0) {
                                         return null;
                                     }
                                     ++cnt;
+                                    return fullNote;
                                 },
                                 function (xhrObj) {
                                     var t = xhrObj.toString();
                                     Error(utils.ReturnObject(201, "Poar", "createRandomNotes failure: ", t));
                                 }
                             );
-
 
                             console.log(xc + " " + xp + " " + xs + " " + xu + " " + xv);
                         }
@@ -154,7 +150,7 @@ function Utils() {
         // make a user
         var u = {
             uuid: 'f430cdbb-f55b-435a-9818-04bd0c8d82d5',
-            plex_user_id: '4b0d3c02-69cf-4df7-9b1d-4c837ab2629b',
+            plex_user_uuid: '4b0d3c02-69cf-4df7-9b1d-4c837ab2629b',
             last_utc: getNow(),
             friendly_name: 'Bill Gray',
             email: 'bill@somewhere.com',
@@ -166,7 +162,7 @@ function Utils() {
                 // make a user
                 var u = {
                     uuid: '7194caf4-8735-4a9e-8554-6a704bf97b48',
-                    plex_user_id: '4ce92bc6-7464-4c31-8f74-1a00b194df11',
+                    plex_user_uuid: '4ce92bc6-7464-4c31-8f74-1a00b194df11',
                     last_utc: getNow(),
                     friendly_name: 'Todd Hill',
                     email: 'todd@somewhere.com',
@@ -178,7 +174,7 @@ function Utils() {
                         // make a user
                         var u = {
                             uuid: '9f1ecfcc-c751-4050-a4a3-a47a1c62cd27',
-                            plex_user_id: '87d489ea-f5d7-44d7-99c4-3a183c9cac47',
+                            plex_user_uuid: '87d489ea-f5d7-44d7-99c4-3a183c9cac47',
                             last_utc: getNow(),
                             friendly_name: 'Suzy User',
                             email: 'suzy@somewhere.com',
@@ -190,7 +186,7 @@ function Utils() {
                                 // make a user
                                 var u = {
                                     uuid: '9f0305c7-0d40-480e-bdc5-813c6febb5e2',
-                                    plex_user_id: 'd380a0fb-736d-412e-b440-2decb8a26865',
+                                    plex_user_uuid: 'd380a0fb-736d-412e-b440-2decb8a26865',
                                     last_utc: getNow(),
                                     friendly_name: 'John Doe',
                                     email: 'john@somewhere.com',
@@ -200,53 +196,55 @@ function Utils() {
                                 var ret = dStore.saveUser(u).then(function (fullUser) {
 
                                         // return the new users from the datastore
-                                        var usrs = dStore.getUsers().then(function (usrs) {
-                                            if (usrs === undefined || usrs.length == 0) {
+                                        var ret = dStore.getUsers().then(function (ret) {
+                                            if (ret === undefined || ret.length == 0) {
                                                 return null;
                                             }
-                                            return usrs;
+                                            return ret;
                                         },
                                             function (xhrObj) {
                                                 var t = xhrObj.toString();
-                                                Error(utils.ReturnObject(201, "Get", "createTestUsers failure: ", t));
+                                                Error(utils.ReturnObject(201, "Get", "createTestUsers failure 5: ", t));
                                             }
                                         );
 
                                     },
                                     function (xhrObj) {
                                         var t = xhrObj.toString();
-                                        Error(utils.ReturnObject(201, "Create", "acreateTestUsers failure: ", t));
+                                        Error(utils.ReturnObject(201, "Create", "acreateTestUsers failure 4: ", t));
                                     }
                                 );
 
                             },
                             function (xhrObj) {
                                 var t = xhrObj.toString();
-                                Error(utils.ReturnObject(201, "Create", "createTestUsers failure: ", t));
+                                Error(utils.ReturnObject(201, "Create", "createTestUsers failure 3: ", t));
                             }
                         );
 
                     },
                     function (xhrObj) {
                         var t = xhrObj.toString();
-                        Error(utils.ReturnObject(201, "Create", "createTestUsers failure: ", t));
+                        Error(utils.ReturnObject(201, "Create", "createTestUsers failure 2: ", t));
                     }
                 );
 
             },
             function (xhrObj) {
                 var t = xhrObj.toString();
-                Error(utils.ReturnObject(201, "Create", "createTestUsersfailure: ", t));
+                Error(utils.ReturnObject(201, "Create", "createTestUsersfailure 1: ", t));
             }
         );
 
+        return ret;
     };
 
     // ----------------------------------------------------------------------------------------------------------------
     /**
      * @name getNow
      *
-     * @description PlexNotes method for the time in seconds
+     * @description
+     * PlexNotes method for the Epoch time in seconds
      *
      * @returns {number}
      */
@@ -260,7 +258,8 @@ function Utils() {
     /**
      * @name getUUID
      *
-     * @description PlexNotes method for a new UUID
+     * @description
+     * PlexNotes method for a new UUID
      *
      * @returns {uuid}
      */
@@ -283,6 +282,7 @@ function Utils() {
      *
      * @param start
      * @param len
+     *
      * @returns {string}
      */
     var loremIpsum = function (start, len) {
@@ -307,22 +307,22 @@ function Utils() {
      * Load the passed response with a 404 Not Found error and return the error text
      *
      * @param res  The response to modify
-     * @returns {} Note NOT found
+     *
+     * @returns {*} Item NOT found
      */
     var notFound = function (res) {
         res.statusCode = 404;
         var retJson = {
-            "jse_shortmsg": "Note not found",
+            "jse_shortmsg": "Item not found",
             "jse_info": {},
-            "message": "Requested note was not found",
+            "message": "Requested item was not found",
             "statusCode": 404,
             "body": {
                 "code": "NotFound",
-                "message": "Note was not found!"
+                "message": "Item was not found"
             },
             "restCode": "NotFound"
         };
-
         return retJson;
     };
 
@@ -330,7 +330,8 @@ function Utils() {
     /**
      * @name ReturnObject
      *
-     * @description Create a PlexNotes standard object to be returned to the client
+     * @description
+     * Create a PlexNotes standard object to be returned to the client
      *
      * @param statusCode
      * @param statusText
@@ -370,8 +371,9 @@ function Utils() {
      * The server runs under one port, and the web app runs under another.
      *
      * @param res
+     *
+     * @return {*}
      */
-
     var setResponseHeader = function (res) {
         res.header("Access-Control-Allow-Origin", "*");
         res.header("Access-Control-Allow-Headers", "X-Requested-With");
