@@ -53,7 +53,7 @@
     var options = commandLineArgs(commandArgs);
 
     // Initialize the datastore interface
-    if (dStore.init(dbType, dbName, logger) == false) {
+    if (dStore.init(dbType, dbName, logger) == false) {             // ! need to handle Promise if priming a new db
         logger.log('error', 'Could not connect to datastore');
         return 1;
     }
@@ -61,8 +61,10 @@
     if (options.generate > 0) {
         var cnt;
         logger.log('info', 'Generate ' + options.generate + ' faux notes');
-        cnt = utils.createRandomNotes(options.generate, dStore);
-        console.log("Created " + cnt + " random notes");
+        cnt = utils.createRandomNotes(options.generate, dStore).then(function() {       // ! need to handle Promise
+            console.log("Created " + cnt + " random notes");
+            return 0;
+        });
     }
 
     // Create the restify server

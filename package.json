@@ -2,7 +2,8 @@
   "name": "application-name",
   "version": "0.0.1",
   "devDependencies": {
-    "restify": "latest"
+    "restify": "latest",
+    "wait-promise": "latest"
   },
   "dependencies": {
     "command-line-args":"^3.0.1",

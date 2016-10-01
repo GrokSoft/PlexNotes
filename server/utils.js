@@ -4,6 +4,10 @@
 
 'use strict';
 
+var wait = require('wait-promise');
+
+var g_usrs = [];
+
 function Utils() {
 
     //-----------------------------------------------------------------------------------------------------------------
@@ -48,7 +52,6 @@ function Utils() {
         var cats = [];
         var pris = [];
         var stas = [];
-        var usrs = [];
         var svrs = ['802221a5-1383-4ea4-b60e-1b5838a546e9', 'c90a407a-c12b-4046-a5c2-9bdeacef8036'];
         var cnt = 0;
 
@@ -68,50 +71,62 @@ function Utils() {
                         return 0;
                     }
 
-                    usrs = dStore.getUsers().then(function (usrs) {
-                        if (usrs === undefined || usrs.length == 0) {
-                            usrs = createTestUsers(dStore);                    // generate fake test users
+                    g_usrs = dStore.getUsers().then(function (lusrs) {
+                        if (lusrs === undefined || lusrs.length == 0) {
+                            createTestUsers(dStore);
+                            console.log('out of createTestUsers');
+                        } else {
+                            g_usrs = lusrs;
                         }
 
-                        for (var i = 0; i < count; ++i) {
-                            var now = getNow();
-                            var xc = parseInt(Math.random() * cats.length);
-                            var xp = parseInt(Math.random() * pris.length);
-                            var xs = parseInt(Math.random() * stas.length);
-                            var xu = parseInt(Math.random() * usrs.length);
-                            var xv = parseInt(Math.random() * svrs.length);
+                        var prom = wait.until(function () {
+                            var b = g_usrs.length != undefined;
+                            return b;
+                        });
 
-                            var note = {
-                                uuid: getUUID(),
-                                fk_categories_uuid: cats[xc].uuid,
-                                fk_priorities_uuid: pris[xp].uuid,
-                                fk_statuses_uuid: stas[xs].uuid,
-                                fk_users_uuid: usrs[xu].uuid,
-                                fk_modifier_users_uuid: usrs[xu].uuid,
-                                plex_server_uuid: svrs[xv],
-                                created_date: now,
-                                modified_date: now,
-                                last_utc: now,
-                                title: "Title for #" + i + " (randomly generated)",
-                                details: loremIpsum(),
-                                opt_in: Math.round(Math.random() < .5)
-                            };
+                        prom.then(function () {
+                            console.log("g_usrs " + (g_usrs == Promise) ? "promise" : "data");
 
-                            note = dStore.saveNote(note).then(function (fullNote) {
-                                    if (fullNote === undefined || fullNote.length == 0) {
-                                        return null;
+                            for (var i = 0; i < count; ++i) {
+                                var now = getNow();
+                                var xc = parseInt(Math.random() * cats.length);
+                                var xp = parseInt(Math.random() * pris.length);
+                                var xs = parseInt(Math.random() * stas.length);
+                                var xu = parseInt(Math.random() * g_usrs.length);
+                                var xv = parseInt(Math.random() * svrs.length);
+
+                                var note = {
+                                    uuid: getUUID(),
+                                    fk_categories_uuid: cats[xc].uuid,
+                                    fk_priorities_uuid: pris[xp].uuid,
+                                    fk_statuses_uuid: stas[xs].uuid,
+                                    fk_users_uuid: g_usrs[xu].uuid,
+                                    fk_modifier_users_uuid: g_usrs[xu].uuid,
+                                    plex_server_uuid: svrs[xv],
+                                    created_date: now,
+                                    modified_date: now,
+                                    last_utc: now,
+                                    title: "Title for #" + i + " (randomly generated)",
+                                    details: loremIpsum(),
+                                    opt_in: (Math.random() < .5) ? 1 : 0
+                                };
+
+                                note = dStore.saveNote(note).then(function (fullNote) {
+                                        if (fullNote === undefined || fullNote.length == 0) {
+                                            return null;
+                                        }
+                                        ++cnt;
+                                        return fullNote;
+                                    },
+                                    function (xhrObj) {
+                                        var t = xhrObj.toString();
+                                        Error(utils.ReturnObject(201, "Poar", "createRandomNotes failure: ", t));
                                     }
-                                    ++cnt;
-                                    return fullNote;
-                                },
-                                function (xhrObj) {
-                                    var t = xhrObj.toString();
-                                    Error(utils.ReturnObject(201, "Poar", "createRandomNotes failure: ", t));
-                                }
-                            );
+                                );
 
-                            console.log(xc + " " + xp + " " + xs + " " + xu + " " + xv);
-                        }
+                                console.log(xc + " " + xp + " " + xs + " " + xu + " " + xv);
+                            }
+                        });
                     }, function (xhrObj) {
                             var t = xhrObj.toString();
                             Error("createRandomNotes failure 4: " + t);
@@ -196,11 +211,19 @@ function Utils() {
                                 var ret = dStore.saveUser(u).then(function (fullUser) {
 
                                         // return the new users from the datastore
-                                        var ret = dStore.getUsers().then(function (ret) {
-                                            if (ret === undefined || ret.length == 0) {
+                                        g_usrs = dStore.getUsers().then(function (lusrs) {
+                                            if (lusrs === undefined || lusrs.length == 0) {
                                                 return null;
                                             }
-                                            return ret;
+                                            g_usrs = lusrs;
+                                            // var prom = wait.until(function() {
+                                            //     var b = g_usrs.length != undefined;
+                                            //     return b;
+                                            // });
+                                            // prom.then(function() {
+                                            //     console.log("g_usrs " + (g_usrs == Promise) ? "promise" : "data");
+                                            // });
+                                            return g_usrs;
                                         },
                                             function (xhrObj) {
                                                 var t = xhrObj.toString();
