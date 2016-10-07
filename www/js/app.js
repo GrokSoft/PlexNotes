@@ -65,7 +65,11 @@
              console.log(headers);
              console.log(JSON.stringify(config));
              alert("error: "+data);*/
-            alert("Could not retrieve data from server, please verify the server is running and accessible!\n" + JSON.stringify(config, null, 4))
+            alert("Could not retrieve data from server, please verify the server is running and accessible!\n" + JSON.stringify(config, null, 4));
+
+            var domElement = document.querySelector('#noServer');
+            var element = angular.element(domElement);
+            element.removeClass('hidden');
         });
 
         //

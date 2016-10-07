@@ -42,7 +42,14 @@
 <nav class="navbar navbar-default ">
     <menu></menu>
 </nav>
-
+<h3 id="noServer" class="hidden text-center" style="color: red">
+    No PlexNote server could be found.<br><span style="font-size: smaller;">
+    Please run the server found in the server directory of the project with node. The reload the page!</span>
+</h3>
+<h3 class="text-center" style="color: yellow">
+    Note: This page is a test page for the components being developed for the project. The home page will be developed
+    after the components are ready.
+</h3>
 <div class="container-fluid">
     <div class="col-lg-4">
         <h3>Debug </h3>
@@ -64,7 +71,7 @@
 
 <hr>
 
-<div class="container-fluid"
+<div id="allNotes" class="container-fluid"
         ng-controller="NotesController as notesCtrl">
     <h2 class="text-center shadowed"
             style="font-weight: bold; color: #918a8d;">
@@ -153,7 +160,7 @@
 
     <hr>
     <span role="button" class="glyphicon glyphicon-arrow-up pull-left"
-            ng-click="scrollTo('noteTitles')" style="font-size: large; color: white;"></span>
+            ng-click="scrollTo('allNotes')" style="font-size: large; color: white;"></span>
     <span class="pull-right">Copyright &copy; 2016</span>
 </footer>
 
