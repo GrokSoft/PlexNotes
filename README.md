@@ -4,7 +4,11 @@
 
 Created August 14, 2016
 
-This project consists of a REST server developed in JavaScript with:
+*Please note the UI is not designed yet. It consists of several components that are being developed and tested.*
+
+The goal of the project is to have a way for family and friends that use my ![alt text][plexVs] media server to report any issues with the content. Request new content, Recommend content to other users, etc...
+
+This project consists of a REST server and client developed in JavaScript with:
 
 * Client-side:
     - AngularJS
@@ -15,10 +19,6 @@ This project consists of a REST server developed in JavaScript with:
     - restify
     - sequelize
     - winston
-
-*Please note the UI is not designed yet. It consists of several components that are being developed and tested.*
-
-The goal of the project is to have a way for family and friends that use my ![alt text][plexVs] media server to report any issues with the content. Request new content, etc...
 
 * A list of available route paths can be found using the uri: `api/routes`
     ~~~~
@@ -44,10 +44,13 @@ The goal of the project is to have a way for family and friends that use my ![al
     ~~~~
 
 * The server can be found under the `/server` directory.
-  * To run the server use: `node plexNotesServer.js` while in the server folder
+  * To run the server use: `node plexNotesServer.js` while in the server folder.
   
 * The client can be found under the `/www` directory.
-  * To run the client load the following page `index.html` while in the www folder
+  * To run the client load the `index.html` page while in the www folder.
+  
+  ###### _Note: If you get a cross domain error when loading the client, you will need to serve the page with a web server, such as the one built into IntelliJ. The reason for this is when the page is loaded though a file:// url some browsers will throw a cross domain exception when the page uses http:// for the REST calls._
+        
 
 ## Development notes
 
