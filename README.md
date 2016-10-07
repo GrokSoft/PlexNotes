@@ -47,7 +47,7 @@ This project consists of a REST server and client developed in JavaScript with:
   * To run the server use: `node plexNotesServer.js` while in the server folder.
   
 * The client can be found under the `/www` directory.
-  * To run the client load the `index.html` page while in the www folder.
+  * To run the client load the `index.html` page with a web browser while in the www folder.
   
   ###### _Note: If you get a cross domain error when loading the client, you will need to serve the page with a web server, such as the one built into IntelliJ. The reason for this is when the page is loaded though a file:// url some browsers will throw a cross domain exception when the page uses http:// for the REST calls._
         
@@ -55,11 +55,9 @@ This project consists of a REST server and client developed in JavaScript with:
 ## Development notes
 
 You must run the web app on the same port as the server is running.
-Note that in IntelliJ, when a run configuration is created, by default the port is for the intelliJ web server. Right now PlexNotes is meant to be ran on the same server as the data server!!!!
+Note that in IntelliJ, when a run configuration is created, by default the port is for the intelliJ web server. Right now PlexNotes is meant to be ran on the same server as the data server!
 This may change in the future to have a configurable url.
 
-<br/>
-<br/>
 <br/>
 <br/>
 
