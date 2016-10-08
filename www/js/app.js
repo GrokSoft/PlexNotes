@@ -689,12 +689,13 @@
         };
 
         $scope.toggleAllNotesCollapse = function () {
-
-            _notes.forEach(function (note) {
-                var id = "note"+note.id;
-                var elem = document.querySelector('#' + id);
-                elem.isCollapsedNote = !elem.isCollapsedNote;
-            })
+            $scope.isCollapsedNote = !$scope.isCollapsedNote;
+            //_notes.forEach(function (note) {
+                /*var id = "collapse-note"+note.id;
+                 var domElement = document.querySelector('#' + id);
+                 var element = angular.element(domElement);*/
+           //     $scope.isCollapsedNote = !$scope.isCollapsedNote;
+           // })
         };
 
         //

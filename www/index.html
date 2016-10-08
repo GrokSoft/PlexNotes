@@ -89,9 +89,9 @@
                 class="plex-logo img-shadowed-frame">Notes
 
         <span class="grow badge pull-right" title="Toggle Collapse of ALL notes">
-        <span class="glyphicon glyphicon-chevron-up  ease-all"
-                ng-class="[{'gly-rotate-180':isCollapsedNotesAll}]"
-                ng-click="toggleAllNotesCollapse()"
+        <span class="glyphicon glyphicon-chevron-down  ease-all"
+                ng-class="[{'gly-flip-vertical':isCollapsedNotesAll}]"
+                ng-click="isCollapsedNotesAll = !isCollapsedNotesAll; isCollapsedNote = !isCollapsedNote;"
                 style="font-size: x-large"></span></span>
     </h2>
     <div id="notes" class="ease-all"
