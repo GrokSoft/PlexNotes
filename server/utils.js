@@ -9,6 +9,7 @@ var wait = require('wait-promise');
 var g_usrs = [];
 
 function Utils() {
+    var generateFlag = false;                                   // generate done flag
 
     //-----------------------------------------------------------------------------------------------------------------
     /**
@@ -46,7 +47,7 @@ function Utils() {
      * @param count
      * @param dStore
      *
-     * @returns number
+     * @returns Array
      */
     var createRandomNotes = function (count, dStore) {
         var cats = [];
@@ -112,12 +113,16 @@ function Utils() {
                                 };
 
                                 note = dStore.saveNote(note).then(function (fullNote) {
-                                        if (fullNote === undefined || fullNote.length == 0) {
-                                            return null;
-                                        }
-                                        ++cnt;
-                                        return fullNote;
-                                    },
+                                    if (fullNote === undefined || fullNote.length == 0) {
+                                        return null;
+                                    }
+                                    ++cnt;
+                                    console.log("Created #" + cnt);
+                                    if (cnt == count) {
+                                        generateFlag = true;
+                                    }
+                                    return fullNote;
+                                },
                                     function (xhrObj) {
                                         var t = xhrObj.toString();
                                         Error(utils.ReturnObject(201, "Poar", "createRandomNotes failure: ", t));
@@ -148,7 +153,7 @@ function Utils() {
             }
         );
 
-        return cnt;
+        return cats;
     };
 
     // ----------------------------------------------------------------------------------------------------------------
@@ -414,7 +419,8 @@ function Utils() {
         loremIpsum: loremIpsum,
         notFound: notFound,
         ReturnObject: ReturnObject,
-        setResponseHeader: setResponseHeader
+        setResponseHeader: setResponseHeader,
+        generateFlag: generateFlag
     };
 
 }
