@@ -4,12 +4,7 @@
 
 'use strict';
 
-var wait = require('wait-promise');
-
-var g_usrs = [];
-
 function Utils() {
-    var generateFlag = false;                                   // generate done flag
 
     //-----------------------------------------------------------------------------------------------------------------
     /**
@@ -35,236 +30,6 @@ function Utils() {
             "restCode": "BadRequest"
         };
         return retJson;
-    };
-
-    // ----------------------------------------------------------------------------------------------------------------
-    /**
-     * @name createRandomNotes
-     *
-     * @description
-     * Generate any number of random notes for testing.
-     *
-     * @param count
-     * @param dStore
-     *
-     * @returns Array
-     */
-    var createRandomNotes = function (count, dStore) {
-        var cats = [];
-        var pris = [];
-        var stas = [];
-        var svrs = ['802221a5-1383-4ea4-b60e-1b5838a546e9', 'c90a407a-c12b-4046-a5c2-9bdeacef8036'];
-        var cnt = 0;
-
-
-        cats = dStore.getCategories().then(function (cats) {
-            if (cats === undefined || cats.length == 0) {
-                return 0;
-            }
-
-            pris = dStore.getPriorities().then(function (pris) {
-                if (pris === undefined || pris.length == 0) {
-                    return 0;
-                }
-
-                stas = dStore.getStatuses().then(function (stas) {
-                    if (stas === undefined || stas.length == 0) {
-                        return 0;
-                    }
-
-                    g_usrs = dStore.getUsers().then(function (lusrs) {
-                        if (lusrs === undefined || lusrs.length == 0) {
-                            createTestUsers(dStore);
-                            console.log('out of createTestUsers');
-                        } else {
-                            g_usrs = lusrs;
-                        }
-
-                        var prom = wait.until(function () {
-                            var b = g_usrs.length != undefined;
-                            return b;
-                        });
-
-                        prom.then(function () {
-                            console.log("g_usrs " + (g_usrs == Promise) ? "promise" : "data");
-
-                            for (var i = 0; i < count; ++i) {
-                                var now = getNow();
-                                var xc = parseInt(Math.random() * cats.length);
-                                var xp = parseInt(Math.random() * pris.length);
-                                var xs = parseInt(Math.random() * stas.length);
-                                var xu = parseInt(Math.random() * g_usrs.length);
-                                var xv = parseInt(Math.random() * svrs.length);
-
-                                var note = {
-                                    uuid: getUUID(),
-                                    fk_categories_uuid: cats[xc].uuid,
-                                    fk_priorities_uuid: pris[xp].uuid,
-                                    fk_statuses_uuid: stas[xs].uuid,
-                                    fk_users_uuid: g_usrs[xu].uuid,
-                                    fk_modifier_users_uuid: g_usrs[xu].uuid,
-                                    plex_server_uuid: svrs[xv],
-                                    created_date: now,
-                                    modified_date: now,
-                                    last_utc: now,
-                                    title: "Title for #" + i + " (randomly generated)",
-                                    details: loremIpsum(),
-                                    opt_in: (Math.random() < .5) ? 1 : 0
-                                };
-
-                                note = dStore.saveNote(note).then(function (fullNote) {
-                                    if (fullNote === undefined || fullNote.length == 0) {
-                                        return null;
-                                    }
-                                    ++cnt;
-                                    console.log("Created #" + cnt);
-                                    if (cnt == count) {
-                                        generateFlag = true;
-                                    }
-                                    return fullNote;
-                                },
-                                    function (xhrObj) {
-                                        var t = xhrObj.toString();
-                                        Error(utils.ReturnObject(201, "Poar", "createRandomNotes failure: ", t));
-                                    }
-                                );
-
-                                console.log(xc + " " + xp + " " + xs + " " + xu + " " + xv);
-                            }
-                        });
-                    }, function (xhrObj) {
-                            var t = xhrObj.toString();
-                            Error("createRandomNotes failure 4: " + t);
-                        }
-                    );
-                }, function (xhrObj) {
-                        var t = xhrObj.toString();
-                        Error("createRandomNotes failure 3: " + t);
-                    }
-                );
-            }, function (xhrObj) {
-                    var t = xhrObj.toString();
-                    Error("createRandomNotes failure 2: " + t);
-                }
-            );
-        }, function (xhrObj) {
-                var t = xhrObj.toString();
-                Error("createRandomNotes failure 1: " + t);
-            }
-        );
-
-        return cats;
-    };
-
-    // ----------------------------------------------------------------------------------------------------------------
-    /**
-     * @name create several test users
-     *
-     * @description
-     * For createRandomNotes() when generating test data in an empty database.  Creates fake users in the datastore.
-     *
-     * @param dStore
-     */
-    var createTestUsers = function (dStore) {
-
-        // make a user
-        var u = {
-            uuid: 'f430cdbb-f55b-435a-9818-04bd0c8d82d5',
-            plex_user_uuid: '4b0d3c02-69cf-4df7-9b1d-4c837ab2629b',
-            last_utc: getNow(),
-            friendly_name: 'Bill Gray',
-            email: 'bill@somewhere.com',
-            opt_in: 1,
-            role: 'Administrator'
-        };
-        var ret = dStore.saveUser(u).then(function (fullUser) {
-
-                // make a user
-                var u = {
-                    uuid: '7194caf4-8735-4a9e-8554-6a704bf97b48',
-                    plex_user_uuid: '4ce92bc6-7464-4c31-8f74-1a00b194df11',
-                    last_utc: getNow(),
-                    friendly_name: 'Todd Hill',
-                    email: 'todd@somewhere.com',
-                    opt_in: 1,
-                    role: 'Administrator'
-                };
-                var ret = dStore.saveUser(u).then(function (fullUser) {
-
-                        // make a user
-                        var u = {
-                            uuid: '9f1ecfcc-c751-4050-a4a3-a47a1c62cd27',
-                            plex_user_uuid: '87d489ea-f5d7-44d7-99c4-3a183c9cac47',
-                            last_utc: getNow(),
-                            friendly_name: 'Suzy User',
-                            email: 'suzy@somewhere.com',
-                            opt_in: 0,
-                            role: 'User'
-                        };
-                        var ret = dStore.saveUser(u).then(function (fullUser) {
-
-                                // make a user
-                                var u = {
-                                    uuid: '9f0305c7-0d40-480e-bdc5-813c6febb5e2',
-                                    plex_user_uuid: 'd380a0fb-736d-412e-b440-2decb8a26865',
-                                    last_utc: getNow(),
-                                    friendly_name: 'John Doe',
-                                    email: 'john@somewhere.com',
-                                    opt_in: 1,
-                                    role: 'User'
-                                };
-                                var ret = dStore.saveUser(u).then(function (fullUser) {
-
-                                        // return the new users from the datastore
-                                        g_usrs = dStore.getUsers().then(function (lusrs) {
-                                            if (lusrs === undefined || lusrs.length == 0) {
-                                                return null;
-                                            }
-                                            g_usrs = lusrs;
-                                            // var prom = wait.until(function() {
-                                            //     var b = g_usrs.length != undefined;
-                                            //     return b;
-                                            // });
-                                            // prom.then(function() {
-                                            //     console.log("g_usrs " + (g_usrs == Promise) ? "promise" : "data");
-                                            // });
-                                            return g_usrs;
-                                        },
-                                            function (xhrObj) {
-                                                var t = xhrObj.toString();
-                                                Error(utils.ReturnObject(201, "Get", "createTestUsers failure 5: ", t));
-                                            }
-                                        );
-
-                                    },
-                                    function (xhrObj) {
-                                        var t = xhrObj.toString();
-                                        Error(utils.ReturnObject(201, "Create", "acreateTestUsers failure 4: ", t));
-                                    }
-                                );
-
-                            },
-                            function (xhrObj) {
-                                var t = xhrObj.toString();
-                                Error(utils.ReturnObject(201, "Create", "createTestUsers failure 3: ", t));
-                            }
-                        );
-
-                    },
-                    function (xhrObj) {
-                        var t = xhrObj.toString();
-                        Error(utils.ReturnObject(201, "Create", "createTestUsers failure 2: ", t));
-                    }
-                );
-
-            },
-            function (xhrObj) {
-                var t = xhrObj.toString();
-                Error(utils.ReturnObject(201, "Create", "createTestUsersfailure 1: ", t));
-            }
-        );
-
-        return ret;
     };
 
     // ----------------------------------------------------------------------------------------------------------------
@@ -412,15 +177,12 @@ function Utils() {
     // exports
     return {
         badRequest: badRequest,
-        createRandomNotes: createRandomNotes,
-        createTestUsers: createTestUsers,
         getNow: getNow,
         getUUID: getUUID,
         loremIpsum: loremIpsum,
         notFound: notFound,
         ReturnObject: ReturnObject,
-        setResponseHeader: setResponseHeader,
-        generateFlag: generateFlag
+        setResponseHeader: setResponseHeader
     };
 
 }
