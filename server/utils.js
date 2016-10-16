@@ -89,7 +89,7 @@ function Utils() {
         if (len == undefined) {
             len = Math.max(start - 1, parseInt(Math.random() * loremIpsumTxt.length - MIN));
         }
-        return loremIpsumTxt.substr(start, len);
+        return loremIpsumTxt.substr(start, len).trim();
     };
 
     //-----------------------------------------------------------------------------------------------------------------
