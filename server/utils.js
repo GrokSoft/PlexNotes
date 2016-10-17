@@ -187,4 +187,4 @@ function Utils() {
 
 }
 
-exports.Utils = new Utils();                                    // singleton instance
+module.exports.Utils = new Utils();                                    // singleton instance

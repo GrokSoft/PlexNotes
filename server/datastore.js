@@ -4,7 +4,12 @@
 
 'use strict';
 
-
+/**
+ * @name Datastore
+ *
+ * @returns {{SRC_UNDEFINED: number, SRC_URL: number, SRC_BODY: number, SRC_UUID: number, init: init, deleteNote: deleteNote, deleteUser: deleteUser, getCategories: getCategories, getPriorities: getPriorities, getNotes: getNotes, getStatuses: getStatuses, getUsers: getUsers, saveNote: saveNote, saveUser: saveUser, createRandomNotes: createRandomNotes, getGeneratedFlag: getGeneratedFlag, getInitializedFlag: getInitializedFlag, setInitializedFlag: setInitializedFlag, getSqlDb: getSqlDb, getDbPath: getDbPath}}
+ * @constructor
+ */
 function Datastore() {
     var Sequelize = require('sequelize');                       // datastore ORM
     var utils = require('./utils.js').Utils;                    // server utilities
@@ -45,46 +50,45 @@ function Datastore() {
      * do not exist. If created certain tables are pre-populated with basic data.
      *
      */
-    var init = function (aDbType, aDbName, aLogger) {
+    var init = function (aDbDialect, aDbName, aLogger) {
+        dbDialect = aDbDialect;
         dbName = aDbName;
         logger = aLogger;
-        // Setup the datastore interface
-        // if (aDbType == 0) {
-        //     dbDialect = 'static';
-        //     sqlDb = dsStatic;
-        //     logger.log('info', 'dbType set: static');
-        //
-        // } else if (aDbType == 1) {
-        //     dbDialect = 'json';
-        //     sqlDb = require('./datastore-json.js');
-        //     sqlDb.setDataFile(aDbName);
-        //     logger.log('info', 'dbType set: JSON');
-        //
-        // } else if (aDbType == 2) {
-        dbDialect = 'sqlite';
-        sqlDb = new Sequelize(dbName, 'plexnotes', 'plexnotes', {
-            host: dbHost,
-            dialect: dbDialect,
-            define: {
-                timestamps: false                           // PlexNotes manages stamps
-            },
-            pool: {
-                max: dbPoolMax,
-                min: 0,
-                idle: dbPoolIdle
-            },
-            storage: getDbPath(dbName)
-        });
-        // logger.log('info', 'dbType set: SQLite');
-        // } else {
-        //     console.log("\n\nFATAL: dbType not defined or not found, cannot continue.\n\n");
-        //     return false;
-        // }
+
+        if (dbDialect == "sqlite") {
+            sqlDb = new Sequelize(dbName, 'plexnotes', 'plexnotes', {
+                host: dbHost,
+                dialect: dbDialect,
+                define: {
+                    timestamps: false                           // PlexNotes manages stamps
+                },
+                pool: {
+                    max: dbPoolMax,
+                    min: 0,
+                    idle: dbPoolIdle
+                },
+                storage: getDbPath(dbName)                      // unique to sqlite
+            });
+        } else {
+            sqlDb = new Sequelize(dbName, 'plexnotes', 'plexnotes', {
+                host: dbHost,
+                dialect: dbDialect,
+                define: {
+                    timestamps: false                           // PlexNotes manages stamps
+                },
+                pool: {
+                    max: dbPoolMax,
+                    min: 0,
+                    idle: dbPoolIdle
+                }
+            });
+        }
+
         logger.log('info', 'dbDialect: ' + dbDialect + ', dbName: ' + dbName);
 
 
         //-----------------------------------------------------------------------------------------------------------------
-        // data models - http://docs.sequelizejs.com/en/latest/docs/models-definition/
+        // data models - see http://docs.sequelizejs.com/en/latest/docs/models-definition/
         //
 
         //-------------------------------------------------------------------------------------------- Categories ---------
@@ -200,7 +204,7 @@ function Datastore() {
         Users.removeAttribute('id');
 
         //-------------------------------------------------------------------------------------------- Notes --------------
-        // Notes must be last so references: are valid
+        // Notes must be last so references: are defined otherwise an exception will be thrown
         Notes = sqlDb.define('notes', {
             uuid: {
                 type: Sequelize.STRING(36),
@@ -272,6 +276,7 @@ function Datastore() {
         Notes.removeAttribute('id');
 
 
+        // sync, create and prime if necessary
         proms.push(Categories.sync().then(function () {
             proms.push(Categories.count().then(function (catsCount) {
 
@@ -286,128 +291,134 @@ function Datastore() {
                                     proms.push(Notes.sync().then(function () {
 
                                         if (catsCount < 1) {
+                                            logger.log('info', "Priming Categories table");
+
                                             proms.push(Categories.create({
                                                 uuid: 'be697ff3-2b1e-4189-b42c-f3ac51bf8b07',
-                                                last_utc: 1472522510,
+                                                last_utc: utils.getNow(),
                                                 value: "None"
                                             }));
                                             proms.push(Categories.create({
                                                 uuid: 'de85a7a4-395f-41ad-ab45-31a47fa37c14',
-                                                last_utc: 1472520233,
+                                                last_utc: utils.getNow(),
                                                 value: "See details"
                                             }));
                                             proms.push(Categories.create({
                                                 uuid: 'ea37de6a-5d7e-4418-bb0a-2eba5e352840',
-                                                value: "Missing Episode/Sequel",
-                                                last_utc: 1472522778
+                                                last_utc: utils.getNow(),
+                                                value: "Missing Episode/Sequel"
                                             }));
                                             proms.push(Categories.create({
                                                 uuid: 'd7e7bfdf-9651-47d6-b81f-6fa0210b79d8',
-                                                last_utc: 1472522799,
+                                                last_utc: utils.getNow(),
                                                 value: "Needs Subtitles"
                                             }));
                                             proms.push(Categories.create({
                                                 uuid: '7c0fc735-1e7e-4f3f-b57b-3a8d2e47a14b',
-                                                last_utc: 1472522815,
+                                                last_utc: utils.getNow(),
                                                 value: "Needs Forced Subtitles"
                                             }));
                                             proms.push(Categories.create({
                                                 uuid: 'e068e721-3474-49e6-8e9a-036485ff238d',
-                                                last_utc: 1472522830,
+                                                last_utc: utils.getNow(),
                                                 value: "Error Streaming"
                                             }));
                                             proms.push(Categories.create({
                                                 uuid: '653c459f-97c7-4d50-9409-5eda117ba18b',
-                                                last_utc: 1472522846,
+                                                last_utc: utils.getNow(),
                                                 value: "Choppy Streaming"
                                             }));
                                             proms.push(Categories.create({
                                                 uuid: '7d96aa61-af22-4b93-baf9-cc2d28f1f8d3',
-                                                last_utc: 1472522862,
+                                                last_utc: utils.getNow(),
                                                 value: "Low Resolution"
                                             }));
                                             proms.push(Categories.create({
                                                 uuid: 'fbd99efe-b7f8-476f-97f7-41936fc0b636',
-                                                last_utc: 1472522893,
+                                                last_utc: utils.getNow(),
                                                 value: "Bad Audio"
                                             }));
                                             proms.push(Categories.create({
                                                 uuid: '13ae190e-4886-446b-b5c0-880b6af340a1',
-                                                last_utc: 1472522934,
+                                                last_utc: utils.getNow(),
                                                 value: "Low Audio"
                                             }));
                                             proms.push(Categories.create({
                                                 uuid: 'c9d9b026-64b8-469b-a362-d82a281d16a0',
-                                                last_utc: 1472522952,
+                                                last_utc: utils.getNow(),
                                                 value: "High Audio"
                                             }));
                                             proms.push(Categories.create({
                                                 uuid: 'c782b3dc-a8b9-4b1a-bbca-aae1ab0b7723',
-                                                last_utc: 1472522973,
+                                                last_utc: utils.getNow(),
                                                 value: "Add Artwork"
                                             }));
                                         }
 
                                         // ##########################
                                         if (priCount < 1) {
+                                            logger.log('info', "Priming Priorities table");
+
                                             proms.push(Priorities.create({
                                                 'uuid': '4928cde2-c372-42dd-b56c-b5152a814bb4',
-                                                'last_utc': 1472525608,
+                                                'last_utc': utils.getNow(),
                                                 'value': "Low"
                                             }));
                                             proms.push(Priorities.create({
                                                 'uuid': 'd6b096bf-5b0e-4eaf-b25b-e42e10e75d84',
-                                                'last_utc': 1472525645,
+                                                'last_utc': utils.getNow(),
                                                 'value': "Normal"
                                             }));
                                             proms.push(Priorities.create({
                                                 'uuid': '16e106f1-0766-47df-b08e-d6c0fc5d91c3',
-                                                'last_utc': 1472525683,
+                                                'last_utc': utils.getNow(),
                                                 'value': "High"
                                             }));
                                             proms.push(Priorities.create({
                                                 'uuid': 'fae24113-356c-4954-947d-83716946292b',
-                                                'last_utc': 1472525722,
+                                                'last_utc': utils.getNow(),
                                                 'value': "Critical"
                                             }));
                                         }
 
                                         // ########################
                                         if (statCount < 1) {
+                                            logger.log('info', "Priming Statuses table");
+
                                             proms.push(Statuses.create({
                                                 'uuid': '3d9c3886-ca2d-49c5-8490-f8d5d919e211',
                                                 'value': "New",
-                                                'last_utc': 1472521553
+                                                'last_utc': utils.getNow()
                                             }));
                                             proms.push(Statuses.create({
                                                 'uuid': '8f6e8a32-6421-43d6-9165-c18ccb8d4e7a',
                                                 'value': "Open",
-                                                'last_utc': 1472521634
+                                                'last_utc': utils.getNow()
                                             }));
                                             proms.push(Statuses.create({
                                                 'uuid': '93a30a13-140d-418a-8c71-f8c9a5c59628',
                                                 'value': "Active",
-                                                'last_utc': 1472521795
+                                                'last_utc': utils.getNow()
                                             }));
                                             proms.push(Statuses.create({
                                                 'uuid': '82ae28a1-f981-43ac-b3bd-74b4d24789d3',
                                                 'value': "On hold",
-                                                'last_utc': 1472521835
+                                                'last_utc': utils.getNow()
                                             }));
                                             proms.push(Statuses.create({
                                                 'uuid': 'd9814799-1471-4392-bead-92117c464835',
                                                 'value': "Duplicate",
-                                                'last_utc': 1472522152
+                                                'last_utc': utils.getNow()
                                             }));
                                             proms.push(Statuses.create({
                                                 'uuid': '7946f084-c489-4612-ac25-23dd9e40f336',
                                                 'value': "Will not fix",
-                                                'last_utc': 1472522163
+                                                'last_utc': utils.getNow()
                                             }));
                                             proms.push(Statuses.create({
                                                 'uuid': '5daa0c72-85c3-49a4-bf26-1eb2985ce0a8',
                                                 'value': "Closed",
-                                                'last_utc': 1472522171
+                                                'last_utc': utils.getNow()
                                             }));
                                         }
 
@@ -436,7 +447,7 @@ function Datastore() {
      *
      * @param theUuid
      *
-     * @returns {*}
+     * @returns Promise
      */
     var deleteNote = function (theUuid) {
         var prom;
@@ -463,7 +474,7 @@ function Datastore() {
      *
      * @param theUuid
      *
-     * @returns {*}
+     * @returns Promise
      */
     var deleteUser = function (theUuid) {
         var prom;
@@ -718,12 +729,11 @@ function Datastore() {
      * @description
      * Generate any number of random notes for testing.
      *
-     * @param count
-     * @param dStore
+     * @param count Number of notes to create
      *
      * @returns Array
      */
-    var createRandomNotes = function (count, dStore) {
+    var createRandomNotes = function (count) {
         var cats = [];
         var pris = [];
         var stas = [];
@@ -748,8 +758,8 @@ function Datastore() {
 
                                 tmpUsers = getUsers().then(function (lusrs) {
                                         if (lusrs === undefined || lusrs.length == 0) {
-                                            createTestUsers(dStore);
-                                            console.log('out of createTestUsers');
+                                            createTestUsers();
+                                            //console.log('out of createTestUsers');
                                         } else {
                                             tmpUsers = lusrs;
                                         }
@@ -760,15 +770,17 @@ function Datastore() {
                                         });
 
                                         prom.then(function () {
-                                            console.log("tmpUsers " + (tmpUsers == Promise) ? "promise" : "data");
+                                            //console.log("tmpUsers " + (tmpUsers == Promise) ? "promise" : "data");
 
-                                            for (var i = 0; i < count; ++i) {
+                                            for (var i = 1; i <= count; ++i) {
                                                 var now = utils.getNow();
                                                 var xc = parseInt(Math.random() * cats.length);
                                                 var xp = parseInt(Math.random() * pris.length);
                                                 var xs = parseInt(Math.random() * stas.length);
                                                 var xu = parseInt(Math.random() * tmpUsers.length);
                                                 var xv = parseInt(Math.random() * svrs.length);
+
+                                                var chunk = utils.loremIpsum();
 
                                                 var note = {
                                                     uuid: utils.getUUID(),
@@ -781,8 +793,8 @@ function Datastore() {
                                                     created_date: now,
                                                     modified_date: now,
                                                     last_utc: now,
-                                                    title: "Title for #" + i + " (randomly generated)",
-                                                    details: utils.loremIpsum(),
+                                                    title: "Title for #" + ((i < 10) ? "00" : i < 100 ? "0" : "") + i + " randomly generated",  // allows nice sort by title
+                                                    details: chunk + "=length " + (chunk.length + (chunk.length < 10 ? 1 : chunk.length < 100 ? 2 : 3) + 8),  // precise length
                                                     opt_in: (Math.random() < .5) ? 1 : 0
                                                 };
 
@@ -791,7 +803,7 @@ function Datastore() {
                                                             return null;
                                                         }
                                                         ++cnt;
-                                                        console.log("Created #" + cnt);
+                                                        logger.log('info', "Created faux note #" + (cnt) + ": " + fullNote.title);
                                                         if (cnt == count) {
                                                             setGeneratedFlag(true);
                                                         }
@@ -803,7 +815,7 @@ function Datastore() {
                                                     }
                                                 );
 
-                                                console.log(xc + " " + xp + " " + xs + " " + xu + " " + xv);
+                                                //console.log(xc + " " + xp + " " + xs + " " + xu + " " + xv);
                                             }
                                         });
                                     }, function (xhrObj) {
@@ -832,14 +844,14 @@ function Datastore() {
 
     // ----------------------------------------------------------------------------------------------------------------
     /**
-     * @name create several test users
+     * @name Create several test users
      *
      * @description
      * For createRandomNotes() when generating test data in an empty database.  Creates fake users in the datastore.
-     *
-     * @param dStore
      */
-    var createTestUsers = function (dStore) {
+    var createTestUsers = function () {
+
+        logger.log('info', "Creating faux users for testing");
 
         // make a user
         var u = {
@@ -895,13 +907,6 @@ function Datastore() {
                                                     return null;
                                                 }
                                                 tmpUsers = lusrs;
-                                                // var prom = wait.until(function() {
-                                                //     var b = tmpUsers.length != undefined;
-                                                //     return b;
-                                                // });
-                                                // prom.then(function() {
-                                                //     console.log("tmpUsers " + (tmpUsers == Promise) ? "promise" : "data");
-                                                // });
                                                 return tmpUsers;
                                             },
                                             function (xhrObj) {
@@ -943,28 +948,61 @@ function Datastore() {
 
     // ----------------------------------------------------------------------------------------------------------------
 
+    /**
+     * Get generateFlag
+     *
+     * @returns {boolean}
+     */
     var getGeneratedFlag = function () {
         return generateFlag;
     };
 
+    /**
+     * Set generatedFlag
+     *
+     * @param val
+     * @returns {boolean}
+     */
     var setGeneratedFlag = function (val) {
         generateFlag = val;
         return generateFlag;
     };
 
+    /**
+     * Get initializedFlag
+     *
+     * @returns {boolean}
+     */
     var getInitializedFlag = function () {
         return initializedFlag;
     };
 
+    /**
+     * Set initializedFlag
+     *
+     * @param val
+     * @returns {boolean}
+     */
     var setInitializedFlag = function (val) {
         initializedFlag = val;
         return initializedFlag;
     };
 
+    /**
+     * Get reference to sqlDb object
+     *
+     * @returns {undefined}
+     */
     var getSqlDb = function () {
         return sqlDb;
     };
 
+    /**
+     * Get path to database
+     *
+     * @param name
+     * @returns {string}
+     */
     var getDbPath = function(name) {
         if (name == undefined) {
             if (dbName != undefined) {
@@ -1004,4 +1042,4 @@ function Datastore() {
 
 }
 
-exports.Datastore = new Datastore();                            // singleton instance
+module.exports.Datastore = new Datastore();                            // singleton instance
