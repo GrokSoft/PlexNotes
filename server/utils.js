@@ -76,7 +76,9 @@ function Utils() {
      * ToDo: Change this to use the api
      *
      * How do I use the API?
-         Just do a GET request on loripsum.net/api, to get some placeholder text. You can add extra parameters to specify the output you're going to get. Say, you need 10 short paragraphs with headings, use loripsum.net/api/10/short/headers. All of the possible parameters are:
+        Just do a GET request on loripsum.net/api, to get some placeholder text. You can add extra parameters to
+        specify the output you're going to get. Say, you need 10 short paragraphs with headings,
+        use loripsum.net/api/10/short/headers. All of the possible parameters are:
 
          (integer) - The number of paragraphs to generate.
          short, medium, long, verylong - The average length of a paragraph.
