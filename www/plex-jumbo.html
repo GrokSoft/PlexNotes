@@ -2,107 +2,138 @@
   ~ Copyright (c) 2016. GrokSoft LLC - All Rights Reserved
   -->
 <style>
-    #slides_control > div{
+    #slides_control > div {
         height: 200px;
     }
-    slide > img{
-        margin:auto;
+
+    slide > img {
+        margin: auto;
         width: 400px;
     }
+
     #slides_control {
-        position:absolute;
+        position: absolute;
         width: 400px;
-        left:50%;
-        top:20px;
-        margin-left:-200px;
+        left: 50%;
+        top: 20px;
+        margin-left: -200px;
     }
-</style>
-<br><br>
+</style><br><br>
 <div class="jumbotron ">
-        <div style="height: 305px">
-            <div uib-carousel active="active" interval="myInterval" no-wrap="noWrapSlides">
-                <div uib-slide ng-repeat="slide in slides track by slide.id" index="slide.id">
-                    <img ng-src="{{slide.image}}" style="margin:auto;">
-                    <div class="carousel-caption">
-                        <h4>Slide {{slide.id}}</h4>
-                        <p>{{slide.text}}</p>
-                    </div>
+    <div style="height: 305px">
+        <div uib-carousel
+                active="active"
+                interval="myInterval"
+                no-wrap="noWrapSlides">
+            <div uib-slide
+                    ng-repeat="slide in slides track by slide.id"
+                    index="slide.id">
+                <img ng-src="{{slide.image}}"
+                        style="margin:auto;">
+                <div class="carousel-caption">
+                    <h4>Slide {{slide.id}}</h4>
+                    <p>{{slide.text}}</p>
                 </div>
             </div>
         </div>
-        <!--<div class="row">
-            <div class="col-md-6">
-                <button type="button" class="btn btn-info" ng-click="addSlide()">Add Slide</button>
-                <button type="button" class="btn btn-info" ng-click="randomize()">Randomize slides</button>
-                <div class="checkbox">
-                    <label>
-                        <input type="checkbox" ng-model="noWrapSlides">
-                        Disable Slide Looping
-                    </label>
-                </div>
-            </div>
-            <div class="col-md-6">
-                Interval, in milliseconds: <input type="number" class="form-control" ng-model="myInterval">
-                <br />Enter a negative number or 0 to stop the interval.
-            </div>
-        </div>-->
+    </div>
+    <!-- <div class="container-fluid">
 
-   <!-- <div class="container-fluid">
+         <div id="topCarousel"
+                 class="carousel slide carousel-fade"
+                 data-interval="false"
+                 data-ride="carousel">
+             <ol class="carousel-indicators">
+                 <li data-target='#topCarousel'
+                         data-slide-to="0"
+                         class="active"></li>
+                 <li data-target='#topCarousel'
+                         data-slide-to="1"></li>
+                 <li data-target='#topCarousel'
+                         data-slide-to="2"></li>
+                 <li data-target='#topCarousel'
+                         data-slide-to="3"></li>
+             </ol>
+             <div class="carousel-inner"
+                     role="listbox"><a class="item alphaHover active"
+                     href="#"><img src="images/banner1.png"
+                     alt="First slide image"
+                     class="center-block">
+                 <div class="carousel-caption"></div>
+             </a> <a class="item alphaHover"
+                     href="#"><img src="images/banner2.png"
+                     alt="Second slide image"
+                     class="center-block">
+                 <div class="carousel-caption shadowed"></div>
+             </a> <a class="item alphaHover"
+                     href="#"><img src="images/banner3.png"
+                     alt="Third slide image"
+                     class="center-block">
+                 <div class="carousel-caption shadowed"></div>
+             </a><a class="item alphaHover"
+                     href="#"><img src="images/banner4.png"
+                     alt="Third slide image"
+                     class="center-block">
+                 <div class="carousel-caption shadowed"></div>
+             </a>
+             </div>
+             <a class="left carousel-control"
+                     href='#topCarousel'
+                     role="button"
+                     data-slide="prev">
+                 <span class="glyphicon glyphicon-chevron-left"
+                         aria-hidden="true"></span>
+                 <span class="sr-only">Previous</span>
+             </a> <a class="right carousel-control"
+                 href='#topCarousel'
+                 role="button"
+                 data-slide="next">
+             <span class="glyphicon glyphicon-chevron-right"
+                     aria-hidden="true"></span>
+             <span class="sr-only">Next</span>
+         </a>
+         </div>
 
-        <div id="topCarousel"
-                class="carousel slide carousel-fade"
-                data-interval="false"
-                data-ride="carousel">
-            <ol class="carousel-indicators">
-                <li data-target='#topCarousel'
-                        data-slide-to="0"
-                        class="active"></li>
-                <li data-target='#topCarousel'
-                        data-slide-to="1"></li>
-                <li data-target='#topCarousel'
-                        data-slide-to="2"></li>
-                <li data-target='#topCarousel'
-                        data-slide-to="3"></li>
-            </ol>
-            <div class="carousel-inner"
-                    role="listbox"><a class="item alphaHover active"
-                    href="#"><img src="images/banner1.png"
-                    alt="First slide image"
-                    class="center-block">
-                <div class="carousel-caption"></div>
-            </a> <a class="item alphaHover"
-                    href="#"><img src="images/banner2.png"
-                    alt="Second slide image"
-                    class="center-block">
-                <div class="carousel-caption shadowed"></div>
-            </a> <a class="item alphaHover"
-                    href="#"><img src="images/banner3.png"
-                    alt="Third slide image"
-                    class="center-block">
-                <div class="carousel-caption shadowed"></div>
-            </a><a class="item alphaHover"
-                    href="#"><img src="images/banner4.png"
-                    alt="Third slide image"
-                    class="center-block">
-                <div class="carousel-caption shadowed"></div>
-            </a>
+     </div>-->
+    <span class="grow badge pull-right" style="position: relative; right: -40px;"
+            ng-click="isCollapsedjControls = !isCollapsedjControls;"
+            title="Click to Toggle Slider Controls">
+        <span id="chevron"
+                class="glyphicon glyphicon-chevron-up  ease-all"
+                ng-class="[{'gly-rotate-180':isCollapsedjControls}]"
+                style="font-size: x-large"></span>
+        <!--<span style="font-size: x-large">Click to Toggle Collapse of all notes</span>-->
+    </span>
+</div>
+<div id="jumboControls"
+        class="ease-all"
+        uib-collapse="isCollapsedjControls">
+    <div class="panel-body"
+            style="padding: 0 0 0 0;">
+        <div class="col-md-6">
+            <button type="button"
+                    class="btn btn-info"
+                    ng-click="addSlide()">Add Slide
+            </button>
+            <button type="button"
+                    class="btn btn-info"
+                    ng-click="randomize()">Randomize Slides
+            </button>
+            <div class="checkbox">
+                <label> <input type="checkbox"
+                        ng-model="noWrapSlides"> Disable Slide Looping <em style="font-size: smaller">This prevents the
+                    slides from continuing past the beginning or ending slide.</em> </label>
             </div>
-            <a class="left carousel-control"
-                    href='#topCarousel'
-                    role="button"
-                    data-slide="prev">
-                <span class="glyphicon glyphicon-chevron-left"
-                        aria-hidden="true"></span>
-                <span class="sr-only">Previous</span>
-            </a> <a class="right carousel-control"
-                href='#topCarousel'
-                role="button"
-                data-slide="next">
-            <span class="glyphicon glyphicon-chevron-right"
-                    aria-hidden="true"></span>
-            <span class="sr-only">Next</span>
-        </a>
         </div>
+        <div class="col-md-6 ">
+            Interval, in milliseconds:
+            <div>
+                <input type="number"
+                        class="form-control"
+                        ng-model="myInterval"> Enter a negative number or 0 to stop the interval.
+            </div>
+        </div>
+    </div>
+</div>
 
-    </div>-->
 </div>

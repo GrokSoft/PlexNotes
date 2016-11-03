@@ -439,6 +439,8 @@
                 $scope.myInterval = 5000;
                 $scope.noWrapSlides = true;
                 $scope.active = 0;
+                $scope.isCollapsedjControls = true;
+
                 var slides = $scope.slides = [];
                 var currIndex = 0;
 
