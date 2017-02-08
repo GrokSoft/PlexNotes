@@ -24,21 +24,27 @@ This project consists of a REST server and client developed in JavaScript with:
     ~~~~
     {
         "GET": [
-            "/www\\/?.*/",
-            "api/data/priorities",
-            "api/data/statuses",
-            "api/data/categories",
-            "api/routes",
-            "api/notes",
-            "api/notes/:id"
+		"/www\\/?.*/",
+		"api/data/categories",
+		"api/data/priorities",
+		"api/data/statuses",
+		"api/notes",
+		"api/note/:uuid",
+		"api/routes",
+		"api/users",
+		"api/user/:uuid"
         ],
-        "PUT": [],
         "POST": [
-            "api/notes",
-            "api/data/add/:count"
+            "api/note",
+            "api/user"
+        ],
+        "PUT": [
+            "api/note",
+            "api/user"
         ],
         "DELETE": [
-            "api/notes/:id"
+            "api/note/:id",
+            "api/user/:id"
         ]
     }`
     ~~~~
